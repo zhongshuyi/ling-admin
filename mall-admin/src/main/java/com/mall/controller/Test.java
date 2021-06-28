@@ -4,6 +4,7 @@ import com.mall.mapper.UmsAdminMapper;
 import com.mall.model.UmsAdmin;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,9 @@ public class Test {
 
     @Autowired
     UmsAdminMapper umsAdminMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @GetMapping
     @ApiOperation("测试")

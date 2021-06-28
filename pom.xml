@@ -154,7 +154,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>com.mall</groupId>
             <artifactId>mall-common</artifactId>

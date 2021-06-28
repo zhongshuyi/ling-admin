@@ -1,7 +1,7 @@
 package com.mall.mapper;
 
-import com.mall.model.UmsAdmin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mall.model.UmsAdmin;
 
 /**
  * <p>
