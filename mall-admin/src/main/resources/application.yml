@@ -8,6 +8,16 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+  security:
+    user:
+      password: 123456
+      name: user
+
+
+jwt:
+  secret: sssss
+  expiration: 30
+
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
@@ -105,3 +115,6 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+logging:
+  level:
+    com.mall: info

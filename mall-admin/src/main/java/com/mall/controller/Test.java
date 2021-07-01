@@ -1,13 +1,12 @@
 package com.mall.controller;
 
-import com.mall.mapper.UmsAdminMapper;
 import com.mall.model.UmsAdmin;
+import com.mall.service.UsmAdminService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,17 +16,22 @@ import java.util.List;
  **/
 @RequestMapping("test")
 @RestController
+@Api(tags = "后台用户管理")
+@Slf4j
 public class Test {
 
     @Autowired
-    UmsAdminMapper umsAdminMapper;
+    UsmAdminService usmAdminService;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     @GetMapping
-    @ApiOperation("测试")
+    @ApiOperation("查询后台用户列表")
     public List<UmsAdmin> test(){
-        return umsAdminMapper.selectList(null);
+        log.info("info");
+        log.debug("debug");
+        log.error("error");
+        log.warn("warn");
+        log.trace("trace");
+        return usmAdminService.list();
     }
 }

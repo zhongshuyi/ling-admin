@@ -29,6 +29,7 @@
         <hutool.version>5.6.5</hutool.version>
         <velocity.version>2.3</velocity.version>
         <springfox.version>3.0.0</springfox.version>
+        <jjwt.version>0.9.1</jjwt.version>
     </properties>
 
     <!--父项目 提供相关的 Maven 默认依赖。-->
@@ -59,11 +60,6 @@
             </exclusions>
         </dependency>
 
-        <!--SpringBoot web 提供Web开发场景所需的底层所有依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
 
         <!-- 健康监控-->
@@ -148,23 +144,29 @@
             <version>2.11.4</version>
         </dependency>
 
-        <!--redis依赖配置-->
+        <!--JWT(Json Web Token)登录支持-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.mall</groupId>
-            <artifactId>mall-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
 
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.mall</groupId>
+                <artifactId>mall-framework</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mall</groupId>
+                <artifactId>mall-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

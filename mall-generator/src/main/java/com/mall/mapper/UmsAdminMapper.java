@@ -1,7 +1,7 @@
 package com.mall.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.model.UmsAdmin;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.mall.model.UmsAdmin;
  * </p>
  *
  * @author 钟舒艺
- * @since 2021-06-24
+ * @since 2021-07-01
  */
 public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
 

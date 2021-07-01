@@ -1,5 +1,6 @@
 package com.mall.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mall.mapper.UmsAdminMapper;
 import com.mall.model.UmsAdmin;
 import com.mall.service.UsmAdminService;
@@ -15,19 +16,6 @@ import java.util.List;
  * @date 2021-06-28-17:28
  **/
 @Service
-public class UsmAdminServiceImpl implements UsmAdminService {
+public class UsmAdminServiceImpl extends ServiceImpl<UmsAdminMapper,UmsAdmin> implements UsmAdminService {
 
-    @Autowired
-    UmsAdminMapper umsAdminMapper;
-
-    @Override
-
-    public List<UmsAdmin> selectAll() {
-        return umsAdminMapper.selectList(null);
-    }
-
-    @Override
-    public int insert(UmsAdmin umsAdmin) {
-        return umsAdminMapper.insert(umsAdmin);
-    }
 }

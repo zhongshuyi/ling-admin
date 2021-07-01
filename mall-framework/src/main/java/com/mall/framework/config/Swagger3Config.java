@@ -40,7 +40,4 @@ public class Swagger3Config {
                 .version("1.0")
                 .build();
     }
-
-
-
 }
