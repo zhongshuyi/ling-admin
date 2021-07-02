@@ -1,4 +1,4 @@
-package com.mall.framework.security;
+package com.mall.framework.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
