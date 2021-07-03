@@ -1,5 +1,8 @@
 package com.mall.framework.config;
 
+import com.mall.framework.security.handle.RestAuthenticationEntryPoint;
+import com.mall.framework.security.handle.RestfulAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +25,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
 
 
     /**
@@ -60,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/*.html",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js"
+                        "/**/*.js",
+                        "/favicon.ico"
                 ).permitAll()
                 .antMatchers("/profile/**").anonymous()
                 .antMatchers("/common/download**").anonymous()
@@ -69,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
-                .antMatchers("/**").permitAll()
+                //.antMatchers("/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
@@ -79,6 +90,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .frameOptions().disable()
                     // 禁用缓存
                     .cacheControl();
+
+        //添加自定义未授权和未登录结果返回
+        httpSecurity.exceptionHandling()
+                // 未授权
+                .accessDeniedHandler(restfulAccessDeniedHandler)
+                // 未登录
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     /**
