@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author 钟舒艺
- * @since 2021-07-02
+ * @since 2021-07-04
  */
 public interface IUmsAdminService extends IService<UmsAdmin> {
 

@@ -1,7 +1,6 @@
 package com.mall.common.core.util.ip;
 
 
-
 import cn.hutool.http.HTMLFilter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +21,7 @@ public class IpUtils {
 
     /**
      * 根据请求获取ip地址
+     *
      * @param request HttpServletRequest
      * @return ip地址
      */
@@ -51,6 +51,7 @@ public class IpUtils {
 
     /**
      * 是否是内部ip
+     *
      * @param ip ip字符串
      * @return 是否是内部ip
      */
@@ -61,6 +62,7 @@ public class IpUtils {
 
     /**
      * 是否是内部ip
+     *
      * @param adder ip
      * @return 是否是内部ip
      */
@@ -107,6 +109,7 @@ public class IpUtils {
      * 2. 传入 255.16777215 转为 255.255.255.255
      * 3. 传入 255.255.65535 转为 255.255.255.255
      * 4. 传入正常的ip地址
+     *
      * @param text IPv4地址
      * @return byte 字节
      */
@@ -159,7 +162,7 @@ public class IpUtils {
                     bytes[3] = (byte) (int) (l & 0xFF);
                     break;
                 case 3:
-                    for (i = 0; i <  elements.length-1; ++i) {
+                    for (i = 0; i < elements.length - 1; ++i) {
                         l = Integer.parseInt(elements[i]);
                         if ((l < 0L) || (l > max8)) {
                             return null;
@@ -193,16 +196,17 @@ public class IpUtils {
 
     /**
      * 将byte数组转为正常ipv4地址字符串
+     *
      * @param bytes byte数组
      * @return ip地址
      */
-    public static String byteArrayToStringV4(byte[] bytes){
+    public static String byteArrayToStringV4(byte[] bytes) {
         // ipv4 有4个部分
         final byte ipv4Section = 4;
-        if (bytes == null || bytes.length != ipv4Section){
+        if (bytes == null || bytes.length != ipv4Section) {
             return null;
         }
-        StringBuilder ip= new StringBuilder();
+        StringBuilder ip = new StringBuilder();
         for (byte value : bytes) {
             ip.append(value & 0xFF).append(".");
         }
@@ -213,10 +217,11 @@ public class IpUtils {
 
     /**
      * 将ipv4地址转换成long,IP地址本身是一个32位的二进制数，通常被分割为4个“8位二进制数”（也就是4个字节）,所以ip地址与int是可以互相转换的
+     *
      * @param text 地址
      * @return 转换后long值
      */
-    public static Long textToLong(String text){
+    public static Long textToLong(String text) {
         long ipLong = 0L;
         String[] ipNumbers = text.split("\\.");
         for (String ipNumber : ipNumbers) {
@@ -227,6 +232,7 @@ public class IpUtils {
 
     /**
      * 根据hostname(主机名)来获取本机IP地址
+     *
      * @return 本机ip
      */
     public static String getHostIp() {
@@ -239,6 +245,7 @@ public class IpUtils {
 
     /**
      * 获取HostName(主机名)
+     *
      * @return HostName
      */
     public static String getHostName() {

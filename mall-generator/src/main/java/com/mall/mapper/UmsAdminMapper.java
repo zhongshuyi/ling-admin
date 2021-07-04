@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author 钟舒艺
- * @since 2021-07-02
+ * @since 2021-07-04
  */
 public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
 

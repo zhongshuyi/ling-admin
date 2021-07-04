@@ -20,8 +20,12 @@ import java.util.List;
 @Slf4j
 public class Test {
 
-    @Autowired
+    final
     UsmAdminService usmAdminService;
+
+    public Test(UsmAdminService usmAdminService) {
+        this.usmAdminService = usmAdminService;
+    }
 
 
     @GetMapping

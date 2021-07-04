@@ -3,7 +3,9 @@ package com.mall.common.core.util.ip;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,11 +43,10 @@ public class AddressUtils {
                     log.error("获取地理位置异常 {}", ip);
                     return UNKNOWN;
                 }
-
                 ObjectMapper objectMapper = new ObjectMapper();
-                Map map = objectMapper.readValue(rspStr, new TypeReference<Map <String,Object >>(){});
-                String region = (String) map.get("pro");
-                String city = (String) map.get("city");
+                JsonNode root = objectMapper.readTree(rspStr);
+                String region = root.get("pro").asText();
+                String city = root.get("city").asText();
                 return String.format("%s %s", region, city);
             }
             catch (Exception e)

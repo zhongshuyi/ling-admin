@@ -20,7 +20,7 @@ public class CodeGenerator {
     /**
      * 写入你需要生成的表名
      */
-    private static final String TABLE_NAME = "ums_admin,ums_role,ums_permission,ums_admin_role_relation,ums_role_permission_relation,ums_admin_permission_relation";
+    private static final String TABLE_NAME = "ums_admin";
 
     public static void main(String[] args) {
         // 代码生成器

@@ -35,7 +35,7 @@ public class JwtTokenUtil {
      */
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
-                //
+                // jwt内存的信息
                 .setClaims(claims)
                 // 设置过期时间
                 .setExpiration(generateExpirationDate())

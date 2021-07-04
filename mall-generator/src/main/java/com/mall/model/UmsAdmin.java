@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author 钟舒艺
- * @since 2021-07-02
+ * @since 2021-07-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -49,8 +49,9 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "最后登录时间")
     private Date loginTime;
 
+    @ApiModelProperty(value = "最后登录ip地址")
+    private String loginIp;
+
     @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
     private Integer status;
-
-
 }
