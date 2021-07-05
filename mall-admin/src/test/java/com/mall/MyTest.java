@@ -1,5 +1,6 @@
 package com.mall;
 
+import com.mall.framework.util.JwtTokenUtil;
 import com.mall.mapper.UmsAdminMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class MyTest {
 
     @Autowired
-    private UmsAdminMapper umsAdminMapper;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
+    JwtTokenUtil jwtTokenUtil;
 
     @Test
     public void test(){
-        System.out.println(redisTemplate.opsForValue().increment("test", 10));
+        System.out.println(jwtTokenUtil.getSecret());
     }
 }

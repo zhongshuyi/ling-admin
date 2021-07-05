@@ -1,8 +1,8 @@
 package com.mall.framework.config;
 
+import com.mall.framework.security.filter.JwtAuthenticationTokenFilter;
 import com.mall.framework.security.handle.RestAuthenticationEntryPoint;
 import com.mall.framework.security.handle.RestfulAccessDeniedHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,10 +11,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * SpringSecurity的配置类
+ * 文档记录: https://www.yuque.com/rookieteam/bvc9h3/gbvtga#PAnLH
  * @author 钟舒艺
  * @date 2021-07-01-15:56
  *
@@ -26,12 +30,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    private final IUmsAdminService adminService;
+
+    public SecurityConfig(RestfulAccessDeniedHandler restfulAccessDeniedHandler, RestAuthenticationEntryPoint restAuthenticationEntryPoint,IUmsAdminService umsAdminService) {
+        this.restfulAccessDeniedHandler = restfulAccessDeniedHandler;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.adminService =umsAdminService;
+    }
 
 
     /**
@@ -91,7 +100,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     // 禁用缓存
                     .cacheControl();
 
-        //添加自定义未授权和未登录结果返回
+        // 添加JWT过滤器
+        httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // 添加自定义未授权和未登录结果返回
         httpSecurity.exceptionHandling()
                 // 未授权
                 .accessDeniedHandler(restfulAccessDeniedHandler)
@@ -101,10 +113,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 强散列哈希加密实现
+     * @return 强散列哈希加密实现
      */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder()
     {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 创建jwt过滤器bean
+     * @return 过滤器实例
+     */
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
+        return new JwtAuthenticationTokenFilter();
+    }
+
+    @Override
+    @Bean
+    public UserDetailsService userDetailsService() {
+        //获取登录用户信息
+        return username -> {
+//            UmsAdmin admin = adminService.getAdminByUsername(username);
+//            if (admin != null) {
+//                List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
+//                return new AdminUserDetails(admin,permissionList);
+//            }
+            throw new UsernameNotFoundException("用户名或密码错误");
+        };
     }
 }

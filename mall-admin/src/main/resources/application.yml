@@ -14,17 +14,22 @@ spring:
       name: user
 
 
-jwt:
-  tokenHeader: Authorization #JWT存储的请求头
-  secret: mall-admin-secret #JWT加解密使用的密钥
-  expiration: 604800 #JWT的超期限时间(60*60*24*7)
-  tokenHead: 'Bearer '  #JWT负载中拿到开头
+token:
+  # token存储的请求头
+  tokenHeader: Authorization
+  # token加解密使用的密钥
+  secret: mall-admin-secret
+  # token的超期限时间
+  expiration: 1
+  # token开头
+  tokenPrefix: 'Bearer '
+  # token中储存的uuid键名
+  userKey: login_user_key
 
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
 mybatis-plus:
-  mapperPackage: com.mall.**.mapper
   # 对应的 XML 文件位置
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
@@ -117,6 +122,3 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-logging:
-  level:
-    com.mall: info

@@ -1,7 +1,8 @@
-package com.mall.bo;
+package com.mall.framework.model;
 
 import com.mall.model.UmsAdmin;
 import com.mall.model.UmsPermission;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +12,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 用户信息类
  * @author 钟舒艺
  * @date 2021-07-03-20:02
  **/
 @SuppressWarnings("unused")
+@Data
 public class AdminUserDetails implements UserDetails {
 
+    /**
+     * 数据库中存储的用户基本信息
+     */
     private final UmsAdmin umsAdmin;
 
+    /**
+     * 权限信息
+     */
     private final List<UmsPermission> permissionList;
+
+    /**
+     * uuid
+     */
+    private String uuid;
+
+    /**
+     * 登录时间
+     */
+    private Long loginTime;
+
+    /**
+     * 过期时间
+     */
+    private Long expireTime;
+
+
+
 
     public AdminUserDetails(UmsAdmin umsAdmin, List<UmsPermission> permissionList) {
         this.umsAdmin = umsAdmin;

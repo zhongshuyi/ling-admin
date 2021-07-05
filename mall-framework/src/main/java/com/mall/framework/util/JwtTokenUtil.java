@@ -1,15 +1,17 @@
 package com.mall.framework.util;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
+import com.mall.common.core.redis.RedisService;
+import com.mall.framework.model.AdminUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,39 +21,76 @@ import java.util.Map;
  * @date 2021-06-29-21:06
  **/
 @Component
+@SuppressWarnings("unused")
+@ConfigurationProperties("token")
+@Slf4j
 public class JwtTokenUtil {
-    private static final Logger LOGGER =  LoggerFactory.getLogger(JwtTokenUtil.class);
-
-    private static final String CLAIM_KEY_USERNAME = "sub";
-    private static final String CLAIM_KEY_CREATED = "created";
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.expiration}")
-    private Long expiration;
-    private String token;
 
     /**
-     * 根据负责生成JWT的token
+     * redis操作
+     */
+
+    private final RedisService redisService;
+
+    /**
+     * 令牌秘钥,定义在application.yml中通过@ConfigurationProperties注解映射
+     */
+    private String secret;
+
+    /**
+     * 令牌有效期,定义在application.yml中通过@ConfigurationProperties注解映射
+     */
+    private Long expiration;
+
+    /**
+     * JWT存储的请求头
+     */
+    private String tokenHeader;
+
+    /**
+     * 令牌前缀
+     */
+    private String tokenPrefix;
+
+    /**
+     * token中储存的uuid键名
+     */
+    private String userKey;
+
+    /**
+     * 一秒
+     */
+    protected static final long MILLIS_SECOND = 1000;
+
+    /**
+     * 一分钟
+     */
+    protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
+
+    /**
+     * 刷新时间,距离过期时间小于20分钟
+     */
+    private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+
+
+    public JwtTokenUtil(RedisService redisService) {
+        this.redisService = redisService;
+    }
+
+    /**
+     * 根据负载生成JWT的token,不设置过期时间,因为不存重要信息
+     *
+     * @param claims 存的信息
+     * @return token
      */
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 // jwt内存的信息
                 .setClaims(claims)
-                // 设置过期时间
-                .setExpiration(generateExpirationDate())
                 // 加密方式
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
-
-
-    /**
-     * 生成token的过期时间
-     */
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
-    }
-
 
     /**
      * 从token中获取JWT中的负载
@@ -64,75 +103,99 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            LOGGER.info("JWT格式验证失败:{}",token);
+            log.info("JWT格式验证失败:{}", token);
         }
         return claims;
     }
 
     /**
-     * 从token中获取登录用户名
-     */
-    public String getUserNameFromToken(String token) {
-        String username;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            username =  claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
-
-    /**
-     * 验证token是否还有效
+     * 根据请求获取token
      *
-     * @param token       客户端传入的token
-     * @param userDetails 从数据库中查询出来的用户信息
+     * @param request 请求
+     * @return token
      */
-    public boolean validateToken(String token, UserDetails userDetails) {
-        String username = getUserNameFromToken(token);
-        return username.equals(userDetails.getUsername()) && isTokenExpired(token);
+    private String getToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        if (StrUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
+            token = token.replace(tokenPrefix, "");
+        }
+        return token;
     }
 
     /**
-     * 判断token是否已经失效
+     * 根据请求获取到token,然后从redis中取出用户的各种信息
+     *
+     * @param request 请求
+     * @return 用户详细信息
      */
-    private boolean isTokenExpired(String token) {
-        Date expiredDate = getExpiredDateFromToken(token);
-        return expiredDate.before(new Date());
+    public AdminUserDetails getAdminUserDetails(HttpServletRequest request) {
+        String token = getToken(request);
+        if (StrUtil.isNotEmpty(token)) {
+            // 解析token获取存的负载对象
+            Claims claims = getClaimsFromToken(token);
+            String uuid = (String) claims.get(userKey);
+            return redisService.get(getTokenKey(uuid));
+        }
+        return null;
     }
 
-    /**
-     * 从token中获取过期时间
-     */
-    private Date getExpiredDateFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        return claims.getExpiration();
-    }
 
     /**
      * 根据用户信息生成token
      */
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date());
+    public String generateToken(AdminUserDetails user) {
+        // 生成存储到redis中的键名
+        String uuid = UUID.fastUUID().toString();
+        user.setUuid(uuid);
+        user.setLoginTime(System.currentTimeMillis());
+        user.setExpireTime(expiration * MILLIS_MINUTE);
+        // 储存至redis
+        redisService.set(getTokenKey(uuid), user, expiration);
+        Map<String, Object> claims = new HashMap<>(2);
+        claims.put(userKey, user);
         return generateToken(claims);
     }
 
     /**
-     * 判断token是否可以被刷新
+     * 刷新有效期
+     *
+     * @param user 用户信息 包含uuid
      */
-    public boolean canRefresh(String token) {
-        return isTokenExpired(token);
+    public void refreshToken(AdminUserDetails user) {
+        long expireTime = user.getExpireTime();
+        long currentTime = System.currentTimeMillis();
+        if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
+            redisService.set(getTokenKey(user.getUuid()), user, expiration);
+        }
     }
 
     /**
-     * 刷新token
+     * 删除缓存的用户信息
+     * @param uuid uuid
      */
-    public String refreshToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
+    public void delUser(String uuid){
+        if(StrUtil.isNotEmpty(uuid)){
+            redisService.del(getTokenKey(uuid));
+        }
+    }
+
+    /**
+     * 更新用户的缓存
+     * @param user 用户信息
+     */
+    public void setUser(AdminUserDetails user){
+        if(user!=null&&StrUtil.isNotEmpty(user.getUuid())){
+            refreshToken(user);
+        }
+    }
+
+    /**
+     * 拼接储存key
+     *
+     * @param uuid uuid
+     * @return 拼接后key
+     */
+    private String getTokenKey(String uuid) {
+        return userKey + ":" + uuid;
     }
 }
