@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * JWT登录授权过滤器 在用户名和密码校验前添加的过滤器，如果请求中有jwt的token且有效，会取出token中的用户名，然后调用SpringSecurity的API进行登录操作。
+ * JWT登录授权过滤器 在用户名和密码校验前添加的过滤器，如果请求中有jwt的token且有效，会取出token中uuid，然后取出redis中的用户信息进行登录操作
  * 文档记录 : https://www.yuque.com/rookieteam/bvc9h3/gbvtga#PAnLH
  *
  * @author 钟舒艺

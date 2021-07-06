@@ -1,15 +1,12 @@
 package com.mall.framework.model;
 
 import com.mall.model.UmsAdmin;
-import com.mall.model.UmsPermission;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * 用户信息类
@@ -28,7 +25,7 @@ public class AdminUserDetails implements UserDetails {
     /**
      * 权限信息
      */
-    private final List<UmsPermission> permissionList;
+    private final Set<String> permissionList;
 
     /**
      * uuid
@@ -48,7 +45,7 @@ public class AdminUserDetails implements UserDetails {
 
 
 
-    public AdminUserDetails(UmsAdmin umsAdmin, List<UmsPermission> permissionList) {
+    public AdminUserDetails(UmsAdmin umsAdmin, Set<String> permissionList) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
     }
@@ -56,10 +53,7 @@ public class AdminUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
-        return permissionList.stream()
-                .filter(permission -> permission.getValue() != null)
-                .map(permission -> new SimpleGrantedAuthority(permission.getValue()))
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -69,7 +63,7 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return umsAdmin.getUsername();
+        return umsAdmin.getUserName();
     }
 
     @Override
@@ -89,6 +83,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return umsAdmin.getStatus().equals(1);
+        return "0".equals(umsAdmin.getStatus());
     }
 }

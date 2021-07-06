@@ -38,7 +38,7 @@ public class CodeGenerator {
         // 实体属性 Swagger2 注解
         gc.setSwagger2(true);
         // 是否覆盖已有文件
-        gc.setFileOverride(true);
+        gc.setFileOverride(false);
         // 设置日期类型,这里使用java.util.Date
         gc.setDateType(DateType.ONLY_DATE);
         // 启用配置
@@ -46,7 +46,7 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/mall?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:mysql://localhost:3306/my-mall?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123456");

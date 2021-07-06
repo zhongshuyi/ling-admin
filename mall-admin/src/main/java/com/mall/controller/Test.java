@@ -1,11 +1,10 @@
 package com.mall.controller;
 
 import com.mall.model.UmsAdmin;
-import com.mall.service.UsmAdminService;
+import com.mall.service.IUmsAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +20,10 @@ import java.util.List;
 public class Test {
 
     final
-    UsmAdminService usmAdminService;
+    IUmsAdminService umsAdminService;
 
-    public Test(UsmAdminService usmAdminService) {
-        this.usmAdminService = usmAdminService;
+    public Test(IUmsAdminService umsAdminService) {
+        this.umsAdminService = umsAdminService;
     }
 
 
@@ -36,6 +35,6 @@ public class Test {
         log.error("error");
         log.warn("warn");
         log.trace("trace");
-        return usmAdminService.list();
+        return umsAdminService.list();
     }
 }

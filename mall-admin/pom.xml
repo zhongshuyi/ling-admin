@@ -25,6 +25,10 @@
             <groupId>com.mall</groupId>
             <artifactId>mall-framework</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.mall</groupId>
+            <artifactId>mall-generator</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
