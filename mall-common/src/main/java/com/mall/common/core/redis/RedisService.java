@@ -29,7 +29,7 @@ public class RedisService {
      * @param <T>   实体
      */
     public <T> void set(String key, T value, long time) {
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value, time, TimeUnit.MINUTES);
     }
 
     /**

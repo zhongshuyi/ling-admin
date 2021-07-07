@@ -1,5 +1,6 @@
 package com.mall.common.exception;
 
+import com.mall.common.enums.BusinessMsgEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

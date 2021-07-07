@@ -6,13 +6,14 @@ import com.mall.framework.security.handle.RestfulAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,14 +31,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * 认证失败处理类 返回未授权
+     */
     private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
+    /**
+     * 当未登录或者token失效访问接口时，自定义的返回结果
+     */
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    /**
+     * token认证过滤器
+     */
+    private final JwtAuthenticationTokenFilter authenticationTokenFilter;
 
-    public SecurityConfig(RestfulAccessDeniedHandler restfulAccessDeniedHandler, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
+
+    public SecurityConfig(RestfulAccessDeniedHandler restfulAccessDeniedHandler, RestAuthenticationEntryPoint restAuthenticationEntryPoint, UserDetailsService userDetailsService, JwtAuthenticationTokenFilter authenticationTokenFilter) {
         this.restfulAccessDeniedHandler = restfulAccessDeniedHandler;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.userDetailsService = userDetailsService;
+        this.authenticationTokenFilter = authenticationTokenFilter;
     }
 
 
@@ -71,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login  允许匿名访问
-                .antMatchers("/login").anonymous()
+                .antMatchers("/login").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/*.html",
@@ -84,8 +100,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/common/download**").anonymous()
                 .antMatchers("/common/download/resource**").anonymous()
                 .antMatchers("/swagger-ui/**").anonymous()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").anonymous()
+                .antMatchers("/*/api-docs").permitAll()
                 .antMatchers("/druid/**").anonymous()
                 //.antMatchers("/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
@@ -99,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .cacheControl();
 
         // 添加JWT过滤器
-        httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 添加自定义未授权和未登录结果返回
         httpSecurity.exceptionHandling()
@@ -119,26 +136,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * 创建jwt过滤器bean
-     * @return 过滤器实例
-     */
-    @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
-        return new JwtAuthenticationTokenFilter();
-    }
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        //获取登录用户信息
-        return username -> {
-//            UmsAdmin admin = adminService.getAdminByUsername(username);
-//            if (admin != null) {
-//                List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
-//                return new AdminUserDetails(admin,permissionList);
-//            }
-            throw new UsernameNotFoundException("用户名或密码错误");
-        };
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

@@ -8,6 +8,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -22,39 +23,42 @@ import java.util.Map;
  **/
 @Component
 @SuppressWarnings("unused")
-@ConfigurationProperties("token")
 @Slf4j
 public class JwtTokenUtil {
 
     /**
      * redis操作
      */
-
     private final RedisService redisService;
 
     /**
      * 令牌秘钥,定义在application.yml中通过@ConfigurationProperties注解映射
      */
+    @Value("${token.secret}")
     private String secret;
 
     /**
      * 令牌有效期,定义在application.yml中通过@ConfigurationProperties注解映射
      */
+    @Value("${token.expiration}")
     private Long expiration;
 
     /**
      * JWT存储的请求头
      */
+    @Value("${token.tokenHeader}")
     private String tokenHeader;
 
     /**
      * 令牌前缀
      */
+    @Value("${token.tokenPrefix}")
     private String tokenPrefix;
 
     /**
      * token中储存的uuid键名
      */
+    @Value("${token.userKey}")
     private String userKey;
 
     /**
@@ -130,11 +134,14 @@ public class JwtTokenUtil {
      */
     public AdminUserDetails getAdminUserDetails(HttpServletRequest request) {
         String token = getToken(request);
+        log.info("获取到的token: "+token);
         if (StrUtil.isNotEmpty(token)) {
             // 解析token获取存的负载对象
             Claims claims = getClaimsFromToken(token);
             String uuid = (String) claims.get(userKey);
-            return redisService.get(getTokenKey(uuid));
+            AdminUserDetails adminUserDetails = redisService.get(getTokenKey(uuid));
+            log.info("解析出的类: "+adminUserDetails.toString());
+            return adminUserDetails;
         }
         return null;
     }
@@ -152,7 +159,7 @@ public class JwtTokenUtil {
         // 储存至redis
         redisService.set(getTokenKey(uuid), user, expiration);
         Map<String, Object> claims = new HashMap<>(2);
-        claims.put(userKey, user);
+        claims.put(userKey, uuid);
         return generateToken(claims);
     }
 

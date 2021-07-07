@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public CommonResult handleHttpMessageNotReadableException(
             MissingServletRequestParameterException ex) {
+        ex.printStackTrace();
         log.error("缺少请求参数，{}", ex.getMessage());
         return  CommonResult.failed(400, "缺少必要的请求参数");
     }
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleTypeMismatchException(NullPointerException ex) {
+        ex.printStackTrace();
         log.error("空指针异常，{}", ex.getMessage());
         return  CommonResult.failed(500, "空指针异常了");
     }

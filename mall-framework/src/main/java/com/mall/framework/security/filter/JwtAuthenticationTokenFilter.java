@@ -2,11 +2,13 @@ package com.mall.framework.security.filter;
 
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
+import com.mall.framework.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -23,25 +25,31 @@ import java.io.IOException;
  * @date 2021-07-04-12:42
  **/
 @Slf4j
+@Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public JwtAuthenticationTokenFilter(JwtTokenUtil jwtTokenUtil) {
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         // 从token中获取用户信息
         AdminUserDetails user = jwtTokenUtil.getAdminUserDetails(request);
         // SecurityContextHolder.getContext().getAuthentication()获取当前用户权限
-        if (user!=null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                // 使用用户信息与用户权限构建 认证用户
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                log.info("jwt验证成功 user:{}", user.getUsername());
-                // 放入安全上下文中,就相当于登录了
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (user != null && SecurityUtils.getAuthentication() == null) {
+            log.info("使用用户信息与用户权限构建 认证用户");
+            // 使用用户信息与用户权限构建 认证用户
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            log.info("jwt验证成功 user:{}", user.getUsername());
+            // 放入安全上下文中,就相当于登录了
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request,response);
-}
+        filterChain.doFilter(request, response);
+    }
 }

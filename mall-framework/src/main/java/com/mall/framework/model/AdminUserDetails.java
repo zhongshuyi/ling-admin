@@ -1,31 +1,45 @@
 package com.mall.framework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.model.UmsAdmin;
+import com.mall.model.UmsRole;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
  * 用户信息类
+ *
  * @author 钟舒艺
  * @date 2021-07-03-20:02
  **/
 @SuppressWarnings("unused")
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminUserDetails implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 数据库中存储的用户基本信息
      */
-    private final UmsAdmin umsAdmin;
+    private UmsAdmin umsAdmin;
 
     /**
      * 权限信息
      */
-    private final Set<String> permissionList;
+    private Set<String> permissionList;
+
+    /**
+     * 角色信息
+     */
+    private List<UmsRole> roles;
+
 
     /**
      * uuid
@@ -42,8 +56,7 @@ public class AdminUserDetails implements UserDetails {
      */
     private Long expireTime;
 
-
-
+    public AdminUserDetails(){}
 
     public AdminUserDetails(UmsAdmin umsAdmin, Set<String> permissionList) {
         this.umsAdmin = umsAdmin;

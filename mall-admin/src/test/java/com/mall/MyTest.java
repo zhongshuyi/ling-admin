@@ -1,11 +1,7 @@
 package com.mall;
 
-import com.mall.framework.util.JwtTokenUtil;
-import com.mall.mapper.UmsAdminMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author 钟舒艺
@@ -14,8 +10,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 @SpringBootTest
 public class MyTest {
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
 
     @Test
     public void test(){
