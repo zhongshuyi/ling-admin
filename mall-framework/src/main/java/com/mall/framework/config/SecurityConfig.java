@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * SpringSecurity的配置类
- * 文档记录: https://www.yuque.com/rookieteam/bvc9h3/gbvtga#PAnLH
+ * 文档记录: https://www.yuque.com/rookieteam/bvc9h3/gbvtga#g5MxD
  * @author 钟舒艺
  * @date 2021-07-01-15:56
  *

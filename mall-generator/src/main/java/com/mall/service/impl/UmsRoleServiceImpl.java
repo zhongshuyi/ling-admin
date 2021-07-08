@@ -19,8 +19,4 @@ import java.util.Set;
 @Service
 public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> implements IUmsRoleService {
 
-    @Override
-    public Set<String> getRoleKeyListByUserId(Long id) {
-        return null;
-    }
 }

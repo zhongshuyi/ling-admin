@@ -15,10 +15,5 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 public interface IUmsRoleService extends IService<UmsRole> {
-    /**
-     * 根据用户id获取角色标识列表
-     * @param id 用户id
-     * @return 角色标识列表
-     */
-    Set<String> getRoleKeyListByUserId(Long id);
+
 }

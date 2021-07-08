@@ -37,5 +37,4 @@ public class LoginController {
         map.put("token",token);
         return CommonResult.success(map);
     }
-
 }
