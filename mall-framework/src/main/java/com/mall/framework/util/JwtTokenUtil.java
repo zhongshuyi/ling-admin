@@ -9,7 +9,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -134,13 +133,13 @@ public class JwtTokenUtil {
      */
     public AdminUserDetails getAdminUserDetails(HttpServletRequest request) {
         String token = getToken(request);
-        log.info("获取到的token: "+token);
+        log.info("获取到的token: " + token);
         if (StrUtil.isNotEmpty(token)) {
             // 解析token获取存的负载对象
             Claims claims = getClaimsFromToken(token);
             String uuid = (String) claims.get(userKey);
             AdminUserDetails adminUserDetails = redisService.get(getTokenKey(uuid));
-            log.info("解析出的类: "+adminUserDetails.toString());
+            log.info("解析出的类: " + adminUserDetails.toString());
             return adminUserDetails;
         }
         return null;
@@ -157,6 +156,7 @@ public class JwtTokenUtil {
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(expiration * MILLIS_MINUTE);
         // 储存至redis
+        log.info("过期时间:"+expiration);
         redisService.set(getTokenKey(uuid), user, expiration);
         Map<String, Object> claims = new HashMap<>(2);
         claims.put(userKey, uuid);
@@ -172,26 +172,31 @@ public class JwtTokenUtil {
         long expireTime = user.getExpireTime();
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
+            user.setLoginTime(System.currentTimeMillis());
+            user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
             redisService.set(getTokenKey(user.getUuid()), user, expiration);
         }
     }
 
     /**
      * 删除缓存的用户信息
+     *
      * @param uuid uuid
      */
-    public void delUser(String uuid){
-        if(StrUtil.isNotEmpty(uuid)){
-            redisService.del(getTokenKey(uuid));
+    public boolean delUser(String uuid) {
+        if (StrUtil.isNotEmpty(uuid)) {
+            return  redisService.del(getTokenKey(uuid));
         }
+        return false;
     }
 
     /**
      * 更新用户的缓存
+     *
      * @param user 用户信息
      */
-    public void setUser(AdminUserDetails user){
-        if(user!=null&&StrUtil.isNotEmpty(user.getUuid())){
+    public void setUser(AdminUserDetails user) {
+        if (user != null && StrUtil.isNotEmpty(user.getUuid())) {
             refreshToken(user);
         }
     }

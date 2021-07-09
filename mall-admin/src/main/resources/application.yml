@@ -20,7 +20,7 @@ token:
   # token加解密使用的密钥
   secret: mall-admin-secret
   # token的超期限时间
-  expiration: 1
+  expiration: 30
   # token开头
   tokenPrefix: 'Bearer '
   # token中储存的uuid键名

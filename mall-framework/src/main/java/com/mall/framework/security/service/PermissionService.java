@@ -4,11 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import com.mall.mapper.UmsMenuMapper;
 import com.mall.mapper.UmsRoleMapper;
 import com.mall.model.UmsAdmin;
-import com.mall.model.UmsRole;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +16,7 @@ import java.util.Set;
  * @date 2021-07-07-11:20
  **/
 @Service
+@SuppressWarnings("unused")
 public class PermissionService {
 
     final
@@ -31,25 +30,6 @@ public class PermissionService {
         this.umsRoleMapper = umsRoleMapper;
     }
 
-    /**
-     * 根据用户信息获取权限键名
-     * @param umsAdmin 用户信息
-     * @return 角色标识列表
-     */
-    public Set<String> getRoleKeyList(UmsAdmin umsAdmin) {
-        Set<String> roles = new HashSet<>();
-        if (umsAdmin.getUserId()==1L){
-            roles.add("admin");
-        }else {
-            List<UmsRole> umsRoles = umsRoleMapper.selectRoleListByUserId(umsAdmin.getUserId());
-            for(UmsRole role : umsRoles){
-                roles.add(StrUtil.trim(role.getRoleKey()));
-            }
-            roles.remove(null);
-            roles.remove("");
-        }
-        return roles;
-    }
 
     /**
      * 通过用户信息获取权限列表

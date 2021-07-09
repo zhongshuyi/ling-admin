@@ -54,6 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessErrorException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleBusinessError(BusinessErrorException ex) {
+        ex.printStackTrace();
         return CommonResult.failed(ex.getCode(), ex.getMessage());
     }
 

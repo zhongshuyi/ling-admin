@@ -17,6 +17,7 @@ import java.util.Set;
  * @date 2021-07-07-16:22
  **/
 @Service("ss")
+@SuppressWarnings("unused")
 public class PermissionVerifyService {
     /**
      * 拥有所有权限标识符
@@ -94,6 +95,12 @@ public class PermissionVerifyService {
         }
         return false;
     }
+
+    /**
+     * 验证登录用户是否属于该角色
+     * @param role 角色键名
+     * @return 是否属于该角色
+     */
     public boolean hasRole(String role){
         if(StrUtil.isEmpty(role)){
             return false;

@@ -1,7 +1,8 @@
 package com.mall.framework.model;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.model.UmsAdmin;
 import com.mall.model.UmsRole;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -58,9 +60,23 @@ public class AdminUserDetails implements UserDetails {
 
     public AdminUserDetails(){}
 
-    public AdminUserDetails(UmsAdmin umsAdmin, Set<String> permissionList) {
+    public AdminUserDetails(UmsAdmin umsAdmin, Set<String> permissionList, List<UmsRole> umsRoles) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
+        this.roles = umsRoles;
+    }
+
+    public Set<String> getRoleKey(){
+        if(CollUtil.isEmpty(roles)) {
+            return null;
+        }
+        Set<String> keySet = new HashSet<>();
+        for(UmsRole role : roles){
+            keySet.add(StrUtil.trim(role.getRoleKey()));
+        }
+        keySet.remove(null);
+        keySet.remove("");
+        return keySet;
     }
 
     @Override

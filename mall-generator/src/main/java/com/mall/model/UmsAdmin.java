@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -53,6 +55,7 @@ public class UmsAdmin implements Serializable {
     private String avatar;
 
     @ApiModelProperty(value = "密码")
+    @JsonIgnore
     private String password;
 
     @ApiModelProperty(value = "帐号状态（0正常 1停用）")

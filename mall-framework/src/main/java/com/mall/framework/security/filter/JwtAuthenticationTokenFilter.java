@@ -4,7 +4,6 @@ import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.framework.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;

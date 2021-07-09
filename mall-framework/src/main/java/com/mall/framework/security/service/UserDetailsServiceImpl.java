@@ -5,6 +5,7 @@ import com.mall.common.enums.BusinessMsgEnum;
 import com.mall.common.enums.UserStatus;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
+import com.mall.mapper.UmsRoleMapper;
 import com.mall.model.UmsAdmin;
 import com.mall.service.IUmsAdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 /**
  * 用户验证处理
@@ -28,9 +30,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     final
     PermissionService permissionService;
 
-    public UserDetailsServiceImpl(IUmsAdminService umsAdminService, PermissionService permissionService) {
+    final
+    UmsRoleMapper umsRoleMapper;
+
+    public UserDetailsServiceImpl(IUmsAdminService umsAdminService, PermissionService permissionService, UmsRoleMapper umsRoleMapper) {
         this.umsAdminService = umsAdminService;
         this.permissionService = permissionService;
+        this.umsRoleMapper = umsRoleMapper;
     }
 
     @Override
@@ -52,6 +58,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DISABLE);
         }
-        return new AdminUserDetails(umsAdmin,permissionService.getPermissionList(umsAdmin));
+        return new AdminUserDetails(umsAdmin,permissionService.getPermissionList(umsAdmin),umsRoleMapper.selectRoleListByUserId(umsAdmin.getUserId()));
     }
 }

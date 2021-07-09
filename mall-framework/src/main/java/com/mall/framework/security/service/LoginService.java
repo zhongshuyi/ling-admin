@@ -4,7 +4,6 @@ import com.mall.common.enums.BusinessMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +23,12 @@ public class LoginService {
     private AuthenticationManager authenticationManager;
 
 
-    @Autowired
+    final
     JwtTokenUtil jwtTokenUtil;
+
+    public LoginService(JwtTokenUtil jwtTokenUtil) {
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     /**
      * 登录验证
@@ -37,7 +40,7 @@ public class LoginService {
 
 
         // 用户验证
-        Authentication authentication = null;
+        Authentication authentication;
 
         try
         {
