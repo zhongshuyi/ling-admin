@@ -35,4 +35,6 @@ module.exports = {
   endOfLine: 'crlf',
   // 格式化开始的字符,从第0个开始
   rangeStart: 0,
-};
+  // 没有尾随逗号
+  trailingComma: 'none'
+}
