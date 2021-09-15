@@ -62,8 +62,4 @@ public class LoginController {
         map.put("permissions",adminUserDetails.getPermissionList());
         return CommonResult.success(map);
     }
-
-
-
-
 }

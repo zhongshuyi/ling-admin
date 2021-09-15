@@ -1,7 +1,6 @@
 package com.mall.framework.model;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mall.model.UmsAdmin;
 import com.mall.model.UmsRole;
@@ -9,10 +8,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 用户信息类
@@ -66,17 +62,18 @@ public class AdminUserDetails implements UserDetails {
         this.roles = umsRoles;
     }
 
-    public Set<String> getRoleKey(){
+    public List<Map<String, String>> getRoleKey(){
         if(CollUtil.isEmpty(roles)) {
             return null;
         }
-        Set<String> keySet = new HashSet<>();
+        List<Map<String,String>> list = new ArrayList<>();
         for(UmsRole role : roles){
-            keySet.add(StrUtil.trim(role.getRoleKey()));
+            Map<String,String> map = new HashMap<>(2);
+            map.put("roleName",role.getRoleName());
+            map.put("value",role.getRoleKey());
+            list.add(map);
         }
-        keySet.remove(null);
-        keySet.remove("");
-        return keySet;
+        return list;
     }
 
     @Override
@@ -112,6 +109,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return "0".equals(umsAdmin.getStatus());
+        return umsAdmin.getStatus()==0;
     }
 }

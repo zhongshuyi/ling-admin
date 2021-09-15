@@ -20,7 +20,7 @@ public class CodeGenerator {
     /**
      * 写入你需要生成的表名
      */
-    private static final String TABLE_NAME = "ums_role,ums_menu,usm_dept";
+    private static final String TABLE_NAME = "ums_menu";
 
     public static void main(String[] args) {
         // 代码生成器
@@ -49,7 +49,7 @@ public class CodeGenerator {
         dsc.setUrl("jdbc:mysql://localhost:3306/my-mall?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("123456");
+        dsc.setPassword("12345678");
         mpg.setDataSource(dsc);
 
         // 包配置

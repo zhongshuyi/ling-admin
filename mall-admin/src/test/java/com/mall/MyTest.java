@@ -1,5 +1,6 @@
 package com.mall;
 
+import com.mall.common.core.util.ip.IpUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,6 +14,6 @@ public class MyTest {
 
     @Test
     public void test(){
-
+        System.out.println(IpUtils.textToLong("255.255.255.255"));
     }
 }

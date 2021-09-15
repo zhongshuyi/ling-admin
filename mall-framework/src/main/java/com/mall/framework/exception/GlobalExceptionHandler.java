@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 /**
- * 全局异常处理器
+ * 全局异常处理程序
+ *
  * @author 钟舒艺
- * @date 2021-07-06-10:52
- **/
+ * @date 2021/07/15
+ */
 @Slf4j
 @ResponseBody
 @RestControllerAdvice

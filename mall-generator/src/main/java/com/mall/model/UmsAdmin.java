@@ -8,6 +8,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,17 +40,14 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "用户昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "用户类型（00系统用户）")
-    private String userType;
-
     @ApiModelProperty(value = "用户邮箱")
     private String email;
 
     @ApiModelProperty(value = "手机号码")
-    private String phonenumber;
+    private String tel;
 
     @ApiModelProperty(value = "用户性别（0男 1女 2未知）")
-    private String sex;
+    private Integer sex;
 
     @ApiModelProperty(value = "头像地址")
     private String avatar;
@@ -58,14 +56,17 @@ public class UmsAdmin implements Serializable {
     @JsonIgnore
     private String password;
 
+    @ApiModelProperty(value = "首页路径")
+    private String homePath;
+
     @ApiModelProperty(value = "帐号状态（0正常 1停用）")
-    private String status;
+    private Integer status;
 
     @ApiModelProperty(value = "删除标志（0代表存在 2代表删除）")
-    private String delFlag;
+    private Integer delFlag;
 
     @ApiModelProperty(value = "最后登录IP")
-    private String loginIp;
+    private Integer loginIp;
 
     @ApiModelProperty(value = "最后登录时间")
     private Date loginDate;

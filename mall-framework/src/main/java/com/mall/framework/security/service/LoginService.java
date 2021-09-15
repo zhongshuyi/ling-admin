@@ -49,6 +49,7 @@ public class LoginService {
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }catch (Exception e)
         {
+            e.printStackTrace();
             if (e instanceof BadCredentialsException)
             {
                 throw new BusinessErrorException(BusinessMsgEnum.USER_PASSWORD_NOT_MATCH);
