@@ -103,6 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").permitAll()
+                .antMatchers("/test").permitAll()
                 .antMatchers("/druid/**").anonymous()
                 //.antMatchers("/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
