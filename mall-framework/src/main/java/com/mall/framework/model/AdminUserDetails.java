@@ -1,6 +1,7 @@
 package com.mall.framework.model;
 
 import cn.hutool.core.collection.CollUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mall.model.UmsAdmin;
 import com.mall.model.UmsRole;
@@ -62,6 +63,7 @@ public class AdminUserDetails implements UserDetails {
         this.roles = umsRoles;
     }
 
+    @JsonIgnore
     public List<Map<String, String>> getRoleKey(){
         if(CollUtil.isEmpty(roles)) {
             return null;
@@ -89,7 +91,7 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return umsAdmin.getUserName();
+        return umsAdmin.getUsername();
     }
 
     @Override

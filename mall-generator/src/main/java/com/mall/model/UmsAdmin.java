@@ -1,7 +1,10 @@
 package com.mall.model;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
+
+import java.util.*;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
@@ -35,10 +38,10 @@ public class UmsAdmin implements Serializable {
     private Long deptId;
 
     @ApiModelProperty(value = "用户账号")
-    private String userName;
+    private String username;
 
     @ApiModelProperty(value = "用户昵称")
-    private String nickName;
+    private String realName;
 
     @ApiModelProperty(value = "用户邮箱")
     private String email;
@@ -85,4 +88,5 @@ public class UmsAdmin implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String remark;
+
 }

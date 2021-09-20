@@ -1,5 +1,6 @@
 package com.mall.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
@@ -12,6 +13,7 @@ import com.mall.vo.RouterVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 钟舒艺
@@ -57,25 +60,38 @@ public class LoginController {
      *
      * @return 信息集合
      */
-    @GetMapping("getInfo")
+    @GetMapping("/getUserInfo")
     @ApiOperation("获取用户信息")
     public CommonResult<Map<String, Object>> getInfo() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-        Map<String, Object> map = new HashMap<>(3);
-        map.put("user", adminUserDetails.getUmsAdmin());
+        Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
         map.put("roles", adminUserDetails.getRoleKey());
-        map.put("permissions", adminUserDetails.getPermissionList());
         return CommonResult.success(map);
     }
 
-    @GetMapping("getMenuList")
+    @GetMapping("/getPermCode")
+    @ApiOperation("获取权限列表")
+    public CommonResult<Set<String>> getPermCode() {
+        AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        return CommonResult.success(adminUserDetails.getPermissionList());
+
+    }
+
+    /**
+     * 获取菜单
+     *
+     * @return 菜单列表
+     */
+    @GetMapping("/getMenuList")
     @ApiOperation("获取菜单列表")
     public CommonResult<List<RouterVo>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails.getUmsAdmin().getUserId() == 1L) {
-            return CommonResult.success(MenuUtil.buildMenus(umsMenuService.selectMenuListAll(), 0L));
+            return CommonResult.success(MenuUtil.getMenus(umsMenuService.selectMenuListAll()));
         } else {
-            return CommonResult.success(MenuUtil.buildMenus(umsMenuService.selectMenuListByUserId(adminUserDetails.getUmsAdmin().getUserId()), 0L));
+            return CommonResult.success(MenuUtil.getMenus(umsMenuService.selectMenuListByUserId(adminUserDetails.getUmsAdmin().getUserId())));
         }
     }
+
+
 }

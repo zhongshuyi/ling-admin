@@ -8,11 +8,6 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
-  security:
-    user:
-      password: 123456
-      name: user
-
 
 token:
   # token存储的请求头

@@ -119,6 +119,7 @@ public class JwtTokenUtil {
      */
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
+        System.out.println(token);
         if (StrUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
             token = token.replace(tokenPrefix, "");
         }

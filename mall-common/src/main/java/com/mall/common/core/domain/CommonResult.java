@@ -26,15 +26,21 @@ public class CommonResult<T> {
     /**
      * 数据封装
      */
-    private T data;
+    private T result;
+
+    /**
+     * 类型
+     */
+    private String type;
 
     protected CommonResult() {
     }
 
-    protected CommonResult(int code, String message, T data) {
+    protected CommonResult(int code, String message, T data,String type) {
         this.code = code;
         this.message = message;
-        this.data = data;
+        this.result = data;
+        this.type = type;
     }
 
     /**
@@ -42,7 +48,7 @@ public class CommonResult<T> {
      * @return 通用返回类
      */
     public static CommonResult success() {
-        return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功",null);
+        return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功",null,"success");
     }
 
     /**
@@ -51,7 +57,7 @@ public class CommonResult<T> {
      * @param data 获取的数据
      */
     public static <T> CommonResult<T> success(T data) {
-        return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功", data);
+        return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功", data,"success");
     }
 
     /**
@@ -61,7 +67,7 @@ public class CommonResult<T> {
      * @param  message 提示信息
      */
     public static <T> CommonResult<T> success(T data, String message) {
-        return new CommonResult<>(HttpStatus.HTTP_OK, message, data);
+        return new CommonResult<>(HttpStatus.HTTP_OK, message, data,"success");
     }
 
     /**
@@ -69,7 +75,7 @@ public class CommonResult<T> {
      * @return 通用返回类
      */
     public static  CommonResult failed() {
-        return new CommonResult<>(HttpStatus.HTTP_INTERNAL_ERROR, "操作失败", null);
+        return new CommonResult<>(HttpStatus.HTTP_INTERNAL_ERROR, "操作失败", null,"error");
     }
 
     /**
@@ -78,7 +84,7 @@ public class CommonResult<T> {
      * @return 通用返回结果
      */
     public static CommonResult failed(String msg) {
-        return new CommonResult<>(HttpStatus.HTTP_INTERNAL_ERROR, msg, null);
+        return new CommonResult<>(HttpStatus.HTTP_INTERNAL_ERROR, msg, null,"error");
     }
 
 
@@ -89,7 +95,7 @@ public class CommonResult<T> {
      * @return 通用返回类型
      */
     public static  CommonResult failed(Integer code,String msg) {
-        return new CommonResult<>(code, msg, null);
+        return new CommonResult<>(code, msg, null,"error");
     }
 
     /**
@@ -101,7 +107,7 @@ public class CommonResult<T> {
      * @return 通用返回类
      */
     public static <T> CommonResult<T> failed(Integer code,String msg,T data) {
-        return new CommonResult<>(code, msg, data);
+        return new CommonResult<>(code, msg, data,"error");
     }
 
     /**
@@ -117,14 +123,14 @@ public class CommonResult<T> {
      * @param message 提示信息
      */
     public static CommonResult validateFailed(String message) {
-        return new CommonResult<>(HttpStatus.HTTP_NOT_FOUND, message, null);
+        return new CommonResult<>(HttpStatus.HTTP_NOT_FOUND, message, null,"error");
     }
 
     /**
      * 未登录返回结果
      */
     public static  CommonResult unauthorized() {
-        return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED,"未登录或已过期", null);
+        return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED,"未登录或已过期", null,"error");
     }
 
     /**
@@ -133,7 +139,7 @@ public class CommonResult<T> {
      * @return 通用返回结果
      */
     public static  CommonResult unauthorized(String msg) {
-        return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED,"未登录或已过期", null);
+        return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED,"未登录或已过期", null,"error");
     }
 
     /**
@@ -142,6 +148,6 @@ public class CommonResult<T> {
      * @return 通用返回类
      */
     public static  CommonResult forbidden(String msg) {
-        return new CommonResult<>(HttpStatus.HTTP_FORBIDDEN,msg,null);
+        return new CommonResult<>(HttpStatus.HTTP_FORBIDDEN,msg,null,"error");
     }
 }

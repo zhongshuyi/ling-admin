@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_name",username);
+        queryWrapper.eq("username",username);
         UmsAdmin umsAdmin = umsAdminService.getOne(queryWrapper);
         if(umsAdmin==null){
             log.info("登录用户：{} 不存在.", username);
