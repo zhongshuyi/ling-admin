@@ -1,9 +1,9 @@
 package com.mall.framework.security.service;
 
 import cn.hutool.core.util.StrUtil;
-import com.mall.mapper.UmsMenuMapper;
-import com.mall.mapper.UmsRoleMapper;
-import com.mall.model.UmsAdmin;
+import com.mall.system.mapper.UmsMenuMapper;
+import com.mall.system.mapper.UmsRoleMapper;
+import com.mall.common.core.domain.entity.UmsAdmin;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

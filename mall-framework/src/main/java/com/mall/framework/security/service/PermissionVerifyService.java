@@ -2,11 +2,10 @@ package com.mall.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
-import com.mall.model.UmsRole;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -111,7 +110,7 @@ public class PermissionVerifyService {
         }
         for (UmsRole umsRole: userDetails.getRoles()){
             String roleKey = umsRole.getRoleKey();
-            if (SUPER_ADMIN.equals(roleKey) || roleKey.equals(StringUtils.trim(role)))
+            if (SUPER_ADMIN.equals(roleKey) || roleKey.equals(StrUtil.trim(role)))
             {
                 return true;
             }

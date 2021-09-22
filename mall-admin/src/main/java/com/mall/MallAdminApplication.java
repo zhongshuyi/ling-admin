@@ -11,7 +11,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
  **/
 @SpringBootApplication
 @EnableOpenApi
-@MapperScan("com.mall.mapper")
+@MapperScan("com.mall.system.mapper")
 public class MallAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(MallAdminApplication.class, args);

@@ -13,6 +13,7 @@
         <module>mall-common</module>
         <module>mall-framework</module>
         <module>mall-generator</module>
+        <module>mall-system</module>
     </modules>
 
     <properties>
@@ -85,7 +86,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.mall</groupId>
-                <artifactId>mall-generator</artifactId>
+                <artifactId>mall-system</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
 

@@ -9,26 +9,21 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mall-admin</artifactId>
+    <artifactId>mall-system</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>com.mall</groupId>
             <artifactId>mall-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.mall</groupId>
-            <artifactId>mall-framework</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.mall</groupId>
-            <artifactId>mall-system</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
 
 </project>

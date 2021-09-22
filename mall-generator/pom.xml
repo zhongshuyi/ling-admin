@@ -18,13 +18,6 @@
 
     <dependencies>
 
-        <!--mybatis-plus-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-
         <!-- 代码生成器-->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -39,19 +32,6 @@
             <version>${velocity.version}</version>
         </dependency>
 
-        <!--集成druid连接池-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
-
-        <!--Mysql数据库驱动-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.mall</groupId>

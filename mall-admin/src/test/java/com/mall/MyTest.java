@@ -1,13 +1,10 @@
 package com.mall;
 
-import com.mall.common.core.util.ip.IpUtils;
-import com.mall.service.IUmsMenuService;
-import com.mall.util.MenuUtil;
+import com.mall.system.service.IUmsMenuService;
+import com.mall.system.util.MenuUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.LinkedList;
 
 /**
  * @author 钟舒艺
@@ -22,6 +19,5 @@ public class MyTest {
 
     @Test
     public void test(){
-        System.out.println(MenuUtil.buildMenus(umsMenuService.selectMenuListByUserId(2L),0L));
     }
 }

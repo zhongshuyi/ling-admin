@@ -90,6 +90,10 @@ public class CodeGenerator {
         TemplateConfig templateConfig = new TemplateConfig();
         templateConfig.setXml(null);
         templateConfig.setController(null);
+        templateConfig.setService(null);
+        templateConfig.setServiceImpl(null);
+        templateConfig.setMapper(null);
+        templateConfig.setEntity("templates/model.java");
         mpg.setTemplate(templateConfig);
 
         // 策略配置
