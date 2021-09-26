@@ -1,5 +1,6 @@
 package com.mall;
 
+import com.mall.system.bo.add.MenuAddBo;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import org.junit.jupiter.api.Test;
@@ -19,5 +20,7 @@ public class MyTest {
 
     @Test
     public void test(){
+
+        System.out.println(umsMenuService.selectMenuListAll(null));
     }
 }

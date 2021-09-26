@@ -71,6 +71,15 @@ public class CommonResult<T> {
     }
 
     /**
+     * 成功返回结果
+     *
+     * @param  message 提示信息
+     */
+    public static <T> CommonResult<T> success(String message) {
+        return new CommonResult<>(HttpStatus.HTTP_OK, message, null,"success");
+    }
+
+    /**
      * 失败返回类型
      * @return 通用返回类
      */

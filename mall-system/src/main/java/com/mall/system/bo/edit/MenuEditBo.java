@@ -1,25 +1,17 @@
-package com.mall.system.bo.add;
+package com.mall.system.bo.edit;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 /**
- * 菜单表
- *
+ * 菜单编辑对象
  * @author 钟舒艺
- * @since 2021-09-22
- */
-
+ * @date 2021-09-23-14:14
+ **/
 @Data
-@Accessors(chain = true)
-@ApiModel(value = "菜单添加" , description = "菜单的添加对象及规则" )
-public class MenuAddBo implements Serializable {
-
+public class MenuEditBo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -73,7 +65,7 @@ public class MenuAddBo implements Serializable {
     /**
      * 是否固定标签(0不固定,1固定)
      */
-    @ApiModelProperty(value = "是否固定标签(0固定,1不固定)" )
+    @ApiModelProperty(value = "是否固定标签(0不固定,1固定)" )
     private Integer affix;
 
     /**
@@ -144,6 +136,4 @@ public class MenuAddBo implements Serializable {
      */
     @ApiModelProperty(value = "是否是外链 0是,1不是" )
     private Integer isFrame;
-
-
 }

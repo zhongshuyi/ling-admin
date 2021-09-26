@@ -82,7 +82,7 @@ public class LoginController {
      *
      * @return 菜单列表
      */
-    @GetMapping("/getMenuList")
+    @GetMapping("/getRouterList")
     @ApiOperation("获取路由")
     public CommonResult<List<RouterVo>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());

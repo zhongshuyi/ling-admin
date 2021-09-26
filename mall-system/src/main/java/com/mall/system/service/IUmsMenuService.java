@@ -47,4 +47,19 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      * @return 是否成功
      */
     Boolean addByAddBo(MenuAddBo menuAddBo);
+
+    /**
+     * 验证后删除菜单
+     * @param ids 菜单列表
+     * @param isValid 菜单列表
+     * @return  是否成功
+     */
+    Boolean deleteWithValidByIds(List<Long> ids , Boolean isValid);
+
+    /**
+     * 检查菜单是否唯一
+     * @param addBo 添加菜单对象
+     * @return 返回是否唯一
+     */
+    Boolean checkMenuUnique(UmsMenu addBo);
 }

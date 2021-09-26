@@ -1,11 +1,11 @@
-package ${package.Entity};
+package $!{package.Entity};
 
 #if(${activeRecord})
 import java.io.Serializable;
 
 #end
 #foreach($pkg in ${table.importPackages})
-import ${pkg};
+import $!{pkg};
 #end
 #if(${entityLombokModel})
 
@@ -15,24 +15,24 @@ import lombok.experimental.Accessors;
 #end
 
 /**
- * ${table.comment}
+ * $!{table.comment}
  *
- * @author ${author}
- * @since ${date}
+ * @author $!{author}
+ * @since $!{date}
  */
 #if(${entityLombokModel})
 @Data
 @Accessors(chain = true)
 #end
 #if(${table.convert})
-@TableName("${table.name}")
+@TableName("$!{table.name}")
 #end
 #if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class $!{entity} extends $!{superEntityClass}#if(${activeRecord})<$!{entity}>#end {
 #elseif(${activeRecord})
-public class ${entity} extends Model<${entity}> {
+public class $!{entity} extends Model<$!{entity}> {
 #else
-public class ${entity} implements Serializable {
+public class $!{entity} implements Serializable {
 #end
 
 private static final long serialVersionUID = 1L;
@@ -44,26 +44,26 @@ private static final long serialVersionUID = 1L;
     #end
     #if("$!field.comment" != "")
     /**
-     * ${field.comment}
+     * $!{field.comment}
      */
     #end
     #if(${field.keyFlag})
         ## 主键
         #if(${field.keyIdentityFlag})
-        @TableId(value="${field.name}", type= IdType.AUTO)
+        @TableId(value="$!{field.name}", type= IdType.AUTO)
         #elseif(${field.convert})
-        @TableId("${field.name}")
+        @TableId("$!{field.name}")
         #end
         ## 普通字段
     #elseif(${field.fill})
         ## -----   存在字段填充设置   -----
         #if(${field.convert})
-        @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
+        @TableField(value = "$!{field.name}", fill = FieldFill.$!{field.fill})
         #else
-        @TableField(fill = FieldFill.${field.fill})
+        @TableField(fill = FieldFill.$!{field.fill})
         #end
     #elseif(${field.convert})
-    @TableField("${field.name}")
+    @TableField("$!{field.name}")
     #end
     ## 乐观锁注解
     #if(${versionFieldName}==${field.name})
@@ -73,7 +73,7 @@ private static final long serialVersionUID = 1L;
     #if(${logicDeleteFieldName}==${field.name})
     @TableLogic
     #end
-private ${field.propertyType} ${field.propertyName};
+private $!{field.propertyType} $!{field.propertyName};
 
 #end
 ## ----------  END 字段循环遍历  ----------
@@ -85,12 +85,12 @@ private ${field.propertyType} ${field.propertyName};
             #set($getprefix="get")
         #end
 
-    public ${field.propertyType} ${getprefix}${field.capitalName}() {
-            return ${field.propertyName};
+    public $!{field.propertyType} $!{getprefix}$!{field.capitalName}() {
+            return $!{field.propertyName};
             }
 
         #if(${entityBuilderModel})
-        public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+        public $!{entity} set$!{field.capitalName}($!{field.propertyType} $!{field.propertyName}) {
         #else
         public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
         #end
