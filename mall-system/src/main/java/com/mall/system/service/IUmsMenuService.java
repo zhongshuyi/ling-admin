@@ -3,7 +3,6 @@ package com.mall.system.service;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mall.system.bo.add.MenuAddBo;
-import com.mall.system.bo.query.MenuQueryBo;
 
 import java.util.List;
 
@@ -25,21 +24,19 @@ public interface IUmsMenuService extends IService<UmsMenu> {
     List<UmsMenu> selectMenuListAll();
 
     /**
-     * 获取所有菜单列表
-     *
-     * @param menuQueryBo 查询条件
+     * 获取有效路由
      * @return 菜单列表
      */
-    List<UmsMenu> selectMenuListAll(MenuQueryBo menuQueryBo);
+    List<UmsMenu> selectRouterListAll();
+
 
     /**
      * 根据用户ID查询菜单
      *
-     * @param menuQueryBo 查询条件
      * @param userId      用户ID
      * @return 菜单列表
      */
-    List<UmsMenu> selectMenuListByUserId(MenuQueryBo menuQueryBo, Long userId);
+    List<UmsMenu> selectMenuListByUserId( Long userId);
 
     /**
      * 增加菜单并验证
@@ -49,17 +46,24 @@ public interface IUmsMenuService extends IService<UmsMenu> {
     Boolean addByAddBo(MenuAddBo menuAddBo);
 
     /**
-     * 验证后删除菜单
-     * @param ids 菜单列表
-     * @param isValid 菜单列表
+     * 删除菜单
+     * @param id 菜单id
      * @return  是否成功
      */
-    Boolean deleteWithValidByIds(List<Long> ids , Boolean isValid);
+    Boolean deleteById(Long id );
 
     /**
      * 检查菜单是否唯一
-     * @param addBo 添加菜单对象
+     * @param menu 菜单对象
      * @return 返回是否唯一
      */
-    Boolean checkMenuUnique(UmsMenu addBo);
+    Boolean checkMenuUnique(UmsMenu menu);
+
+    /**
+     * 获取菜单的子级菜单
+     * @param id 菜单id
+     * @return 子级菜单
+     */
+    List<UmsMenu> getMenuChildren(Long id);
+
 }

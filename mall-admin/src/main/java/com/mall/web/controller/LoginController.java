@@ -87,9 +87,9 @@ public class LoginController {
     public CommonResult<List<RouterVo>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails.getUmsAdmin().getUserId() == 1L) {
-            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuListAll()));
+            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectRouterListAll()));
         } else {
-            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuListByUserId(new MenuQueryBo(),adminUserDetails.getUmsAdmin().getUserId())));
+            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuListByUserId(adminUserDetails.getUmsAdmin().getUserId())));
         }
     }
 

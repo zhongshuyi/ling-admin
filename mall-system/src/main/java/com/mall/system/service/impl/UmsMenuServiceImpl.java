@@ -1,10 +1,10 @@
 package com.mall.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.bo.add.MenuAddBo;
-import com.mall.system.bo.query.MenuQueryBo;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,23 +31,23 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     public List<UmsMenu> selectMenuListAll() {
         return list(Wrappers
                 .<UmsMenu>lambdaQuery()
+                .orderByAsc(UmsMenu::getParentId, UmsMenu::getOrderNo));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<UmsMenu> selectRouterListAll() {
+        return list(Wrappers
+                .<UmsMenu>lambdaQuery()
                 .eq(UmsMenu::getStatus, 0)
                 .in(UmsMenu::getMenuType, 0, 1)
                 .orderByDesc(UmsMenu::getParentId, UmsMenu::getOrderNo));
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<UmsMenu> selectMenuListAll(MenuQueryBo menuQueryBo) {
-        return list(Wrappers
-                .lambdaQuery(BeanUtil.toBean(menuQueryBo, UmsMenu.class))
-                .orderByDesc(UmsMenu::getParentId, UmsMenu::getOrderNo));
-    }
-
 
     @Override
-    public List<UmsMenu> selectMenuListByUserId(MenuQueryBo menuQueryBo, Long userId) {
-        return baseMapper.selectMenuListByUserId(menuQueryBo, userId);
+    public List<UmsMenu> selectMenuListByUserId(Long userId) {
+        return baseMapper.selectMenuListByUserId(userId);
     }
 
     @Override
@@ -58,17 +58,29 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public Boolean deleteWithValidByIds(List<Long> ids, Boolean isValid) {
-        return null;
+    public Boolean deleteById(Long id) {
+        List<UmsMenu> list = getMenuChildren(id);
+        if (CollUtil.isNotEmpty(list)) {
+            for (UmsMenu menu : list) {
+                deleteById(menu.getId());
+            }
+        }
+        return removeById(id);
     }
 
     @Override
-    public Boolean checkMenuUnique(UmsMenu addBo) {
-        List<UmsMenu> list = this.list(
-                Wrappers.<UmsMenu>lambdaQuery()
-                        .eq(UmsMenu::getParentId, addBo.getParentId())
-                        .and(q -> q.eq(UmsMenu::getPath, addBo.getPath()).or().eq(UmsMenu::getTitle, addBo.getTitle())));
-        return !list.isEmpty();
+    public Boolean checkMenuUnique(UmsMenu bo) {
+        return !this.list(
+                        Wrappers.<UmsMenu>lambdaQuery()
+                                .ne(UmsMenu::getId, bo.getId())
+                                .eq(UmsMenu::getParentId, bo.getParentId())
+                                .and(q -> q.eq(UmsMenu::getPath, bo.getPath()).or().eq(UmsMenu::getTitle, bo.getTitle())))
+                .isEmpty();
+    }
+
+    @Override
+    public List<UmsMenu> getMenuChildren(Long id) {
+        return this.list(Wrappers.<UmsMenu>lambdaQuery().eq(UmsMenu::getParentId, id));
     }
 
     @SuppressWarnings("unused")

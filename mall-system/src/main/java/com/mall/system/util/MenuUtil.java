@@ -2,10 +2,13 @@ package com.mall.system.util;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.mall.common.core.domain.entity.UmsMenu;
+import com.mall.system.bo.query.MenuQueryBo;
 import com.mall.system.vo.MenuVo;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,6 +18,7 @@ import java.util.List;
  * @author 钟舒艺
  * @date 2021-09-17-9:39
  **/
+@Slf4j
 public class MenuUtil {
 
 
@@ -36,6 +40,7 @@ public class MenuUtil {
     public static List<MenuVo> getMenuList(List<UmsMenu> menus){
         return buildMenus(menus,0L);
     }
+
 
     /**
      * 构建路由树
@@ -89,7 +94,7 @@ public class MenuUtil {
      */
     private static List<MenuVo> buildMenus(List<UmsMenu> menus, Long parentId) {
         List<MenuVo> list = new ArrayList<>();
-        if (menus == null || menus.isEmpty()) {
+        if (CollUtil.isEmpty(menus)) {
             return null;
         }
         for (UmsMenu menu : menus) {

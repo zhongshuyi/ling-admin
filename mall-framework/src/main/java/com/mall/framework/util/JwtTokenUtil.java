@@ -119,7 +119,6 @@ public class JwtTokenUtil {
      */
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
-        System.out.println(token);
         if (StrUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
             token = token.replace(tokenPrefix, "");
         }
@@ -134,14 +133,11 @@ public class JwtTokenUtil {
      */
     public AdminUserDetails getAdminUserDetails(HttpServletRequest request) {
         String token = getToken(request);
-        log.info("获取到的token: " + token);
         if (StrUtil.isNotEmpty(token)) {
             // 解析token获取存的负载对象
             Claims claims = getClaimsFromToken(token);
             String uuid = (String) claims.get(userKey);
-            AdminUserDetails adminUserDetails = redisService.get(getTokenKey(uuid));
-            log.info("解析出的类: " + adminUserDetails.toString());
-            return adminUserDetails;
+            return redisService.get(getTokenKey(uuid));
         }
         return null;
     }

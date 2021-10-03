@@ -76,10 +76,6 @@ public class UmsAdmin implements Serializable {
     @JsonIgnore
     private String password;
 
-    /**
-     * 首页路径
-     */
-    private String homePath;
 
     /**
      * 账号状态（0正常 1停用）

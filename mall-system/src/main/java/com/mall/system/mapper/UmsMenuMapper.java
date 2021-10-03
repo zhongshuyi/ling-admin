@@ -29,9 +29,8 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
     /**
      * 根据用户ID查询菜单
      *
-     * @param bo     查询条件
      * @param userId 用户ID
      * @return 菜单列表
      */
-    List<UmsMenu> selectMenuListByUserId(@Param("bo" ) MenuQueryBo bo, @Param("userId" ) Long userId);
+    List<UmsMenu> selectMenuListByUserId(@Param("userId" ) Long userId);
 }
