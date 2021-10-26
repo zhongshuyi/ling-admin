@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单表 服务实现类
@@ -41,13 +42,27 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                 .<UmsMenu>lambdaQuery()
                 .eq(UmsMenu::getStatus, 0)
                 .in(UmsMenu::getMenuType, 0, 1)
-                .orderByDesc(UmsMenu::getParentId, UmsMenu::getOrderNo));
+                .orderByAsc(UmsMenu::getParentId, UmsMenu::getOrderNo));
+    }
+
+    @Override
+    public List<UmsMenu> selectMenuByIds(List<Long> permIds) {
+        return list(
+                Wrappers.<UmsMenu>lambdaQuery()
+                        .in(UmsMenu::getId, permIds)
+                        .in(UmsMenu::getMenuType, 0L, 1L)
+                        .eq(UmsMenu::getStatus, 0L));
     }
 
 
     @Override
-    public List<UmsMenu> selectMenuListByUserId(Long userId) {
-        return baseMapper.selectMenuListByUserId(userId);
+    public Set<Long> selectRolePermsId(Long userId) {
+        return baseMapper.selectRolePerms(userId);
+    }
+
+    @Override
+    public Set<Long> selectDeptPermsId(Long userId) {
+        return baseMapper.selectDeptPermsId(userId);
     }
 
     @Override
@@ -81,6 +96,27 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     @Override
     public List<UmsMenu> getMenuChildren(Long id) {
         return this.list(Wrappers.<UmsMenu>lambdaQuery().eq(UmsMenu::getParentId, id));
+    }
+
+    @Override
+    public List<UmsMenu> getDeptPerm(Long id) {
+        return baseMapper.getDeptPerm(id);
+    }
+
+    @Override
+    public Boolean addDeptPerm(Long deptId, Set<Long> permIds) {
+        if(permIds.size()==0){
+            return true;
+        }
+        return baseMapper.addDeptPerm(deptId, permIds)==permIds.size();
+    }
+
+    @Override
+    public Boolean removeDeptPerm(Long deptId, Set<Long> permIds) {
+        if(permIds.size()==0){
+            return true;
+        }
+        return baseMapper.removeDeptPerm(deptId, permIds)==permIds.size();
     }
 
     @SuppressWarnings("unused")

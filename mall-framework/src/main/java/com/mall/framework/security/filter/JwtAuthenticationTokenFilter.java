@@ -42,6 +42,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // SecurityContextHolder.getContext().getAuthentication()获取当前用户权限
         if (user != null && SecurityUtils.getAuthentication() == null) {
             log.info("使用用户信息与用户权限构建 认证用户");
+            jwtTokenUtil.refreshToken(user);
             // 使用用户信息与用户权限构建 认证用户
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

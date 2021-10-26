@@ -4,12 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mall.common.core.domain.entity.UmsAdmin;
+import com.mall.common.core.domain.entity.UmsDept;
+import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.domain.entity.UmsRole;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 用户信息类
@@ -30,15 +33,24 @@ public class AdminUserDetails implements UserDetails {
     private UmsAdmin umsAdmin;
 
     /**
-     * 权限信息
+     * 权限代码
      */
-    private Set<String> permissionList;
+    private Set<String> permissionCodeSet;
+
+    /**
+     * 权限列表
+     */
+    private List<UmsMenu> permissionList;
 
     /**
      * 角色信息
      */
     private List<UmsRole> roles;
 
+    /**
+     * 部门信息
+     */
+    private List<UmsDept> depts;
 
     /**
      * uuid
@@ -57,10 +69,17 @@ public class AdminUserDetails implements UserDetails {
 
     public AdminUserDetails(){}
 
-    public AdminUserDetails(UmsAdmin umsAdmin, Set<String> permissionList, List<UmsRole> umsRoles) {
+    public AdminUserDetails(UmsAdmin umsAdmin, List<UmsMenu> permissionList, List<UmsRole> umsRoles,List<UmsDept> depts) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
         this.roles = umsRoles;
+        this.depts = depts;
+        if(umsAdmin.getId()==1){
+            this.permissionCodeSet = new HashSet<>(1);
+            this.permissionCodeSet.add("*:*:*");
+        }else {
+            this.permissionCodeSet = permissionList.stream().map(UmsMenu::getPerms).collect(Collectors.toSet());
+        }
     }
 
     @JsonIgnore

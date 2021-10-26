@@ -8,7 +8,10 @@ import com.mall.framework.model.AdminUserDetails;
 import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.system.service.IUmsAdminService;
+import com.mall.system.service.IUmsDeptService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,15 +20,19 @@ import org.springframework.stereotype.Service;
 
 /**
  * 用户验证处理
+ *
  * @author 钟舒艺
  * @date 2021-07-06-17:31
  **/
 @Service
 @Slf4j
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     final
     IUmsAdminService umsAdminService;
+
+    final IUmsDeptService umsDeptService;
 
     final
     PermissionService permissionService;
@@ -33,31 +40,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     final
     UmsRoleMapper umsRoleMapper;
 
-    public UserDetailsServiceImpl(IUmsAdminService umsAdminService, PermissionService permissionService, UmsRoleMapper umsRoleMapper) {
-        this.umsAdminService = umsAdminService;
-        this.permissionService = permissionService;
-        this.umsRoleMapper = umsRoleMapper;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",username);
+        queryWrapper.eq("username", username);
         UmsAdmin umsAdmin = umsAdminService.getOne(queryWrapper);
-        if(umsAdmin==null){
+        if (umsAdmin == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
-        }
-        else if (UserStatus.DELETED.getCode().equals(umsAdmin.getDelFlag()))
-        {
+        } else if (UserStatus.DELETED.getCode().equals(umsAdmin.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DELETED);
-        }
-        else if (UserStatus.DISABLE.getCode().equals(umsAdmin.getStatus()))
-        {
+        } else if (UserStatus.DISABLE.getCode().equals(umsAdmin.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DISABLE);
         }
-        return new AdminUserDetails(umsAdmin,permissionService.getPermissionList(umsAdmin),umsRoleMapper.selectRoleListByUserId(umsAdmin.getUserId()));
+        return new AdminUserDetails(umsAdmin, permissionService.getPermissionList(umsAdmin), umsRoleMapper.selectRoleListByUserId(umsAdmin.getId()),umsDeptService.getDeptListByUserId(umsAdmin.getId()));
     }
 }

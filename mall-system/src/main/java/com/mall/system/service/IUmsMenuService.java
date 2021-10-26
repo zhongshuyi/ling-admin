@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mall.system.bo.add.MenuAddBo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -31,12 +32,28 @@ public interface IUmsMenuService extends IService<UmsMenu> {
 
 
     /**
-     * 根据用户ID查询菜单
+     * 根据用户id获取菜单(部门权限加角色权限)
+     * @param permIds 权限id
+     * @return 菜单
+     */
+    List<UmsMenu> selectMenuByIds(List<Long> permIds);
+
+    /**
+     * 根据用户ID查询角色权限
      *
      * @param userId      用户ID
      * @return 菜单列表
      */
-    List<UmsMenu> selectMenuListByUserId( Long userId);
+    Set<Long> selectRolePermsId( Long userId);
+
+
+    /**
+     * 根据用户id获取部门权限
+     * @param userId 用户id
+     * @return 权限的id
+     */
+    Set<Long> selectDeptPermsId(Long userId);
+
 
     /**
      * 增加菜单并验证
@@ -65,5 +82,28 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      * @return 子级菜单
      */
     List<UmsMenu> getMenuChildren(Long id);
+
+    /**
+     * 获取部门权限
+     * @param id 部门id
+     * @return 权限
+     */
+    List<UmsMenu> getDeptPerm(Long id);
+
+    /**
+     *  增加部门权限
+     * @param deptId 部门id
+     * @param permIds 权限id
+     * @return 是否成功
+     */
+    Boolean addDeptPerm(Long deptId ,Set<Long> permIds);
+
+    /**
+     *  删除部门权限
+     * @param deptId 部门id
+     * @param permIds 权限id
+     * @return 是否成功
+     */
+    Boolean removeDeptPerm(Long deptId ,Set<Long> permIds);
 
 }

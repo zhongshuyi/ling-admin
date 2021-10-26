@@ -59,7 +59,7 @@ public class PermissionVerifyService {
         if ( userDetails == null || CollUtil.isEmpty(userDetails.getPermissionList())){
             return false;
         }
-        return hasPermissions(userDetails.getPermissionList(),permission);
+        return hasPermissions(userDetails.getPermissionCodeSet(),permission);
     }
 
     /**
@@ -85,7 +85,7 @@ public class PermissionVerifyService {
         if ( userDetails == null || CollUtil.isEmpty(userDetails.getPermissionList())){
             return false;
         }
-        Set<String> authorities = userDetails.getPermissionList();
+        Set<String> authorities = userDetails.getPermissionCodeSet();
         for(String permission : permissions.split(PERMISSION_DELIMETER)){
             if (permission != null && hasPermissions(authorities, permission))
             {

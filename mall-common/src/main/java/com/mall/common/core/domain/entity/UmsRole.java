@@ -27,8 +27,8 @@ public class UmsRole implements Serializable {
     /**
      * 角色ID
      */
-    @TableId(value = "role_id" , type = IdType.AUTO)
-    private Long roleId;
+    @TableId(value = "id" , type = IdType.AUTO)
+    private Long id;
 
     /**
      * 角色名称

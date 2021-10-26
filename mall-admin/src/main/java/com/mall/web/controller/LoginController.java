@@ -1,13 +1,14 @@
 package com.mall.web.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.domain.CommonResult;
+import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.model.LoginBody;
 import com.mall.framework.security.service.LoginService;
 import com.mall.framework.util.JwtTokenUtil;
-import com.mall.system.bo.query.MenuQueryBo;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import com.mall.system.vo.RouterVo;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author 钟舒艺
@@ -66,6 +68,7 @@ public class LoginController {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
         map.put("roles", adminUserDetails.getRoleKey());
+        map.put("depts", adminUserDetails.getDepts());
         return CommonResult.success(map);
     }
 
@@ -73,8 +76,7 @@ public class LoginController {
     @ApiOperation("获取权限列表")
     public CommonResult<Set<String>> getPermCode() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-        return CommonResult.success(adminUserDetails.getPermissionList());
-
+        return CommonResult.success(adminUserDetails.getPermissionCodeSet());
     }
 
     /**
@@ -86,12 +88,10 @@ public class LoginController {
     @ApiOperation("获取路由")
     public CommonResult<List<RouterVo>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-        if (adminUserDetails.getUmsAdmin().getUserId() == 1L) {
+        if (adminUserDetails.getUmsAdmin().getId() == 1L) {
             return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectRouterListAll()));
         } else {
-            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuListByUserId(adminUserDetails.getUmsAdmin().getUserId())));
+            return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuByIds(adminUserDetails.getPermissionList().stream().map(UmsMenu::getId).collect(Collectors.toList()))));
         }
     }
-
-
 }

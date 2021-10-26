@@ -2,6 +2,8 @@ package com.mall.web.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
 import com.mall.common.annotation.RepeatSubmit;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.entity.UmsMenu;
@@ -10,11 +12,9 @@ import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.system.bo.add.MenuAddBo;
 import com.mall.system.bo.edit.MenuEditBo;
-import com.mall.system.bo.query.MenuQueryBo;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
-import com.mall.system.vo.MenuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -41,15 +41,16 @@ public class MenuController extends BaseController {
 
     @GetMapping
     @ApiOperation("获取所有菜单")
-    public CommonResult<List<MenuVo>> getMenuList(MenuQueryBo query) {
-        log.warn("请求getMenu");
-        query.setTitle("");
-        query.setStatus(null);
+    public CommonResult<List<Tree<Long>>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-        if (adminUserDetails.getUmsAdmin().getUserId() == 1L) {
+
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        treeNodeConfig.setWeightKey("order");
+
+        if (adminUserDetails.getUmsAdmin().getId().equals(1L)) {
             return CommonResult.success(MenuUtil.getMenuList(umsMenuService.selectMenuListAll()));
         } else {
-            return CommonResult.success(MenuUtil.getMenuList(umsMenuService.selectMenuListByUserId(adminUserDetails.getUmsAdmin().getUserId())));
+            return CommonResult.success(MenuUtil.getMenuList(umsMenuService.list()));
         }
     }
 
@@ -83,7 +84,13 @@ public class MenuController extends BaseController {
 
     @ApiOperation("检查菜单是否有子菜单")
     @GetMapping("checkMenuHasChildren/{id}")
-    public  CommonResult checkMenuHasChildren(@PathVariable Long id){
+    public CommonResult checkMenuHasChildren(@PathVariable Long id) {
         return CommonResult.success(CollUtil.isNotEmpty(umsMenuService.getMenuChildren(id)));
+    }
+
+    @ApiOperation("获取权限树结构")
+    @GetMapping("getPerm")
+    public CommonResult<List<Tree<Long>>> getPerm() {
+        return CommonResult.success(MenuUtil.buildPermTree(umsMenuService.list()));
     }
 }

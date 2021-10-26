@@ -28,4 +28,9 @@ public class BusinessErrorException extends RuntimeException{
         this.code = businessMsgEnum.getCode();
         this.message = businessMsgEnum.getMsg();
     }
+
+    public BusinessErrorException(String message){
+        this.message = message;
+        this.code = 500;
+    }
 }

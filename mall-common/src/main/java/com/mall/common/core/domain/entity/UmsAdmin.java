@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.*;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,9 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
  * 用户信息表
- * </p>
  *
  * @author 钟舒艺
  * @since 2021-07-06
@@ -32,13 +31,8 @@ public class UmsAdmin implements Serializable {
     /**
      * 用户ID
      */
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Long userId;
-
-    /**
-     * 部门ID
-     */
-    private Long deptId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
      * 用户账号
@@ -86,6 +80,16 @@ public class UmsAdmin implements Serializable {
      * 删除标志（0 代表存在 2 代表删除）
      */
     private Integer delFlag;
+
+    /**
+     * 用户身份(0: 普通员工 ; 1: 上级)
+     */
+    private Integer userIdentity;
+
+    /**
+     * 负责的部门
+     */
+    private String departIds;
 
     /**
      * 最后登录IP

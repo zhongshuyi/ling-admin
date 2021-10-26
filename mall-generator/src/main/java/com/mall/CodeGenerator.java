@@ -20,7 +20,7 @@ public class CodeGenerator {
     /**
      * 写入你需要生成的表名
      */
-    private static final String TABLE_NAME = "ums_menu";
+    private static final String TABLE_NAME = "ums_dept";
 
     public static void main(String[] args) {
         // 代码生成器
@@ -88,11 +88,11 @@ public class CodeGenerator {
 
         // 配置模板 如果不需要生成哪个部分,就设置为null
         TemplateConfig templateConfig = new TemplateConfig();
+        templateConfig.setMapper(null);
+        templateConfig.setServiceImpl(null);
+        templateConfig.setService(null);
         templateConfig.setXml(null);
         templateConfig.setController(null);
-        templateConfig.setService(null);
-        templateConfig.setServiceImpl(null);
-        templateConfig.setMapper(null);
         templateConfig.setEntity("templates/model.java");
         mpg.setTemplate(templateConfig);
 

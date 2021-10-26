@@ -1,13 +1,16 @@
 package com.mall.framework.security.service;
 
-import cn.hutool.core.util.StrUtil;
+import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.common.core.domain.entity.UmsAdmin;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 用户权限处理
@@ -37,19 +40,14 @@ public class PermissionService {
      * @param umsAdmin 用户信息
      * @return 权限列表
      */
-    public Set<String> getPermissionList(UmsAdmin umsAdmin) {
+    public List<UmsMenu> getPermissionList(UmsAdmin umsAdmin) {
 
-        Set<String> perms = new HashSet<>();
+        List<UmsMenu> perms = new ArrayList<>();
 
-        if (umsAdmin.getUserId() == 1L) {
-            perms.add("*:*:*");
-        } else {
-            Set<String> p = umsMenuMapper.selectPermsByUserId(umsAdmin.getUserId());
-            p.remove("");
-            p.remove(null);
-            for (String s : p) {
-                perms.add(StrUtil.trim(s));
-            }
+        if (umsAdmin.getId() != 1L) {
+            Set<Long> p = umsMenuMapper.selectRolePerms(umsAdmin.getId());
+            p.addAll(umsMenuMapper.selectDeptPermsId(umsAdmin.getId()));
+            perms.addAll(umsMenuMapper.selectBatchIds(p));
         }
         return perms;
     }
