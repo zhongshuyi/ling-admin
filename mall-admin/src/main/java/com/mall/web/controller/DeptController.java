@@ -2,6 +2,10 @@ package com.mall.web.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsDept;
@@ -9,7 +13,6 @@ import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.bo.add.DeptAddBo;
 import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsMenuService;
-import com.mall.system.vo.DeptVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +42,21 @@ public class DeptController extends BaseController {
 
     @GetMapping
     @ApiOperation(value = "获取部门列表")
-    public CommonResult<List<DeptVo>> getDeptVoList() {
-        return CommonResult.success(umsDeptService.getDeptVoList());
+    public CommonResult<List<Tree<Long>>> getDeptVoList() {
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        treeNodeConfig.setWeightKey("orderNo");
+        treeNodeConfig.setNameKey("deptName");
+        return CommonResult.success(TreeUtil.build(
+                umsDeptService.list(
+                        Wrappers.<UmsDept>lambdaQuery().orderByAsc(UmsDept::getOrderNo)),
+                0L,
+                treeNodeConfig,
+                (treeNode, tree) -> {
+                    tree.setId(treeNode.getId());
+                    tree.setParentId(treeNode.getParentId());
+                    tree.setName(treeNode.getDeptName());
+                    tree.setWeight(treeNode.getOrderNo());
+                }));
     }
 
     @PostMapping
@@ -89,17 +105,17 @@ public class DeptController extends BaseController {
 
     @ApiOperation("更改部门权限")
     @PutMapping("DeptPerm/{deptId}")
-    public CommonResult setDeptPerm(@PathVariable Long deptId,@RequestBody Set<Long> newIds){
+    public CommonResult setDeptPerm(@PathVariable Long deptId, @RequestBody Set<Long> newIds) {
 
         Set<Long> oldIds = umsMenuService.getDeptPerm(deptId).stream().map(UmsMenu::getId).collect(Collectors.toSet());
         Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        System.out.println("删除的值"+result);
-        Boolean isSuccess = umsMenuService.removeDeptPerm(deptId,result);
+        System.out.println("删除的值" + result);
+        Boolean isSuccess = umsMenuService.removeDeptPerm(deptId, result);
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        System.out.println("新增的值"+result);
-        return toAjax(umsMenuService.addDeptPerm(deptId,result)&&isSuccess);
+        System.out.println("新增的值" + result);
+        return toAjax(umsMenuService.addDeptPerm(deptId, result) && isSuccess);
     }
 }

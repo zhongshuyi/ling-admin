@@ -1,37 +1,16 @@
-package com.mall.common.core.domain.entity;
+package com.mall.system.bo.edit;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-
-
-import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
 
 import java.io.Serializable;
 
-
-import com.mall.common.core.domain.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
 /**
- * 角色信息表
- *
  * @author 钟舒艺
- * @since 2021-09-22
- */
-
+ * @date 2021-10-26-14:45
+ **/
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-public class UmsRole extends BaseEntity implements Serializable {
-
+public class RoleEditBo implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 角色ID
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
 
     /**
      * 角色名称
@@ -53,8 +32,14 @@ public class UmsRole extends BaseEntity implements Serializable {
      */
     private Integer dataScope;
 
+
     /**
      * 角色状态（0正常 1停用）
      */
     private Integer status;
+
+    /**
+     * 备注
+     */
+    private String remark;
 }

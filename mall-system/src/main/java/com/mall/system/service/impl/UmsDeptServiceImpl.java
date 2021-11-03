@@ -8,10 +8,8 @@ import com.mall.common.core.domain.entity.UmsDept;
 import com.mall.system.bo.add.DeptAddBo;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
-import com.mall.system.vo.DeptVo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,11 +20,6 @@ import java.util.List;
  */
 @Service
 public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> implements IUmsDeptService {
-
-    @Override
-    public List<DeptVo> getDeptVoList() {
-        return build(list(), 0L);
-    }
 
     @Override
     public Boolean addDept(DeptAddBo addBo) {
@@ -64,32 +57,6 @@ public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> impl
     @Override
     public List<UmsDept> getDeptListByUserId(Long userId) {
         return baseMapper.getDeptListByUserId(userId);
-    }
-
-    /**
-     * 构建层级关系
-     *
-     * @param list     原始数据
-     * @param parentId 父级id
-     * @return 属于该父级的子级列表
-     */
-    private List<DeptVo> build(List<UmsDept> list, Long parentId) {
-        if (CollUtil.isEmpty(list)) {
-            return null;
-        }
-        List<DeptVo> voList = new ArrayList<>();
-        for (UmsDept dept : list) {
-            if (!dept.getParentId().equals(parentId)) {
-                continue;
-            }
-            DeptVo vo = BeanUtil.toBean(dept, DeptVo.class);
-            vo.setChildren(build(list, dept.getId()));
-            if (CollUtil.isEmpty(vo.getChildren())) {
-                vo.setChildren(null);
-            }
-            voList.add(vo);
-        }
-        return voList;
     }
 
 }

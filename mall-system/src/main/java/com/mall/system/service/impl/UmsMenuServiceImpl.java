@@ -3,6 +3,7 @@ package com.mall.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.bo.add.MenuAddBo;
 import com.mall.system.mapper.UmsMenuMapper;
@@ -10,6 +11,8 @@ import com.mall.system.service.IUmsMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,21 +31,19 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
      * @return 菜单列表
      */
     @Override
-    @SuppressWarnings("unchecked")
     public List<UmsMenu> selectMenuListAll() {
         return list(Wrappers
                 .<UmsMenu>lambdaQuery()
-                .orderByAsc(UmsMenu::getParentId, UmsMenu::getOrderNo));
+                .orderByAsc(Arrays.asList(UmsMenu::getOrderNo, UmsMenu::getParentId)));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<UmsMenu> selectRouterListAll() {
         return list(Wrappers
                 .<UmsMenu>lambdaQuery()
                 .eq(UmsMenu::getStatus, 0)
                 .in(UmsMenu::getMenuType, 0, 1)
-                .orderByAsc(UmsMenu::getParentId, UmsMenu::getOrderNo));
+                .orderByAsc(Arrays.asList(UmsMenu::getOrderNo, UmsMenu::getParentId)));
     }
 
     @Override
@@ -105,18 +106,18 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
 
     @Override
     public Boolean addDeptPerm(Long deptId, Set<Long> permIds) {
-        if(permIds.size()==0){
+        if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.addDeptPerm(deptId, permIds)==permIds.size();
+        return baseMapper.addDeptPerm(deptId, permIds) == permIds.size();
     }
 
     @Override
     public Boolean removeDeptPerm(Long deptId, Set<Long> permIds) {
-        if(permIds.size()==0){
+        if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.removeDeptPerm(deptId, permIds)==permIds.size();
+        return baseMapper.removeDeptPerm(deptId, permIds) == permIds.size();
     }
 
     @SuppressWarnings("unused")

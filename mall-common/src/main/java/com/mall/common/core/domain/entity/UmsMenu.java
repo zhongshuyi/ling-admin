@@ -112,34 +112,9 @@ public class UmsMenu implements Serializable {
     private Integer isLink;
 
     /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改者
-     */
-    private String updateBy;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
      * 菜单类型( 0 目录,1 菜单,2 按钮)
      */
     private Integer menuType;
-
-    /**
-     * 备注
-     */
-    private String remark;
 
     /**
      * 状态(0启用 1禁用)

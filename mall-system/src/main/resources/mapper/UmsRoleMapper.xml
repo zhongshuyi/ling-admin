@@ -6,18 +6,13 @@
         select distinct r.id,
                         r.role_name,
                         r.role_key,
-                        r.role_sort,
+                        r.order_no,
                         r.data_scope,
-                        r.menu_check_strictly,
-                        r.dept_check_strictly,
                         r.status,
-                        r.del_flag,
                         r.create_time,
                         r.remark
-        from ums_role r
-                 left join ums_user_role ur on ur.role_id = r.id
-                 left join ums_admin u on u.id = ur.user_id
-        WHERE r.del_flag = '0'
-          and ur.user_id = #{userId}
+        from  ums_role r
+                 left join ums_user_role ur on r.id =ur.role_id
+        WHERE ur.user_id = #{userId}
     </select>
 </mapper>

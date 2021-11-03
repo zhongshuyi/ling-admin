@@ -6,7 +6,7 @@
         select id,
                parent_id,
                dept_name,
-               order_num,
+               order_no,
                leader,
                phone,
                email,

@@ -3,7 +3,6 @@ package com.mall.system.service;
 import com.mall.common.core.domain.entity.UmsDept;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mall.system.bo.add.DeptAddBo;
-import com.mall.system.vo.DeptVo;
 
 import java.util.List;
 
@@ -14,12 +13,6 @@ import java.util.List;
  * @since 2021-10-08
  */
 public interface IUmsDeptService extends IService<UmsDept> {
-
-    /**
-     * 获取层级部门列表
-     * @return 部门列表
-     */
-    List<DeptVo> getDeptVoList();
 
     /**
      * 添加部门

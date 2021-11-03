@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mall.common.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UmsAdmin implements Serializable {
+public class UmsAdmin extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -100,30 +101,4 @@ public class UmsAdmin implements Serializable {
      * 最后登录时间
      */
     private Date loginDate;
-
-    /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 备注
-     */
-    private String remark;
-
 }

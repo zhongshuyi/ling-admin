@@ -10,8 +10,6 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
  * @date 2021-06-20-15:17
  **/
 @SpringBootApplication
-@EnableOpenApi
-@MapperScan("com.mall.system.mapper")
 public class MallAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(MallAdminApplication.class, args);

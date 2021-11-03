@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 
+import com.mall.common.core.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -18,9 +20,10 @@ import lombok.experimental.Accessors;
  * @author 钟舒艺
  * @since 2021-10-08
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class UmsDept implements Serializable {
+public class UmsDept extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +46,7 @@ public class UmsDept implements Serializable {
     /**
      * 显示顺序
      */
-    private Integer orderNum;
+    private Integer orderNo;
 
     /**
      * 负责人
@@ -59,26 +62,4 @@ public class UmsDept implements Serializable {
      * 邮箱
      */
     private String email;
-
-    /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-
 }
