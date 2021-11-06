@@ -203,10 +203,20 @@ public interface IServicePlus<T, V> extends IService<T> {
      * 分页实体集合转Vo集合
      *
      * @param page 分页对象
-     * @return Vo对象
+     * @return 分页
      */
     default PagePlus<T, V> pageVo(PagePlus<T, V> page) {
         return pageVo(page, Wrappers.emptyWrapper(), new CopyOptions());
+    }
+
+    /**
+     * 分页实体集合转Vo集合
+     * @param page 分页对象
+     * @param wrapper 查询条件
+     * @return 分页对象
+     */
+    default PagePlus<T, V> pageVo(PagePlus<T, V> page,Wrapper<T> wrapper) {
+        return pageVo(page, wrapper, new CopyOptions());
     }
 
     /**
@@ -240,4 +250,5 @@ public interface IServicePlus<T, V> extends IService<T> {
      * @return 是否成功
      */
     boolean saveAll(Collection<T> entityList);
+
 }

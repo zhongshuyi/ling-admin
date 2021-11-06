@@ -3,6 +3,7 @@ package com.mall.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.domain.entity.UmsRole;
+import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @author 钟舒艺
  * @since 2021-07-07
  */
-public interface UmsRoleMapper extends BaseMapper<UmsRole> {
+public interface UmsRoleMapper extends  BaseMapperPlus<UmsRole> {
     /**
      * 根据用户id查询角色列表
      * @param userId 用户id

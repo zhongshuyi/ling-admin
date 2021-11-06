@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -24,9 +23,9 @@ import java.util.Map;
  * @author 钟舒艺
  * @date 2021-11-02-14:42
  */
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceImpl<M, T> implements IServicePlus<T, V> {
 
+    @Autowired
     protected M baseMapper;
 
     @Getter

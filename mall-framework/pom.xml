@@ -57,6 +57,7 @@
             <groupId>com.mall</groupId>
             <artifactId>mall-system</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

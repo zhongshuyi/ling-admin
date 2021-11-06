@@ -1,7 +1,8 @@
 package com.mall.system.service;
 
 import com.mall.common.core.domain.entity.UmsRole;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.mall.common.core.mybatisplus.core.IServicePlus;
+import com.mall.system.vo.RoleVo;
 
 /**
  * <p>
@@ -12,6 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-07-07
  */
 @SuppressWarnings("unused")
-public interface IUmsRoleService extends IService<UmsRole> {
+public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo> {
 
 }
