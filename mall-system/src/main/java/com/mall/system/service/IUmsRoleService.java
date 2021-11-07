@@ -15,4 +15,10 @@ import com.mall.system.vo.RoleVo;
 @SuppressWarnings("unused")
 public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo> {
 
+    /**
+     * 检查角色的标识是否唯一
+     * @param roleBo 角色Bo
+     */
+    void checkRoleKeyUnique(UmsRole roleBo);
+
 }

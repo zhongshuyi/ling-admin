@@ -15,7 +15,7 @@
         </foreach>
     </delete>
 
-    <select id="selectRolePerms" resultType="java.lang.Long">
+    <select id="selectUserPermsIdsById" resultType="java.lang.Long">
         select distinct m.id
         from ums_menu m
                  left join ums_role_menu rm on m.id = rm.menu_id
@@ -37,6 +37,7 @@
           and m.status = 0
         order by m.parent_id, m.order_no;
     </select>
+
     <select id="getDeptPerm" resultType="com.mall.common.core.domain.entity.UmsMenu">
         select ums_menu.id,
                parent_id,
@@ -66,6 +67,37 @@
         from ums_menu
                  left join ums_dept_permission udp on ums_menu.id = udp.permission_id
         where udp.dept_id = #{id}
+    </select>
+
+    <select id="getRolePerm" resultType="com.mall.common.core.domain.entity.UmsMenu">
+        select m.id,
+               parent_id,
+               perms,
+               order_no,
+               path,
+               title,
+               component,
+               ignore_keep_alive,
+               affix,
+               icon,
+               frame_src,
+               transition_name,
+               hide_breadcrumb,
+               hide_children_in_menu,
+               hide_tab,
+               hide_menu,
+               is_link,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               menu_type,
+               remark,
+               status,
+               is_frame
+        from ums_menu m
+                 left join ums_role_menu rm on m.id = rm.menu_id
+        where m.status = 0
     </select>
 
 

@@ -20,7 +20,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param userId 用户id
      * @return 权限列表set
      */
-    Set<Long> selectRolePerms(Long userId);
+    Set<Long> selectUserPermsIdsById(Long userId);
 
     /**
      * 查询部门的权限列表
@@ -52,4 +52,12 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @return 是否成功
      */
     Integer removeDeptPerm(@Param("deptId") Long deptId, @Param("permIds") Set<Long> permIds);
+
+
+    /**
+     * 获取角色权限
+     * @param id 角色id
+     * @return 权限
+     */
+    List<UmsMenu> getRolePerm(Long id);
 }

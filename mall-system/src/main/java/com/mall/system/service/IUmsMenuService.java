@@ -1,8 +1,8 @@
 package com.mall.system.service;
 
-import com.mall.common.core.domain.entity.UmsMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.mall.system.bo.add.MenuAddBo;
+import com.mall.common.core.domain.entity.UmsMenu;
+import com.mall.system.bo.MenuBo;
 
 import java.util.List;
 import java.util.Set;
@@ -57,10 +57,10 @@ public interface IUmsMenuService extends IService<UmsMenu> {
 
     /**
      * 增加菜单并验证
-     * @param menuAddBo 菜单增加对象
+     * @param menuBo 菜单增加对象
      * @return 是否成功
      */
-    Boolean addByAddBo(MenuAddBo menuAddBo);
+    Boolean addByAddBo(MenuBo menuBo);
 
     /**
      * 删除菜单
@@ -106,4 +106,11 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      */
     Boolean removeDeptPerm(Long deptId ,Set<Long> permIds);
 
+
+    /**
+     * 获取角色权限
+     * @param id 部门id
+     * @return 权限
+     */
+    List<UmsMenu> getRolePerm(Long id);
 }

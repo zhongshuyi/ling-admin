@@ -6,13 +6,13 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import com.mall.common.annotation.RepeatSubmit;
 import com.mall.common.core.controller.BaseController;
+import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.util.ServletUtils;
+import com.mall.common.core.validate.ValidationGroups;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
-import com.mall.system.bo.add.MenuAddBo;
-import com.mall.system.bo.edit.MenuEditBo;
-import com.mall.common.core.domain.CommonResult;
+import com.mall.system.bo.MenuBo;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import io.swagger.annotations.Api;
@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class MenuController extends BaseController {
 
     @PostMapping
     @ApiOperation("增加菜单")
-    public CommonResult addMenu(@RequestBody MenuAddBo addBo) {
+    public CommonResult addMenu(@Validated(ValidationGroups.Add.class) @RequestBody MenuBo addBo) {
         if (umsMenuService.checkMenuUnique(BeanUtil.toBean(addBo, UmsMenu.class))) {
             return CommonResult.failed("菜单" + addBo.getTitle() + "已存在");
         }
@@ -73,7 +74,7 @@ public class MenuController extends BaseController {
     @ApiOperation("编辑菜单")
     @PutMapping()
     @RepeatSubmit
-    public CommonResult editMenu(@RequestBody MenuEditBo bo) {
+    public CommonResult editMenu(@Validated(ValidationGroups.Edit.class) @RequestBody MenuBo bo) {
         if (bo.getId().equals(bo.getParentId())) {
             return CommonResult.failed("上级菜单不能为自己");
         } else if (umsMenuService.checkMenuUnique(BeanUtil.toBean(bo, UmsMenu.class))) {

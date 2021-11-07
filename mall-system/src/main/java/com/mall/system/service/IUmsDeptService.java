@@ -1,8 +1,8 @@
 package com.mall.system.service;
 
-import com.mall.common.core.domain.entity.UmsDept;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.mall.system.bo.add.DeptAddBo;
+import com.mall.common.core.domain.entity.UmsDept;
+import com.mall.system.bo.DeptBo;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public interface IUmsDeptService extends IService<UmsDept> {
      * @param addBo 添加对象
      * @return 是否成功
      */
-    Boolean addDept(DeptAddBo addBo);
+    Boolean addDept(DeptBo addBo);
 
     /**
      * 检查同一级部门下是否有相同名称部门
      * @param addBo 新增部门对象
      * @return 是否存在
      */
-    Boolean checkDeptUnique(DeptAddBo addBo);
+    Boolean checkDeptUnique(DeptBo addBo);
 
     /**
      * 获取子部门列表

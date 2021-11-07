@@ -6,10 +6,11 @@ import com.mall.system.service.IUmsAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- * <p>
+ *
  * 用户信息表 服务实现类
- * </p>
  *
  * @author 钟舒艺
  * @since 2021-07-06
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> implements IUmsAdminService {
 
+    @Override
+    public List<UmsAdmin> getUserListByRoleId(Long roleId) {
+        return baseMapper.getUserListByRoleId(roleId);
+    }
 }

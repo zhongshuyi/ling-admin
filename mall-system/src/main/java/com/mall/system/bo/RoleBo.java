@@ -21,6 +21,14 @@ public class RoleBo {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 角色id
+     */
+    @ApiModelProperty(value = "角色id")
+    @NotNull(message = "主键不能为空", groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
+    private Long id;
+
+    /**
      * 角色名称
      */
     @ApiModelProperty(value = "角色名称")
@@ -38,7 +46,7 @@ public class RoleBo {
      * 显示顺序
      */
     @NotNull(message = "显示顺序不能为空", groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
-    @Min(value = 1, message = "显示顺序最低为0",groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+    @Min(value = 0, message = "显示顺序最低为0",groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @ApiModelProperty(value = "显示顺序")
     private Integer orderNo;
 

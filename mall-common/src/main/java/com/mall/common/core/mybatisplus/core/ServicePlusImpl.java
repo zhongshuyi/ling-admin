@@ -121,4 +121,15 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
         }
         return baseMapper.insertAll(entityList) == entityList.size();
     }
+
+
+    @Override
+    public void validEntityBeforeSave(T t) {
+
+    }
+
+    @Override
+    public void validEntityBeforeDel(Long id) {
+
+    }
 }

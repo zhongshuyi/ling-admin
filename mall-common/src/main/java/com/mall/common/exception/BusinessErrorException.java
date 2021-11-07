@@ -6,12 +6,13 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 自定义业务异常
+ *
  * @author 钟舒艺
  * @date 2021-07-06-11:27
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class BusinessErrorException extends RuntimeException{
+public class BusinessErrorException extends RuntimeException {
     private static final long serialVersionUID = -7480022450501760611L;
 
     /**
@@ -29,8 +30,13 @@ public class BusinessErrorException extends RuntimeException{
         this.message = businessMsgEnum.getMsg();
     }
 
-    public BusinessErrorException(String message){
+    public BusinessErrorException(String message) {
         this.message = message;
         this.code = 500;
+    }
+
+    public BusinessErrorException(int code, String message) {
+        this.message = message;
+        this.code = code;
     }
 }

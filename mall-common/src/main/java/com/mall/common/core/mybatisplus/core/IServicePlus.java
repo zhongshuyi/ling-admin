@@ -1,5 +1,6 @@
 package com.mall.common.core.mybatisplus.core;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -211,11 +212,12 @@ public interface IServicePlus<T, V> extends IService<T> {
 
     /**
      * 分页实体集合转Vo集合
-     * @param page 分页对象
+     *
+     * @param page    分页对象
      * @param wrapper 查询条件
      * @return 分页对象
      */
-    default PagePlus<T, V> pageVo(PagePlus<T, V> page,Wrapper<T> wrapper) {
+    default PagePlus<T, V> pageVo(PagePlus<T, V> page, Wrapper<T> wrapper) {
         return pageVo(page, wrapper, new CopyOptions());
     }
 
@@ -250,5 +252,56 @@ public interface IServicePlus<T, V> extends IService<T> {
      * @return 是否成功
      */
     boolean saveAll(Collection<T> entityList);
+
+
+    /**
+     * 保存前的数据校验
+     *
+     * @param t 实体类
+     */
+    void validEntityBeforeSave(T t);
+
+
+    /**
+     * 通过bo进行新增
+     *
+     * @param bo  接收到数据
+     * @param <B> Bo类
+     * @return 是否保存成功
+     */
+    default <B> Boolean insertByBo(B bo) {
+        T t = BeanUtil.toBean(bo, getEntityClass());
+        validEntityBeforeSave(t);
+        return save(t);
+    }
+
+    /**
+     * 通过bo进行修改
+     *
+     * @param bo  接收到数据
+     * @param <B> Bo类
+     * @return 是否修改成功
+     */
+    default <B> Boolean updateByBo(B bo) {
+        T t = BeanUtil.toBean(bo, getEntityClass());
+        validEntityBeforeSave(t);
+        return updateById(t);
+    }
+
+    /**
+     * 删除前操作
+     * @param id 需要删除的数据id
+     */
+    void validEntityBeforeDel(Long id);
+
+    /**
+     * 做操作后删除
+     * @param id 需要删除的数据id
+     * @return 是否成功
+     */
+    default Boolean deleteWithValidById(Long id) {
+        validEntityBeforeDel(id);
+        return removeById(id);
+    }
 
 }

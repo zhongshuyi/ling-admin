@@ -10,7 +10,8 @@ import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsDept;
 import com.mall.common.core.domain.entity.UmsMenu;
-import com.mall.system.bo.add.DeptAddBo;
+import com.mall.common.core.validate.ValidationGroups;
+import com.mall.system.bo.DeptBo;
 import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsMenuService;
 import io.swagger.annotations.Api;
@@ -18,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -61,7 +63,7 @@ public class DeptController extends BaseController {
 
     @PostMapping
     @ApiOperation(value = "增加部门")
-    public CommonResult addDept(@RequestBody DeptAddBo addBo) {
+    public CommonResult addDept(@Validated(ValidationGroups.Add.class) @RequestBody DeptBo addBo) {
         if (umsDeptService.checkDeptUnique(addBo)) {
             return CommonResult.failed("部门'" + addBo.getDeptName() + "' 已存在");
         } else {
@@ -77,7 +79,7 @@ public class DeptController extends BaseController {
 
     @PutMapping
     @ApiOperation(value = "更改部门")
-    public CommonResult editDept(@RequestBody DeptAddBo dept) {
+    public CommonResult editDept(@RequestBody DeptBo dept) {
         if (umsDeptService.checkDeptUnique(dept)) {
             return CommonResult.failed("部门'" + dept.getDeptName() + "' 已存在");
         } else {

@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mall.system.mapper.UmsAdminMapper">
 
+    <select id="getUserListByRoleId" resultType="com.mall.common.core.domain.entity.UmsAdmin">
+        select id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               avatar,
+               password,
+               home_path,
+               status,
+               del_flag,
+               login_ip,
+               depart_ids,
+               user_identity,
+               login_date,
+               remark,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from ums_admin u
+                 left join ums_user_role uur on u.id = uur.user_id
+        where uur.role_id = #{roleId}
+    </select>
 </mapper>

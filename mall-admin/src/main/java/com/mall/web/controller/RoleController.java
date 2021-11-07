@@ -1,5 +1,6 @@
 package com.mall.web.controller;
 
+import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.util.PageUtils;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "角色操作")
 @RequestMapping("/system/role")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class RoleController {
+public class RoleController extends BaseController {
 
     private final IUmsRoleService umsRoleService;
 
@@ -35,12 +36,23 @@ public class RoleController {
         return CommonResult.success(PageUtils.buildPageInfo(umsRoleService.pageVo(PageUtils.buildPagePlus())));
     }
 
-
     @PostMapping
     @ApiOperation("添加角色")
     public CommonResult add(@Validated(ValidationGroups.Add.class) @RequestBody RoleBo role) {
-        System.out.println(role);
-        return CommonResult.success();
+        return toAjax(umsRoleService.insertByBo(role));
     }
+
+    @PutMapping
+    @ApiOperation("修改角色")
+    public CommonResult edit(@Validated(ValidationGroups.Edit.class) @RequestBody RoleBo role) {
+        return toAjax(umsRoleService.updateByBo(role));
+    }
+
+    @ApiOperation("根据id删除角色")
+    @DeleteMapping("/{id}")
+    public CommonResult del(@PathVariable Long id) {
+        return toAjax(umsRoleService.removeById(id));
+    }
+
 
 }

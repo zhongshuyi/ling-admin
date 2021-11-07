@@ -45,7 +45,7 @@ public class PermissionService {
         List<UmsMenu> perms = new ArrayList<>();
 
         if (umsAdmin.getId() != 1L) {
-            Set<Long> p = umsMenuMapper.selectRolePerms(umsAdmin.getId());
+            Set<Long> p = umsMenuMapper.selectUserPermsIdsById(umsAdmin.getId());
             p.addAll(umsMenuMapper.selectDeptPermsId(umsAdmin.getId()));
             perms.addAll(umsMenuMapper.selectBatchIds(p));
         }

@@ -3,15 +3,13 @@ package com.mall.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mall.common.core.domain.entity.UmsMenu;
-import com.mall.system.bo.add.MenuAddBo;
+import com.mall.system.bo.MenuBo;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -58,7 +56,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
 
     @Override
     public Set<Long> selectRolePermsId(Long userId) {
-        return baseMapper.selectRolePerms(userId);
+        return baseMapper.selectUserPermsIdsById(userId);
     }
 
     @Override
@@ -67,8 +65,8 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public Boolean addByAddBo(MenuAddBo menuAddBo) {
-        UmsMenu menu = BeanUtil.toBean(menuAddBo, UmsMenu.class);
+    public Boolean addByAddBo(MenuBo menuBo) {
+        UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
         validEntityBeforeSave(menu);
         return save(menu);
     }
@@ -118,6 +116,11 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
             return true;
         }
         return baseMapper.removeDeptPerm(deptId, permIds) == permIds.size();
+    }
+
+    @Override
+    public List<UmsMenu> getRolePerm(Long id) {
+        return baseMapper.getRolePerm(id);
     }
 
     @SuppressWarnings("unused")

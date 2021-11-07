@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mall.common.core.domain.entity.UmsDept;
-import com.mall.system.bo.add.DeptAddBo;
+import com.mall.system.bo.DeptBo;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ import java.util.List;
 public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> implements IUmsDeptService {
 
     @Override
-    public Boolean addDept(DeptAddBo addBo) {
+    public Boolean addDept(DeptBo addBo) {
         UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
         return save(dept);
     }
 
 
     @Override
-    public Boolean checkDeptUnique(DeptAddBo addBo) {
+    public Boolean checkDeptUnique(DeptBo addBo) {
         return
                 getOne(
                         Wrappers.<UmsDept>lambdaQuery()
