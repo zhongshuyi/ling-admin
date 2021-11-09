@@ -32,11 +32,6 @@
             <version>${velocity.version}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.mall</groupId>
-            <artifactId>mall-common</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

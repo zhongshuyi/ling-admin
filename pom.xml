@@ -9,9 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>mall-admin</module>
-        <module>mall-common</module>
-        <module>mall-framework</module>
         <module>mall-generator</module>
         <module>mall-system</module>
     </modules>
@@ -22,8 +19,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.4.5</spring-boot.version>
         <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
-        <pagehelper.version>1.4.0</pagehelper.version>
+        <mybatis-plus-generator.version>3.5.1</mybatis-plus-generator.version>
         <druid.version>1.2.8</druid.version>
         <mysql-connector.version>8.0.25</mysql-connector.version>
         <lombok.version>1.18.22</lombok.version>
@@ -37,7 +33,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
+        <version>2.5.0</version>
         <relativePath/>
     </parent>
 
@@ -85,24 +81,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.mall</groupId>
-                <artifactId>mall-system</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.mall</groupId>
-                <artifactId>mall-framework</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.mall</groupId>
-                <artifactId>mall-common</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
@@ -131,7 +109,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.5</version>
+                <version>2.5.4</version>
                 <configuration>
                     <mainClass>com.mall.MallApplication</mainClass>
                 </configuration>

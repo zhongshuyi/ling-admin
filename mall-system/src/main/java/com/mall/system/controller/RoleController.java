@@ -1,4 +1,4 @@
-package com.mall.web.controller;
+package com.mall.system.controller;
 
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
@@ -6,6 +6,7 @@ import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.util.PageUtils;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.system.bo.RoleBo;
+import com.mall.system.service.IUmsMenuService;
 import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import io.swagger.annotations.Api;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * @author 钟舒艺
@@ -29,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController extends BaseController {
 
     private final IUmsRoleService umsRoleService;
+
+    private final IUmsMenuService umsMenuService;
 
     @GetMapping
     @ApiOperation("分页获取角色列表")
@@ -52,6 +57,12 @@ public class RoleController extends BaseController {
     @DeleteMapping("/{id}")
     public CommonResult del(@PathVariable Long id) {
         return toAjax(umsRoleService.removeById(id));
+    }
+
+    @ApiOperation("获取角色权限")
+    @GetMapping("perm/{id}")
+    public CommonResult<Set<Long>> getPerm(@PathVariable Long id) {
+        return CommonResult.success(umsMenuService.getRolePerm(id));
     }
 
 

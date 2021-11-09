@@ -69,35 +69,11 @@
         where udp.dept_id = #{id}
     </select>
 
-    <select id="getRolePerm" resultType="com.mall.common.core.domain.entity.UmsMenu">
-        select m.id,
-               parent_id,
-               perms,
-               order_no,
-               path,
-               title,
-               component,
-               ignore_keep_alive,
-               affix,
-               icon,
-               frame_src,
-               transition_name,
-               hide_breadcrumb,
-               hide_children_in_menu,
-               hide_tab,
-               hide_menu,
-               is_link,
-               create_by,
-               create_time,
-               update_by,
-               update_time,
-               menu_type,
-               remark,
-               status,
-               is_frame
+    <select id="getRolePerm" resultType="java.lang.Long">
+        select m.id
         from ums_menu m
                  left join ums_role_menu rm on m.id = rm.menu_id
-        where m.status = 0
+        where rm.role_id = #{id}
     </select>
 
 

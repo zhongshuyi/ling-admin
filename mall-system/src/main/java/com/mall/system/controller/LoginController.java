@@ -1,7 +1,6 @@
-package com.mall.web.controller;
+package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.util.ServletUtils;

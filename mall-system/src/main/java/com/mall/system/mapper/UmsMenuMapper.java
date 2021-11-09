@@ -59,5 +59,5 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param id 角色id
      * @return 权限
      */
-    List<UmsMenu> getRolePerm(Long id);
+    Set<Long> getRolePerm(Long id);
 }

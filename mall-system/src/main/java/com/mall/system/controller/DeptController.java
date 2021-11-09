@@ -1,4 +1,4 @@
-package com.mall.web.controller;
+package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;

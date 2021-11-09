@@ -112,5 +112,5 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      * @param id 部门id
      * @return 权限
      */
-    List<UmsMenu> getRolePerm(Long id);
+    Set<Long> getRolePerm(Long id);
 }

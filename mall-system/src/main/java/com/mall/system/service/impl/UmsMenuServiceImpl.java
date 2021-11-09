@@ -119,7 +119,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     }
 
     @Override
-    public List<UmsMenu> getRolePerm(Long id) {
+    public Set<Long> getRolePerm(Long id) {
         return baseMapper.getRolePerm(id);
     }
 
