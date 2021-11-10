@@ -2,7 +2,7 @@ package com.mall.framework.util;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
-import com.mall.common.core.redis.RedisService;
+import com.mall.common.util.RedisUtils;
 import com.mall.framework.model.AdminUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -25,10 +26,6 @@ import java.util.Map;
 @Slf4j
 public class JwtTokenUtil {
 
-    /**
-     * redis操作
-     */
-    private final RedisService redisService;
 
     /**
      * 令牌秘钥,定义在application.yml中通过@ConfigurationProperties注解映射
@@ -75,10 +72,6 @@ public class JwtTokenUtil {
      */
     private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
-
-    public JwtTokenUtil(RedisService redisService) {
-        this.redisService = redisService;
-    }
 
     /**
      * 根据负载生成JWT的token,不设置过期时间,因为不存重要信息
@@ -137,7 +130,7 @@ public class JwtTokenUtil {
             // 解析token获取存的负载对象
             Claims claims = getClaimsFromToken(token);
             String uuid = (String) claims.get(userKey);
-            return redisService.get(getTokenKey(uuid));
+            return RedisUtils.getCacheObject(getTokenKey(uuid));
         }
         return null;
     }
@@ -153,8 +146,8 @@ public class JwtTokenUtil {
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(expiration * MILLIS_MINUTE);
         // 储存至redis
-        log.info("过期时间:"+expiration);
-        redisService.set(getTokenKey(uuid), user, expiration);
+        log.info("过期时间:" + expiration);
+        RedisUtils.setCacheObject(getTokenKey(uuid), user, expiration, TimeUnit.SECONDS);
         Map<String, Object> claims = new HashMap<>(2);
         claims.put(userKey, uuid);
         return generateToken(claims);
@@ -171,7 +164,7 @@ public class JwtTokenUtil {
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
             user.setLoginTime(System.currentTimeMillis());
             user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
-            redisService.set(getTokenKey(user.getUuid()), user, expiration);
+            RedisUtils.setCacheObject(getTokenKey(user.getUuid()), user, expiration, TimeUnit.SECONDS);
         }
     }
 
@@ -182,7 +175,7 @@ public class JwtTokenUtil {
      */
     public boolean delUser(String uuid) {
         if (StrUtil.isNotEmpty(uuid)) {
-            return  redisService.del(getTokenKey(uuid));
+            return RedisUtils.deleteObject(getTokenKey(uuid));
         }
         return false;
     }

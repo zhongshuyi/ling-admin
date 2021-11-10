@@ -1,0 +1,41 @@
+# 单Redis节点模式
+singleServerConfig:
+  # 节点地址 (默认本地6379)
+  address: "redis://127.0.0.1:6379"
+  # 密码
+  password: null
+  # 客户端名称
+  clientName: null
+  # 选择使用哪个数据库0~15
+  database: 0
+  # 连接空闲超时，单位：毫秒
+  idleConnectionTimeout: 10000
+  # 连接超时，单位：毫秒
+  connectTimeout: 10000
+  # 命令等待超时，单位：毫秒
+  timeout: 3000
+  # 命令失败重试次数
+  retryAttempts: 3
+  # 命令重试发送时间间隔，单位：毫秒
+  retryInterval: 1500
+  # 单个连接最大订阅数量
+  subscriptionsPerConnection: 5
+  # 发布和订阅连接的最小空闲连接数
+  subscriptionConnectionMinimumIdleSize: 1
+  # 发布和订阅连接池大小
+  subscriptionConnectionPoolSize: 50
+  # 最小空闲连接数
+  connectionMinimumIdleSize: 32
+  # 连接池大小
+  connectionPoolSize: 64
+  # DNS监测时间间隔，单位：毫秒
+  dnsMonitoringInterval: 5000
+# 线程池数量(默认 2)
+threads: 2
+# Netty线程池数量
+nettyThreads: 2
+# Jackson JSON 编码 (默认编码)
+codec:
+  class: "org.redisson.codec.JsonJacksonCodec"
+# 传输模式 (默认值：TransportMode.NIO)
+transportMode: "NIO"

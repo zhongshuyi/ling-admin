@@ -5,10 +5,9 @@ import cn.hutool.core.lang.Validator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.constant.GlobalConstants;
-import com.mall.common.core.redis.RedisService;
 import com.mall.common.filter.RepeatedlyRequestWrapper;
+import com.mall.common.util.RedisUtils;
 import com.mall.framework.interceptor.BaseRepeatSubmitInterceptor;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 判断请求url和数据是否和上一次相同，
@@ -40,17 +40,13 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
     @Value("${token.tokenHeader}")
     private String header;
 
-    /**
-     * redis工具
-     */
-    private final RedisService redisCache;
 
     /**
      * 间隔时间，单位:秒 默认10秒
      * <p>
      * 两次相同参数的请求，如果间隔时间大于该参数，系统不会认定为重复提交的数据
      */
-    private int intervalTime = 10;
+    private Long intervalTime = 10L;
 
     /**
      * 防重提交 redis key
@@ -58,7 +54,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
     public static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
 
 
-    public void setIntervalTime(int intervalTime) {
+    public void setIntervalTime(Long intervalTime) {
         this.intervalTime = intervalTime;
     }
 
@@ -91,7 +87,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
         // 唯一标识（指定key + 消息头）
         String cacheRepeatKey = REPEAT_SUBMIT_KEY + submitKey;
 
-        Map<String, Object> session = redisCache.get(cacheRepeatKey);
+        Map<String, Object> session = RedisUtils.getCacheObject(cacheRepeatKey);
         if (session != null) {
             if (session.containsKey(url)) {
                 Map<String, Object> preDataMap = (Map<String, Object>) session.get(url);
@@ -102,7 +98,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
         }
         Map<String, Object> cacheMap = new HashMap<>(2);
         cacheMap.put(url, nowDataMap);
-        redisCache.set(cacheRepeatKey, cacheMap, intervalTime);
+        RedisUtils.setCacheObject(cacheRepeatKey, cacheMap, intervalTime, TimeUnit.SECONDS);
         return false;
     }
 
