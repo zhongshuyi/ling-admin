@@ -42,6 +42,11 @@ public class UmsRoleServiceImpl extends ServicePlusImpl<UmsRoleMapper, UmsRole, 
     }
 
     @Override
+    public boolean stateChanges(Long id, Integer state) {
+        return update(Wrappers.<UmsRole>lambdaUpdate().eq(UmsRole::getId, id).set(UmsRole::getStatus, state));
+    }
+
+    @Override
     public void validEntityBeforeDel(Long id) {
         if (CollUtil.isNotEmpty(umsMenuService.getRolePerm(id)) || CollUtil.isNotEmpty(umsAdminService.getUserListByRoleId(id))) {
             throw new BusinessErrorException(400, "此角色还有关联用户或菜单");

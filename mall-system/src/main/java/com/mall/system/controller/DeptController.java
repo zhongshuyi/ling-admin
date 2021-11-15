@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 部门操作
+ *
  * @author 钟舒艺
  * @date 2021-10-09-10:33
  **/
@@ -42,6 +44,11 @@ public class DeptController extends BaseController {
 
     public final IUmsMenuService umsMenuService;
 
+    /**
+     * 获取部门树
+     *
+     * @return 部门树结构
+     */
     @GetMapping
     @ApiOperation(value = "获取部门列表")
     public CommonResult<List<Tree<Long>>> getDeptVoList() {
@@ -61,6 +68,12 @@ public class DeptController extends BaseController {
                 }));
     }
 
+    /**
+     * 增加部门
+     *
+     * @param addBo 部门对象
+     * @return 是否成功
+     */
     @PostMapping
     @ApiOperation(value = "增加部门")
     public CommonResult addDept(@Validated(ValidationGroups.Add.class) @RequestBody DeptBo addBo) {
@@ -71,12 +84,24 @@ public class DeptController extends BaseController {
         }
     }
 
+    /**
+     * 删除部门
+     *
+     * @param id 部门id
+     * @return 是否成功
+     */
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除部门")
     public CommonResult deleteById(@PathVariable Long id) {
         return toAjax(umsDeptService.deleteById(id));
     }
 
+    /**
+     * 根据id更改部门信息
+     *
+     * @param dept 部门对象
+     * @return 是否成功
+     */
     @PutMapping
     @ApiOperation(value = "更改部门")
     public CommonResult editDept(@RequestBody DeptBo dept) {
@@ -87,28 +112,52 @@ public class DeptController extends BaseController {
         }
     }
 
+    /**
+     * 检查部门是否有下级部门
+     *
+     * @param id 菜单id
+     * @return 是否有子菜单
+     */
     @ApiOperation("检查菜单是否有子菜单")
     @GetMapping("checkMenuHasChildren/{id}")
     public CommonResult checkMenuHasChildren(@PathVariable Long id) {
         return CommonResult.success(CollUtil.isNotEmpty(umsDeptService.getDeptChildren(id)));
     }
 
+    /**
+     * 获取部门详细信息
+     *
+     * @param id 部门id
+     * @return 部门详细信息
+     */
     @ApiOperation("获取部门详细信息")
     @GetMapping("/{id}")
-    public CommonResult getDept(@PathVariable Long id) {
+    public CommonResult<UmsDept> getDept(@PathVariable Long id) {
         return CommonResult.success(umsDeptService.getById(id));
     }
 
+    /**
+     * 获取部门权限id集合
+     *
+     * @param id 部门id
+     * @return 拥有的权限集合
+     */
     @ApiOperation("获取部门权限")
     @GetMapping("DeptPerm/{id}")
     public CommonResult<Set<Long>> getDeptPerm(@PathVariable Long id) {
         return CommonResult.success(umsMenuService.getDeptPerm(id).stream().map(UmsMenu::getId).collect(Collectors.toSet()));
     }
 
+    /**
+     * 更改部门的权限
+     *
+     * @param deptId 部门id
+     * @param newIds 新的权限id集合
+     * @return 是否更改成功
+     */
     @ApiOperation("更改部门权限")
     @PutMapping("DeptPerm/{deptId}")
     public CommonResult setDeptPerm(@PathVariable Long deptId, @RequestBody Set<Long> newIds) {
-
         Set<Long> oldIds = umsMenuService.getDeptPerm(deptId).stream().map(UmsMenu::getId).collect(Collectors.toSet());
         Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);

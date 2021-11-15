@@ -17,8 +17,17 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo> {
 
     /**
      * 检查角色的标识是否唯一
+     *
      * @param roleBo 角色Bo
      */
     void checkRoleKeyUnique(UmsRole roleBo);
 
+    /**
+     * 更改角色状态
+     *
+     * @param id    角色id
+     * @param state 状态
+     * @return 是否成功
+     */
+    boolean stateChanges(Long id, Integer state);
 }

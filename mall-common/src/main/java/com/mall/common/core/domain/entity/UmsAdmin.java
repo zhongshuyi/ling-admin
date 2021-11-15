@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 
 import java.util.*;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
@@ -68,7 +69,6 @@ public class UmsAdmin extends BaseEntity implements Serializable {
     /**
      * password
      */
-    @JsonIgnore
     private String password;
 
 
@@ -101,4 +101,10 @@ public class UmsAdmin extends BaseEntity implements Serializable {
      * 最后登录时间
      */
     private Date loginDate;
+
+    /**
+     * 是否是超级管理员
+     */
+    @TableField(exist = false)
+    private Boolean isAdmin;
 }

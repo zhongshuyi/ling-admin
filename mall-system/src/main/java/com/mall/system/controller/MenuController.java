@@ -26,20 +26,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 菜单操作
+ *
  * @author 钟舒艺
  * @date 2021-09-21-14:08
  **/
+@Slf4j
 @RestController
 @Api(tags = "菜单操作")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RequestMapping("/system/menu")
-@Slf4j
 public class MenuController extends BaseController {
 
     private final IUmsMenuService umsMenuService;
 
     private final JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * 获取所有菜单
+     *
+     * @return 菜单树结构
+     */
     @GetMapping
     @ApiOperation("获取所有菜单")
     public CommonResult<List<Tree<Long>>> getMenuList() {
@@ -48,13 +55,19 @@ public class MenuController extends BaseController {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
 
-        if (adminUserDetails.getUmsAdmin().getId().equals(1L)) {
+        if (adminUserDetails.getUmsAdmin().getIsAdmin()) {
             return CommonResult.success(MenuUtil.getMenuList(umsMenuService.selectMenuListAll()));
         } else {
             return CommonResult.success(MenuUtil.getMenuList(umsMenuService.list()));
         }
     }
 
+    /**
+     * 增加菜单
+     *
+     * @param addBo 菜单对象
+     * @return 是否增加成功
+     */
     @PostMapping
     @ApiOperation("增加菜单")
     public CommonResult addMenu(@Validated(ValidationGroups.Add.class) @RequestBody MenuBo addBo) {
@@ -64,6 +77,12 @@ public class MenuController extends BaseController {
         return toAjax(umsMenuService.addByAddBo(addBo));
     }
 
+    /**
+     * 删除菜单
+     *
+     * @param id 菜单id
+     * @return 是否删除成功
+     */
     @ApiOperation("删除菜单")
     @DeleteMapping("/{id}")
     public CommonResult delMenu(@PathVariable Long id) {
@@ -71,8 +90,14 @@ public class MenuController extends BaseController {
     }
 
 
+    /**
+     * 更改菜单信息
+     *
+     * @param bo 菜单信息
+     * @return 是否更改成功
+     */
     @ApiOperation("编辑菜单")
-    @PutMapping()
+    @PutMapping
     @RepeatSubmit
     public CommonResult editMenu(@Validated(ValidationGroups.Edit.class) @RequestBody MenuBo bo) {
         if (bo.getId().equals(bo.getParentId())) {
@@ -83,12 +108,23 @@ public class MenuController extends BaseController {
         return CommonResult.success(umsMenuService.updateById(BeanUtil.toBean(bo, UmsMenu.class)));
     }
 
+    /**
+     * 检查菜单是否有子菜单
+     *
+     * @param id 菜单id
+     * @return 是否有子菜单
+     */
     @ApiOperation("检查菜单是否有子菜单")
     @GetMapping("checkMenuHasChildren/{id}")
     public CommonResult checkMenuHasChildren(@PathVariable Long id) {
         return CommonResult.success(CollUtil.isNotEmpty(umsMenuService.getMenuChildren(id)));
     }
 
+    /**
+     * 获取权限树
+     *
+     * @return 权限树
+     */
     @ApiOperation("获取权限树结构")
     @GetMapping("getPerm")
     public CommonResult<List<Tree<Long>>> getPerm() {

@@ -14,6 +14,9 @@ public class RoleVo {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("角色id")
+    private Long id;
+
     /**
      * 角色名称
      */

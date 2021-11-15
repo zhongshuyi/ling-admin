@@ -11,6 +11,7 @@
     <modules>
         <module>mall-generator</module>
         <module>mall-system</module>
+        <module>mall-common</module>
     </modules>
 
     <properties>
@@ -23,7 +24,7 @@
         <druid.version>1.2.8</druid.version>
         <mysql-connector.version>8.0.25</mysql-connector.version>
         <lombok.version>1.18.22</lombok.version>
-        <hutool.version>5.7.15</hutool.version>
+        <hutool.version>5.7.16</hutool.version>
         <velocity.version>2.3</velocity.version>
         <springfox.version>3.0.0</springfox.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -122,6 +123,8 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
+
     </build>
 </project>

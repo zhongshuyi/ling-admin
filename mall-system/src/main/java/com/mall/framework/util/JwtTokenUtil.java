@@ -147,7 +147,7 @@ public class JwtTokenUtil {
         user.setExpireTime(expiration * MILLIS_MINUTE);
         // 储存至redis
         log.info("过期时间:" + expiration);
-        RedisUtils.setCacheObject(getTokenKey(uuid), user, expiration, TimeUnit.SECONDS);
+        RedisUtils.setCacheObject(getTokenKey(uuid), user, expiration, TimeUnit.MINUTES);
         Map<String, Object> claims = new HashMap<>(2);
         claims.put(userKey, uuid);
         return generateToken(claims);
@@ -164,7 +164,7 @@ public class JwtTokenUtil {
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
             user.setLoginTime(System.currentTimeMillis());
             user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
-            RedisUtils.setCacheObject(getTokenKey(user.getUuid()), user, expiration, TimeUnit.SECONDS);
+            RedisUtils.setCacheObject(getTokenKey(user.getUuid()), user, expiration, TimeUnit.MINUTES);
         }
     }
 

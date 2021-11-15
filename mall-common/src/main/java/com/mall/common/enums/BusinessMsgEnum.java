@@ -28,6 +28,10 @@ public enum BusinessMsgEnum {
      */
     ACCOUNT_DISABLE(401, "账户已被禁用"),
     /**
+     * 角色已被禁用
+     */
+    ROLE_DISABLE(401, "账户已被禁用"),
+    /**
      * 部门被禁用
      */
     DEPT_DISABLE(401, "部门已被禁用");

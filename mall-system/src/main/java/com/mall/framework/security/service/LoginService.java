@@ -32,30 +32,27 @@ public class LoginService {
 
     /**
      * 登录验证
+     *
      * @param username 用户名
      * @param password 密码
      * @return token
      */
-    public String login(String username,String password){
+    public String login(String username, String password) {
 
 
         // 用户验证
         Authentication authentication;
 
-        try
-        {
+        System.out.println(username + " , " + password);
+
+        try {
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-            if (e instanceof BadCredentialsException)
-            {
+        } catch (Exception e) {
+            if (e instanceof BadCredentialsException) {
                 throw new BusinessErrorException(BusinessMsgEnum.USER_PASSWORD_NOT_MATCH);
-            }
-            else
-            {
+            } else {
                 throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
             }
         }

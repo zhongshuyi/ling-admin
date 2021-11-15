@@ -8,7 +8,7 @@ import lombok.Getter;
  * @date 2021-07-07-17:43
  **/
 @Getter
-public enum UserStatus {
+public enum Status {
 
     /**
      * 正常
@@ -26,7 +26,7 @@ public enum UserStatus {
     private final Integer code;
     private final String info;
 
-    UserStatus(Integer code, String info)
+    Status(Integer code, String info)
     {
         this.code = code;
         this.info = info;

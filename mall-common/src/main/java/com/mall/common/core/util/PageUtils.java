@@ -80,7 +80,9 @@ public class PageUtils {
         }
         PagePlus<T, K> page = new PagePlus<>(pageNum, pageSize);
         OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
-        page.addOrder(orderItem);
+        if (orderItem != null) {
+            page.addOrder(orderItem);
+        }
         return page;
     }
 
@@ -113,7 +115,9 @@ public class PageUtils {
         }
         Page<T> page = new Page<>(pageNum, pageSize);
         OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
-        page.addOrder(orderItem);
+        if (orderItem != null) {
+            page.addOrder(orderItem);
+        }
         return page;
     }
 

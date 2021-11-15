@@ -1,12 +1,14 @@
 package com.mall.framework.security.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mall.common.constant.GlobalConstants;
+import com.mall.common.core.domain.entity.UmsAdmin;
+import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.enums.BusinessMsgEnum;
-import com.mall.common.enums.UserStatus;
+import com.mall.common.enums.Status;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.system.mapper.UmsRoleMapper;
-import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsDeptService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -43,19 +47,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
-        UmsAdmin umsAdmin = umsAdminService.getOne(queryWrapper);
+        log.info(username + "尝试登录");
+        UmsAdmin umsAdmin = umsAdminService.getOne(Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, username).last("limit 1"));
         if (umsAdmin == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
-        } else if (UserStatus.DELETED.getCode().equals(umsAdmin.getDelFlag())) {
+        } else if (Status.DELETED.getCode().equals(umsAdmin.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DELETED);
-        } else if (UserStatus.DISABLE.getCode().equals(umsAdmin.getStatus())) {
+        } else if (Status.DISABLE.getCode().equals(umsAdmin.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DISABLE);
         }
-        return new AdminUserDetails(umsAdmin, permissionService.getPermissionList(umsAdmin), umsRoleMapper.selectRoleListByUserId(umsAdmin.getId()),umsDeptService.getDeptListByUserId(umsAdmin.getId()));
+        List<UmsRole> roles = umsRoleMapper.selectRoleListByUserId(umsAdmin.getId());
+        roles.forEach((r) -> {
+            if (r.getStatus().equals(Status.DISABLE.getCode())) {
+                log.info("登录用户：{} 角色{}已被停用.", username, r.getRoleName());
+                throw new BusinessErrorException(BusinessMsgEnum.ROLE_DISABLE);
+            }
+            if (r.getId().equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
+                umsAdmin.setIsAdmin(true);
+            }
+        });
+        return new AdminUserDetails(umsAdmin, permissionService.getPermissionList(umsAdmin), roles, umsDeptService.getDeptListByUserId(umsAdmin.getId()));
     }
 }

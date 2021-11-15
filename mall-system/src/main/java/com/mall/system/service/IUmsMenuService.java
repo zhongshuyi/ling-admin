@@ -32,8 +32,8 @@ public interface IUmsMenuService extends IService<UmsMenu> {
 
 
     /**
-     * 根据用户id获取菜单(部门权限加角色权限)
-     * @param permIds 权限id
+     * 根据权限id列表获取权限
+     * @param permIds 权限id列表
      * @return 菜单
      */
     List<UmsMenu> selectMenuByIds(List<Long> permIds);
@@ -113,4 +113,22 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      * @return 权限
      */
     Set<Long> getRolePerm(Long id);
+
+
+    /**
+     *  增加角色权限
+     * @param roleId 角色id
+     * @param permIds 权限id
+     * @return 是否成功
+     */
+    Boolean addRolePerm(Long roleId ,Set<Long> permIds);
+
+    /**
+     *  删除角色权限
+     * @param roleId 部门id
+     * @param permIds 权限id
+     * @return 是否成功
+     */
+    Boolean removeRolePerm(Long roleId ,Set<Long> permIds);
+
 }

@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 登录操作
+ *
  * @author 钟舒艺
  * @date 2021-07-07-21:09
  **/
@@ -71,6 +73,11 @@ public class LoginController {
         return CommonResult.success(map);
     }
 
+    /**
+     * 获取权限键列表
+     *
+     * @return 权限键列表
+     */
     @GetMapping("/getPermCode")
     @ApiOperation("获取权限列表")
     public CommonResult<Set<String>> getPermCode() {
@@ -87,7 +94,7 @@ public class LoginController {
     @ApiOperation("获取路由")
     public CommonResult<List<RouterVo>> getMenuList() {
         AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-        if (adminUserDetails.getUmsAdmin().getId() == 1L) {
+        if (adminUserDetails.getUmsAdmin().getIsAdmin()) {
             return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectRouterListAll()));
         } else {
             return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectMenuByIds(adminUserDetails.getPermissionList().stream().map(UmsMenu::getId).collect(Collectors.toList()))));

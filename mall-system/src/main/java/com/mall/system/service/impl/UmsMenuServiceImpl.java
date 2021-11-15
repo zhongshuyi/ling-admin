@@ -123,6 +123,22 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         return baseMapper.getRolePerm(id);
     }
 
+    @Override
+    public Boolean addRolePerm(Long roleId, Set<Long> permIds) {
+        if (permIds.size() == 0) {
+            return true;
+        }
+        return baseMapper.addRolePerm(roleId, permIds) == permIds.size();
+    }
+
+    @Override
+    public Boolean removeRolePerm(Long roleId, Set<Long> permIds) {
+        if (permIds.size() == 0) {
+            return true;
+        }
+        return baseMapper.removeRolePerm(roleId, permIds) == permIds.size();
+    }
+
     @SuppressWarnings("unused")
     private void validEntityBeforeSave(UmsMenu menu) {
 

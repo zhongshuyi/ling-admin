@@ -74,7 +74,7 @@ public class AdminUserDetails implements UserDetails {
         this.permissionList = permissionList;
         this.roles = umsRoles;
         this.depts = depts;
-        if(umsAdmin.getId()==1){
+        if(umsAdmin.getIsAdmin()){
             this.permissionCodeSet = new HashSet<>(1);
             this.permissionCodeSet.add("*:*:*");
         }else {
