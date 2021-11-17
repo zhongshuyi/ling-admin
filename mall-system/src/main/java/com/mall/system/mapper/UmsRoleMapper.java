@@ -1,7 +1,6 @@
 package com.mall.system.mapper;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.common.core.mybatisplus.core.BaseMapperPlus;

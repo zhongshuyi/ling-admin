@@ -1,8 +1,8 @@
 package com.mall.system.mapper;
 
 import com.mall.common.core.domain.entity.UmsAdmin;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
+import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
 import org.apache.ibatis.annotations.CacheNamespace;
 
 import java.util.List;
@@ -14,9 +14,10 @@ import java.util.List;
  * @since 2021-07-06
  */
 @CacheNamespace(implementation = MybatisPlusRedisCache.class, eviction = MybatisPlusRedisCache.class)
-public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
+public interface UmsAdminMapper extends BaseMapperPlus<UmsAdmin> {
     /**
      * 根据角色id获取用户列表
+     *
      * @param roleId 角色id
      * @return 用户列表
      */

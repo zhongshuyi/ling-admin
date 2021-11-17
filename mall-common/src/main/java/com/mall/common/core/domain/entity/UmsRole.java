@@ -1,17 +1,13 @@
 package com.mall.common.core.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-
-
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.io.Serializable;
-
-
 import com.mall.common.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * 角色信息表

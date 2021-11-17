@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Getter;
@@ -24,6 +25,8 @@ import java.util.Map;
  * @date 2021-11-02-14:42
  */
 public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceImpl<M, T> implements IServicePlus<T, V> {
+
+    private static final long serialVersionUID = -2447762079455049677L;
 
     @Autowired
     protected M baseMapper;
@@ -99,6 +102,11 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
     }
 
     @Override
+    public <B> PagePlus<T, V> pageVo(PagePlus<T, V> page, B bo) {
+        return pageVo(page, new QueryWrapper<>(BeanUtil.toBean(bo, getEntityClass())));
+    }
+
+    @Override
     public PagePlus<T, V> pageVo(PagePlus<T, V> page, Wrapper<T> queryWrapper, CopyOptions copyOptions) {
         PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
         result.setRecordsVo(BeanUtil.copyToList(result.getRecords(), getVoClass(), copyOptions));
@@ -113,6 +121,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
                 copyOptions
         );
     }
+
 
     @Override
     public boolean saveAll(Collection<T> entityList) {

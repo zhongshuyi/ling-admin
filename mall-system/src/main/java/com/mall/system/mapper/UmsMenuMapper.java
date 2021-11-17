@@ -1,7 +1,7 @@
 package com.mall.system.mapper;
 
-import com.mall.common.core.domain.entity.UmsMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +20,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 查询权限列表
+     *
      * @param userId 用户id
      * @return 权限列表set
      */
@@ -27,6 +28,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 查询部门的权限列表
+     *
      * @param userId 用户id
      * @return 权限列表
      */
@@ -35,6 +37,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 获取部门权限
+     *
      * @param id 部门id
      * @return 权限
      */
@@ -42,6 +45,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 增加部门权限
+     *
      * @param deptId  部门id
      * @param permIds 权限id
      * @return 改变行数
@@ -50,6 +54,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 删除部门权限
+     *
      * @param deptId  部门id
      * @param permIds 权限id
      * @return 是否成功
@@ -59,6 +64,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 增加部门权限
+     *
      * @param deptId  部门id
      * @param permIds 权限id
      * @return 改变行数
@@ -67,6 +73,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 删除部门权限
+     *
      * @param roleId  部门id
      * @param permIds 权限id
      * @return 是否成功
@@ -75,6 +82,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**
      * 获取角色权限
+     *
      * @param id 角色id
      * @return 权限
      */

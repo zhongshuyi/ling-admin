@@ -1,6 +1,7 @@
 package com.mall.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,7 +11,8 @@ import lombok.Data;
  * @date 2021-09-17-8:55
  **/
 @Data
-@JsonInclude(value= JsonInclude.Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@ApiModel("路由配置信息")
 public class RouterMeta {
 
     @ApiModelProperty(value = "菜单排序")

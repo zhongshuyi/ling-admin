@@ -1,7 +1,7 @@
 package com.mall.system.mapper;
 
-import com.mall.common.core.domain.entity.UmsDept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mall.common.core.domain.entity.UmsDept;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ public interface UmsDeptMapper extends BaseMapper<UmsDept> {
 
     /**
      * 根据用户id获取部门列表
+     *
      * @param userId 用户id
      * @return 部门列表
      */

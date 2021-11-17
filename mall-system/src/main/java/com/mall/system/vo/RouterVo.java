@@ -1,6 +1,7 @@
 package com.mall.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
  * @date 2021-09-17-8:46
  **/
 @Data
-@JsonInclude(value= JsonInclude.Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@ApiModel("路由")
 public class RouterVo {
 
     /**

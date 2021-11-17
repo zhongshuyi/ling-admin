@@ -23,6 +23,8 @@ import java.util.Set;
 @Service
 public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> implements IUmsMenuService {
 
+    private static final long serialVersionUID = -5579437013223054201L;
+
     /**
      * 获取所有菜单列表
      *

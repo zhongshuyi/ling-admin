@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static com.mall.common.constant.GlobalConstants.LOCAL_HOST_IPV4_IP;
+
 /**
  * @author 钟舒艺
  * @date 2021-07-02-23:51
@@ -46,7 +48,7 @@ public class IpUtils {
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : new HTMLFilter().filter(ip);
+        return "0:0:0:0:0:0:0:1".equals(ip) ? LOCAL_HOST_IPV4_IP : new HTMLFilter().filter(ip);
     }
 
     /**
@@ -57,7 +59,7 @@ public class IpUtils {
      */
     public static boolean internalIp(String ip) {
         byte[] adder = textToNumericFormatV4(ip);
-        return internalIp(adder) || "127.0.0.1".equals(ip);
+        return internalIp(adder) || LOCAL_HOST_IPV4_IP.equals(ip);
     }
 
     /**
@@ -103,7 +105,7 @@ public class IpUtils {
      * 将IPv4地址转换成字节数组
      * IP地址本身是一个32位的二进制数，通常被分割为4个“8位二进制数”（也就是4个字节）,所以ip地址与int是可以互相转换的
      * 形如 192.168.1.1 的ipv4地址都分为4段,每段都是 0~255 之间的数,每段可以用 8 位来装下它,而1个byte的取值范围正好是-128~127,共255,正好可以存下
-     * 只需要对0~255的数与255进行位与运算,就可以得出-128~127之间的数,需要转换回来的时候再对其与255进行位与运算就可以了
+     * 只需要对0~255的数与255进行按位与运算,就可以得出-128~127之间的数,需要转换回来的时候再对其与255进行位与运算就可以了
      * 该方法可以转换4种情况
      * 1. 传入为int 如 4294967295 转为 255.255.255.255 这是最大的情况 存储到byte数组中是[-1, -1, -1, -1]
      * 2. 传入 255.16777215 转为 255.255.255.255
@@ -240,7 +242,7 @@ public class IpUtils {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException ignored) {
         }
-        return "127.0.0.1";
+        return LOCAL_HOST_IPV4_IP;
     }
 
     /**

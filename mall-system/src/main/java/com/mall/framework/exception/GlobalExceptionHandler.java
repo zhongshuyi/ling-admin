@@ -54,10 +54,7 @@ public class GlobalExceptionHandler {
         StringBuilder errorMsg = new StringBuilder();
         if (result.hasErrors()) {
             List<FieldError> fieldErrors = result.getFieldErrors();
-            fieldErrors.forEach(error -> {
-                System.out.println("field" + error.getField() + ", msg:" + error.getDefaultMessage());
-                errorMsg.append(error.getDefaultMessage()).append("!");
-            });
+            fieldErrors.forEach(error -> errorMsg.append(error.getDefaultMessage()).append("!"));
         }
         log.error("参数验证异常,{}", ex.getMessage());
         return CommonResult.failed(400, errorMsg.toString());

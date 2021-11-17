@@ -21,7 +21,7 @@ import java.util.function.Function;
  * @date 2021-11-02-9:07
  */
 @SuppressWarnings("unused")
-public interface IServicePlus<T, V> extends IService<T> {
+public interface IServicePlus<T, V> extends IService<T>, Serializable {
 
 
     /**
@@ -222,6 +222,15 @@ public interface IServicePlus<T, V> extends IService<T> {
     }
 
     /**
+     * 分页实体集合转Vo集合
+     *
+     * @param page 分页对象
+     * @param bo   查询条件
+     * @return 分页对象
+     */
+    <B> PagePlus<T, V> pageVo(PagePlus<T, V> page, B bo);
+
+    /**
      * 有查询条件,自定义转换分页集合
      *
      * @param page         分页对象
@@ -290,12 +299,14 @@ public interface IServicePlus<T, V> extends IService<T> {
 
     /**
      * 删除前操作
+     *
      * @param id 需要删除的数据id
      */
     void validEntityBeforeDel(Long id);
 
     /**
      * 做操作后删除
+     *
      * @param id 需要删除的数据id
      * @return 是否成功
      */

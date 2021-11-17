@@ -19,22 +19,21 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
     /**
      * 创建时间属性名
      */
-    private static final  String CREATE_TIME_STR = "createTime";
+    private static final String CREATE_TIME_STR = "createTime";
 
     /**
-     *  创建人
+     * 创建人
      */
-    private static final  String CREATE_BY_STR = "createBy";
+    private static final String CREATE_BY_STR = "createBy";
 
-    private static final  String UPDATE_BY = "updateBy";
+    private static final String UPDATE_BY = "updateBy";
 
-    private static final  String UPDATE_TIME = "updateBy";
-
-
+    private static final String UPDATE_TIME = "updateBy";
 
 
     /**
      * 插入时填充
+     *
      * @param metaObject 操作对象
      */
     @Override

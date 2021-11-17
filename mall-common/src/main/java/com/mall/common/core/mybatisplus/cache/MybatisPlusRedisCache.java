@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * mybatis-redis 二级缓存
- *
+ * <p>
  * 使用方法 配置文件开启 mybatis-plus 二级缓存
  * 在 XxxMapper.java 类上添加注解 @CacheNamespace(implementation = MybatisPlusRedisCache.class, eviction = MybatisPlusRedisCache.class)
  *

@@ -45,8 +45,13 @@ public class RoleController extends BaseController {
      */
     @GetMapping
     @ApiOperation("分页获取角色列表")
-    public CommonResult<PageInfo<RoleVo>> getList() {
-        return CommonResult.success(PageUtils.buildPageInfo(umsRoleService.pageVo(PageUtils.buildPagePlus())));
+    public CommonResult<PageInfo<RoleVo>> getList(RoleBo role) {
+        log.info(role.toString());
+        return CommonResult.success(
+                PageUtils.buildPageInfo(
+                        umsRoleService.pageVo(PageUtils.buildPagePlus(), role)
+                )
+        );
     }
 
     /**

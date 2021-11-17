@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
+@SuppressWarnings("unused")
 public class BusinessErrorException extends RuntimeException {
     private static final long serialVersionUID = -7480022450501760611L;
 
@@ -25,6 +26,11 @@ public class BusinessErrorException extends RuntimeException {
      */
     private String message;
 
+    /**
+     * 异常信息
+     */
+    private Exception exception;
+
     public BusinessErrorException(BusinessMsgEnum businessMsgEnum) {
         this.code = businessMsgEnum.getCode();
         this.message = businessMsgEnum.getMsg();
@@ -34,6 +40,20 @@ public class BusinessErrorException extends RuntimeException {
         this.message = message;
         this.code = 500;
     }
+
+    public BusinessErrorException(Exception e) {
+        this.code = 500;
+        this.message = "系统异常";
+        this.exception = e;
+    }
+
+
+    public BusinessErrorException(int code, String message, Exception e) {
+        this.code = code;
+        this.message = message;
+        this.exception = e;
+    }
+
 
     public BusinessErrorException(int code, String message) {
         this.message = message;

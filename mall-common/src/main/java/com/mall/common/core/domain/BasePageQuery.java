@@ -3,13 +3,16 @@ package com.mall.common.core.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author 钟舒艺
  * @date 2021-11-06-16:58
  **/
 @Data
-public class BasePageQuery {
+public class BasePageQuery implements Serializable {
 
+    private static final long serialVersionUID = 6745507447447938043L;
     /**
      * 分页大小
      */

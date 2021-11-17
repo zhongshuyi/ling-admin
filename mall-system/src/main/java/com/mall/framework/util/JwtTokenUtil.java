@@ -7,11 +7,13 @@ import com.mall.framework.model.AdminUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -21,40 +23,39 @@ import java.util.concurrent.TimeUnit;
  * @author 钟舒艺
  * @date 2021-06-29-21:06
  **/
-@Component
 @SuppressWarnings("unused")
+@Component
 @Slf4j
-public class JwtTokenUtil {
+@ConfigurationProperties(prefix = "token")
+@Data
+public class JwtTokenUtil implements Serializable {
 
+
+    private static final long serialVersionUID = 8404670744997523298L;
 
     /**
      * 令牌秘钥,定义在application.yml中通过@ConfigurationProperties注解映射
      */
-    @Value("${token.secret}")
     private String secret;
 
     /**
      * 令牌有效期,定义在application.yml中通过@ConfigurationProperties注解映射
      */
-    @Value("${token.expiration}")
     private Long expiration;
 
     /**
      * JWT存储的请求头
      */
-    @Value("${token.tokenHeader}")
     private String tokenHeader;
 
     /**
      * 令牌前缀
      */
-    @Value("${token.tokenPrefix}")
     private String tokenPrefix;
 
     /**
      * token中储存的uuid键名
      */
-    @Value("${token.userKey}")
     private String userKey;
 
     /**

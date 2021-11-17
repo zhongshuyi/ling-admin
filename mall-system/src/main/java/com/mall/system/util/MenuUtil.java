@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
@@ -54,6 +53,7 @@ public class MenuUtil {
 
     /**
      * 构建权限树结构
+     *
      * @param menus 菜单
      * @return 树结构
      */

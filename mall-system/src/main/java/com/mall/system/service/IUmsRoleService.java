@@ -4,6 +4,8 @@ import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.mybatisplus.core.IServicePlus;
 import com.mall.system.vo.RoleVo;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * 角色信息表 服务类
@@ -13,7 +15,7 @@ import com.mall.system.vo.RoleVo;
  * @since 2021-07-07
  */
 @SuppressWarnings("unused")
-public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo> {
+public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializable {
 
     /**
      * 检查角色的标识是否唯一

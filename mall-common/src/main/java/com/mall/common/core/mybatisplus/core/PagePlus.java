@@ -112,14 +112,22 @@ public class PagePlus<T, K> implements IPage<T> {
         return this.orders;
     }
 
-    public PagePlus<T, K> addOrder(OrderItem... items) {
+    /**
+     * 增加排序规则
+     *
+     * @param items 排序规则
+     */
+    public void addOrder(OrderItem... items) {
         this.orders.addAll(Arrays.asList(items));
-        return this;
     }
 
-    public PagePlus<T, K> addOrder(List<OrderItem> items) {
+    /**
+     * 增加排序规则
+     *
+     * @param items 排序规则list
+     */
+    public void addOrder(List<OrderItem> items) {
         this.orders.addAll(items);
-        return this;
     }
 
     @Override

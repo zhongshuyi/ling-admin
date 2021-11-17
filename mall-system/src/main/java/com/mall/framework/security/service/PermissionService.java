@@ -1,16 +1,16 @@
 package com.mall.framework.security.service;
 
+import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.mapper.UmsRoleMapper;
-import com.mall.common.core.domain.entity.UmsAdmin;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 用户权限处理
@@ -20,18 +20,12 @@ import java.util.stream.Collectors;
  **/
 @Service
 @SuppressWarnings("unused")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PermissionService {
 
-    final
-    UmsMenuMapper umsMenuMapper;
+    private final UmsMenuMapper umsMenuMapper;
 
-    final
-    UmsRoleMapper umsRoleMapper;
-
-    public PermissionService(UmsMenuMapper umsMenuMapper, UmsRoleMapper umsRoleMapper) {
-        this.umsMenuMapper = umsMenuMapper;
-        this.umsRoleMapper = umsRoleMapper;
-    }
+    private final UmsRoleMapper umsRoleMapper;
 
 
     /**

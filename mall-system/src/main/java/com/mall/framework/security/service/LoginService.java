@@ -1,9 +1,10 @@
 package com.mall.framework.security.service;
 
-import com.mall.common.enums.BusinessMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,18 +18,14 @@ import javax.annotation.Resource;
  * @date 2021-07-07-17:23
  **/
 @Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LoginService {
 
     @Resource
     private AuthenticationManager authenticationManager;
 
+    private final JwtTokenUtil jwtTokenUtil;
 
-    final
-    JwtTokenUtil jwtTokenUtil;
-
-    public LoginService(JwtTokenUtil jwtTokenUtil) {
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     /**
      * 登录验证
@@ -39,11 +36,8 @@ public class LoginService {
      */
     public String login(String username, String password) {
 
-
         // 用户验证
         Authentication authentication;
-
-        System.out.println(username + " , " + password);
 
         try {
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
@@ -51,9 +45,9 @@ public class LoginService {
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
-                throw new BusinessErrorException(BusinessMsgEnum.USER_PASSWORD_NOT_MATCH);
+                throw new BusinessErrorException(403, "用户名或密码错误", e);
             } else {
-                throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
+                throw new BusinessErrorException(e);
             }
         }
         AdminUserDetails adminUserDetails = (AdminUserDetails) authentication.getPrincipal();

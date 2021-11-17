@@ -161,12 +161,10 @@ public class DeptController extends BaseController {
         Set<Long> oldIds = umsMenuService.getDeptPerm(deptId).stream().map(UmsMenu::getId).collect(Collectors.toSet());
         Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        System.out.println("删除的值" + result);
         Boolean isSuccess = umsMenuService.removeDeptPerm(deptId, result);
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        System.out.println("新增的值" + result);
         return toAjax(umsMenuService.addDeptPerm(deptId, result) && isSuccess);
     }
 }

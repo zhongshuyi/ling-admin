@@ -11,15 +11,15 @@ spring:
 
 token:
   # token存储的请求头
-  tokenHeader: Authorization
+  token-header: Authorization
   # token加解密使用的密钥
   secret: mall-admin-secret
   # token的超期限时间
   expiration: 720
   # token开头
-  tokenPrefix: 'Bearer '
+  token_prefix: 'Bearer '
   # token中储存的uuid键名
-  userKey: login_user_key
+  user_key: login_user_key
 
 
 # MyBatisPlus配置

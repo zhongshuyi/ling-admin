@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +30,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @SuppressWarnings("unused")
-public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
+public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implements Serializable {
+
+    private static final long serialVersionUID = 3670730997054064652L;
+
     public final String REPEAT_PARAMS = "repeatParams";
 
     public final String REPEAT_TIME = "repeatTime";
@@ -37,7 +41,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor {
     /**
      * 令牌自定义标识
      */
-    @Value("${token.tokenHeader}")
+    @Value("${token.token-header}")
     private String header;
 
 

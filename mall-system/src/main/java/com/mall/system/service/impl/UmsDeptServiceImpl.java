@@ -21,6 +21,8 @@ import java.util.List;
 @Service
 public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> implements IUmsDeptService {
 
+    private static final long serialVersionUID = 8302483662294489594L;
+
     @Override
     public Boolean addDept(DeptBo addBo) {
         UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);

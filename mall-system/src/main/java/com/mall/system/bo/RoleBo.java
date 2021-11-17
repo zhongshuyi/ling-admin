@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author 钟舒艺
@@ -46,7 +49,7 @@ public class RoleBo {
      * 显示顺序
      */
     @NotNull(message = "显示顺序不能为空", groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
-    @Min(value = 0, message = "显示顺序最低为0",groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+    @Min(value = 0, message = "显示顺序最低为0", groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @ApiModelProperty(value = "显示顺序")
     private Integer orderNo;
 

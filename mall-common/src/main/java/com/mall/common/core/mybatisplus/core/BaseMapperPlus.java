@@ -13,6 +13,7 @@ public interface BaseMapperPlus<T> extends BaseMapper<T> {
 
     /**
      * 批量插入
+     *
      * @param batchList 数据集合
      * @return 成功条数
      */

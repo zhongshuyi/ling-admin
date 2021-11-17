@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UmsRoleServiceImpl extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo> implements IUmsRoleService {
 
+    private static final long serialVersionUID = 6794454144163365234L;
+
     private final IUmsMenuService umsMenuService;
 
     private final IUmsAdminService umsAdminService;
