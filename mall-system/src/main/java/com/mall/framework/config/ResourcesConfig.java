@@ -8,6 +8,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * 资源配置
+ *
  * @author 钟舒艺
  * @date 2021-09-23-15:21
  **/
@@ -15,14 +17,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ResourcesConfig implements WebMvcConfigurer {
 
-    private final BaseRepeatSubmitInterceptor repeatSubmitInterceptor;
+    private final transient BaseRepeatSubmitInterceptor repeatSubmitInterceptor;
 
     /**
      * 自定义拦截规则
      */
     @Override
-    public void addInterceptors(InterceptorRegistry registry)
-    {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(repeatSubmitInterceptor).addPathPatterns("/**");
     }
 

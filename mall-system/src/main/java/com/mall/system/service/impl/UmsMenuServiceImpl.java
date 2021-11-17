@@ -8,11 +8,10 @@ import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.bo.MenuBo;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
-import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import org.springframework.stereotype.Service;
 
 /**
  * 菜单表 服务实现类
@@ -21,7 +20,9 @@ import java.util.Set;
  * @since 2021-09-14
  */
 @Service
-public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> implements IUmsMenuService {
+public class UmsMenuServiceImpl
+        extends ServiceImpl<UmsMenuMapper, UmsMenu>
+        implements IUmsMenuService {
 
     private static final long serialVersionUID = -5579437013223054201L;
 
@@ -90,7 +91,9 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
                         Wrappers.<UmsMenu>lambdaQuery()
                                 .ne(UmsMenu::getId, bo.getId())
                                 .eq(UmsMenu::getParentId, bo.getParentId())
-                                .and(q -> q.eq(UmsMenu::getPath, bo.getPath()).or().eq(UmsMenu::getTitle, bo.getTitle())))
+                                .and(q -> q
+                                        .eq(UmsMenu::getPath, bo.getPath()).or()
+                                        .eq(UmsMenu::getTitle, bo.getTitle())))
                 .isEmpty();
     }
 

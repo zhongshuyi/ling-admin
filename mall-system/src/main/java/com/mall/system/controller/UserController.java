@@ -32,11 +32,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserController extends BaseController {
 
-    private final IUmsAdminService umsAdminService;
+    private final transient IUmsAdminService umsAdminService;
 
+    /**
+     * 分页获取用户列表
+     *
+     * @param user 用户查询条件
+     * @return 分页后信息
+     */
     @GetMapping
     @ApiOperation(value = "分页获取用户列表")
-    public CommonResult<PageInfo<UserVo>> getUserList(@Validated(ValidationGroups.Query.class) UserBo user) {
+    public CommonResult<PageInfo<UserVo>> getUserList(
+            @Validated(ValidationGroups.Query.class) UserBo user) {
         return CommonResult.success(
                 PageUtils.buildPageInfo(
                         umsAdminService.pageVo(PageUtils.buildPagePlus(), user)

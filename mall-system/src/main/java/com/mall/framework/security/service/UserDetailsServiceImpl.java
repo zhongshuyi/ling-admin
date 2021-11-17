@@ -11,6 +11,7 @@ import com.mall.framework.model.AdminUserDetails;
 import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsDeptService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 /**
@@ -33,22 +32,20 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    final
-    IUmsAdminService umsAdminService;
+    private final transient IUmsAdminService umsAdminService;
 
-    final IUmsDeptService umsDeptService;
+    private final transient IUmsDeptService umsDeptService;
 
-    final
-    PermissionService permissionService;
+    private final transient PermissionService permissionService;
 
-    final
-    UmsRoleMapper umsRoleMapper;
-
+    private final transient UmsRoleMapper umsRoleMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username + "尝试登录");
-        UmsAdmin umsAdmin = umsAdminService.getOne(Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, username).last("limit 1"));
+        UmsAdmin umsAdmin = umsAdminService.getOne(
+                Wrappers.<UmsAdmin>lambdaQuery()
+                        .eq(UmsAdmin::getUsername, username).last("limit 1"));
         if (umsAdmin == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
@@ -69,6 +66,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 umsAdmin.setIsAdmin(true);
             }
         });
-        return new AdminUserDetails(umsAdmin, permissionService.getPermissionList(umsAdmin), roles, umsDeptService.getDeptListByUserId(umsAdmin.getId()));
+        return new AdminUserDetails(
+                umsAdmin,
+                permissionService.getPermissionList(umsAdmin),
+                roles, umsDeptService.getDeptListByUserId(umsAdmin.getId()));
     }
 }

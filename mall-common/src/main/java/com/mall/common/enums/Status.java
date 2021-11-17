@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * 系统用户状态
+ *
  * @author 钟舒艺
  * @date 2021-07-07-17:43
  **/
@@ -26,8 +27,7 @@ public enum Status {
     private final Integer code;
     private final String info;
 
-    Status(Integer code, String info)
-    {
+    Status(Integer code, String info) {
         this.code = code;
         this.info = info;
     }

@@ -7,13 +7,18 @@ import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.common.core.domain.entity.UmsDept;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.domain.entity.UmsRole;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 用户信息类
@@ -71,7 +76,18 @@ public class AdminUserDetails implements UserDetails, Serializable {
     public AdminUserDetails() {
     }
 
-    public AdminUserDetails(UmsAdmin umsAdmin, List<UmsMenu> permissionList, List<UmsRole> umsRoles, List<UmsDept> depts) {
+    /**
+     * 构造方法
+     *
+     * @param umsAdmin       用户信息
+     * @param permissionList 权限集合
+     * @param umsRoles       用户角色组
+     * @param depts          用户部门组
+     */
+    public AdminUserDetails(
+            UmsAdmin umsAdmin,
+            List<UmsMenu> permissionList,
+            List<UmsRole> umsRoles, List<UmsDept> depts) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
         this.roles = umsRoles;
@@ -80,10 +96,16 @@ public class AdminUserDetails implements UserDetails, Serializable {
             this.permissionCodeSet = new HashSet<>(1);
             this.permissionCodeSet.add("*:*:*");
         } else {
-            this.permissionCodeSet = permissionList.stream().map(UmsMenu::getPerms).collect(Collectors.toSet());
+            this.permissionCodeSet =
+                    permissionList.stream().map(UmsMenu::getPerms).collect(Collectors.toSet());
         }
     }
 
+    /**
+     * 获取角色的名称与键名
+     *
+     * @return 名称与键名集合
+     */
     @JsonIgnore
     public List<Map<String, String>> getRoleKey() {
         if (CollUtil.isEmpty(roles)) {

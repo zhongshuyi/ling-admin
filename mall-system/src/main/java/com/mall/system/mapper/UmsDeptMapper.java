@@ -2,7 +2,6 @@ package com.mall.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.domain.entity.UmsDept;
-
 import java.util.List;
 
 /**

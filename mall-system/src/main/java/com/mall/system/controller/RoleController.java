@@ -13,16 +13,24 @@ import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 角色管理操作
+ *
  * @author 钟舒艺
  * @date 2021-10-26-14:47
  **/
@@ -34,13 +42,14 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RoleController extends BaseController {
 
-    private final IUmsRoleService umsRoleService;
+    private final transient IUmsRoleService umsRoleService;
 
-    private final IUmsMenuService umsMenuService;
+    private final transient IUmsMenuService umsMenuService;
 
     /**
      * 分页获取角色列表
      *
+     * @param role 查询信息
      * @return 分页后的角色列表
      */
     @GetMapping
@@ -140,7 +149,7 @@ public class RoleController extends BaseController {
         Set<Long> oldIds = umsMenuService.getRolePerm(id);
         Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        Boolean isSuccess = umsMenuService.removeRolePerm(id, result);
+        final Boolean isSuccess = umsMenuService.removeRolePerm(id, result);
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);

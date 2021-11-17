@@ -16,16 +16,23 @@ import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 部门操作
@@ -38,11 +45,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RequestMapping("/system/dept")
 @Slf4j
+@Getter
 public class DeptController extends BaseController {
 
-    public final IUmsDeptService umsDeptService;
+    public final transient IUmsDeptService umsDeptService;
 
-    public final IUmsMenuService umsMenuService;
+    public final transient IUmsMenuService umsMenuService;
 
     /**
      * 获取部门树
@@ -145,7 +153,12 @@ public class DeptController extends BaseController {
     @ApiOperation("获取部门权限")
     @GetMapping("DeptPerm/{id}")
     public CommonResult<Set<Long>> getDeptPerm(@PathVariable Long id) {
-        return CommonResult.success(umsMenuService.getDeptPerm(id).stream().map(UmsMenu::getId).collect(Collectors.toSet()));
+        return CommonResult.success(
+                umsMenuService
+                        .getDeptPerm(id)
+                        .stream()
+                        .map(UmsMenu::getId)
+                        .collect(Collectors.toSet()));
     }
 
     /**
@@ -158,10 +171,14 @@ public class DeptController extends BaseController {
     @ApiOperation("更改部门权限")
     @PutMapping("DeptPerm/{deptId}")
     public CommonResult setDeptPerm(@PathVariable Long deptId, @RequestBody Set<Long> newIds) {
-        Set<Long> oldIds = umsMenuService.getDeptPerm(deptId).stream().map(UmsMenu::getId).collect(Collectors.toSet());
+        Set<Long> oldIds = umsMenuService
+                .getDeptPerm(deptId)
+                .stream()
+                .map(UmsMenu::getId)
+                .collect(Collectors.toSet());
         Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        Boolean isSuccess = umsMenuService.removeDeptPerm(deptId, result);
+        final Boolean isSuccess = umsMenuService.removeDeptPerm(deptId, result);
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);

@@ -10,6 +10,8 @@ import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.util.ServletUtils;
 import com.mall.common.core.validate.ValidationGroups;
+import com.mall.common.enums.BusinessMsgEnum;
+import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.system.bo.MenuBo;
@@ -17,13 +19,19 @@ import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 菜单操作
@@ -38,9 +46,9 @@ import java.util.List;
 @RequestMapping("/system/menu")
 public class MenuController extends BaseController {
 
-    private final IUmsMenuService umsMenuService;
+    private final transient IUmsMenuService umsMenuService;
 
-    private final JwtTokenUtil jwtTokenUtil;
+    private final transient JwtTokenUtil jwtTokenUtil;
 
     /**
      * 获取所有菜单
@@ -50,8 +58,11 @@ public class MenuController extends BaseController {
     @GetMapping
     @ApiOperation("获取所有菜单")
     public CommonResult<List<Tree<Long>>> getMenuList() {
-        AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
-
+        AdminUserDetails adminUserDetails =
+                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        if (adminUserDetails == null) {
+            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_NOT_LOGIN);
+        }
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
 

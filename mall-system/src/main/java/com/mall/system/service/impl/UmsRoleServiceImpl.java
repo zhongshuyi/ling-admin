@@ -10,8 +10,6 @@ import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,14 +19,20 @@ import org.springframework.stereotype.Service;
  * @since 2021-07-07
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class UmsRoleServiceImpl extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo> implements IUmsRoleService {
+public class UmsRoleServiceImpl
+        extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo>
+        implements IUmsRoleService {
 
     private static final long serialVersionUID = 6794454144163365234L;
 
-    private final IUmsMenuService umsMenuService;
+    private final transient IUmsMenuService umsMenuService;
 
-    private final IUmsAdminService umsAdminService;
+    private final transient IUmsAdminService umsAdminService;
+
+    public UmsRoleServiceImpl(IUmsMenuService umsMenuService, IUmsAdminService umsAdminService) {
+        this.umsMenuService = umsMenuService;
+        this.umsAdminService = umsAdminService;
+    }
 
     @Override
     public void validEntityBeforeSave(UmsRole umsRole) {
@@ -37,7 +41,9 @@ public class UmsRoleServiceImpl extends ServicePlusImpl<UmsRoleMapper, UmsRole, 
 
     @Override
     public void checkRoleKeyUnique(UmsRole roleBo) {
-        UmsRole umsRole = getOne(Wrappers.<UmsRole>lambdaQuery().eq(UmsRole::getRoleKey, roleBo.getRoleKey()).last("limit 1"));
+        UmsRole umsRole =
+                getOne(Wrappers.<UmsRole>lambdaQuery()
+                        .eq(UmsRole::getRoleKey, roleBo.getRoleKey()).last("limit 1"));
         if (umsRole != null && !umsRole.getId().equals(roleBo.getId())) {
             throw new BusinessErrorException(400, "角色键值已存在");
         }
@@ -45,12 +51,14 @@ public class UmsRoleServiceImpl extends ServicePlusImpl<UmsRoleMapper, UmsRole, 
 
     @Override
     public boolean stateChanges(Long id, Integer state) {
-        return update(Wrappers.<UmsRole>lambdaUpdate().eq(UmsRole::getId, id).set(UmsRole::getStatus, state));
+        return update(Wrappers.<UmsRole>lambdaUpdate()
+                .eq(UmsRole::getId, id).set(UmsRole::getStatus, state));
     }
 
     @Override
     public void validEntityBeforeDel(Long id) {
-        if (CollUtil.isNotEmpty(umsMenuService.getRolePerm(id)) || CollUtil.isNotEmpty(umsAdminService.getUserListByRoleId(id))) {
+        if (CollUtil.isNotEmpty(umsMenuService.getRolePerm(id))
+                || CollUtil.isNotEmpty(umsAdminService.getUserListByRoleId(id))) {
             throw new BusinessErrorException(400, "此角色还有关联用户或菜单");
         }
     }

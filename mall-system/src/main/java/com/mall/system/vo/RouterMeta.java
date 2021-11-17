@@ -7,6 +7,8 @@ import lombok.Data;
 
 
 /**
+ * 路由配置信息
+ *
  * @author 钟舒艺
  * @date 2021-09-17-8:55
  **/

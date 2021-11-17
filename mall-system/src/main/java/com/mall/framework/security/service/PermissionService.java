@@ -4,13 +4,12 @@ import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.mapper.UmsRoleMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 用户权限处理

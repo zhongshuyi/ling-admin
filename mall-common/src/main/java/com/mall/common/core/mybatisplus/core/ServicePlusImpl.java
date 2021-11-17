@@ -7,24 +7,24 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * IServicePlus 实现类
+ * IServicePlus 实现类.
  *
  * @param <M> Mapper类
  * @param <T> 数据实体类
  * @param <V> vo类
  * @author 钟舒艺
- * @date 2021-11-02-14:42
  */
-public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceImpl<M, T> implements IServicePlus<T, V> {
+public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
+        extends ServiceImpl<M, T>
+        implements IServicePlus<T, V> {
 
     private static final long serialVersionUID = -2447762079455049677L;
 
@@ -50,7 +50,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
     @Override
     @SuppressWarnings("unchecked")
     protected Class<M> currentMapperClass() {
-        return (Class<M>) ReflectionKit.getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 0);
+        return (Class<M>) ReflectionKit
+                .getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 0);
     }
 
     /**
@@ -61,7 +62,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
     @Override
     @SuppressWarnings("unchecked")
     protected Class<T> currentModelClass() {
-        return (Class<T>) ReflectionKit.getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 1);
+        return (Class<T>) ReflectionKit
+                .getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 1);
     }
 
     /**
@@ -71,7 +73,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
      */
     @SuppressWarnings("unchecked")
     protected Class<V> currentVoClass() {
-        return (Class<V>) ReflectionKit.getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 2);
+        return (Class<V>) ReflectionKit
+                .getSuperClassGenericType(this.getClass(), ServicePlusImpl.class, 2);
     }
 
     @Override
@@ -107,7 +110,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V> extends ServiceI
     }
 
     @Override
-    public PagePlus<T, V> pageVo(PagePlus<T, V> page, Wrapper<T> queryWrapper, CopyOptions copyOptions) {
+    public PagePlus<T, V> pageVo(
+            PagePlus<T, V> page, Wrapper<T> queryWrapper, CopyOptions copyOptions) {
         PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
         result.setRecordsVo(BeanUtil.copyToList(result.getRecords(), getVoClass(), copyOptions));
         return result;

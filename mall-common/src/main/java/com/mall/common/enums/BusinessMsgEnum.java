@@ -12,6 +12,10 @@ import lombok.Getter;
 public enum BusinessMsgEnum {
 
     /**
+     * 用户未登录
+     */
+    USER_IS_NOT_LOGIN(403, "用户未登录或已过期"),
+    /**
      * 系统异常
      */
     UNEXPECTED_EXCEPTION(500, "系统发生异常，请联系管理员！"),

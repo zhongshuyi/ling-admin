@@ -7,9 +7,8 @@ import com.mall.common.exception.BusinessErrorException;
 import com.mall.system.mapper.UmsAdminMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.vo.UserVo;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * 用户信息表 服务实现类
@@ -18,7 +17,9 @@ import java.util.List;
  * @since 2021-07-06
  */
 @Service
-public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmin, UserVo> implements IUmsAdminService {
+public class UmsAdminServiceImpl
+        extends ServicePlusImpl<UmsAdminMapper, UmsAdmin, UserVo>
+        implements IUmsAdminService {
 
     private static final long serialVersionUID = -6767396404407827925L;
 
@@ -42,7 +43,10 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      * @return true就是唯一的
      */
     public Boolean checkUserNameUnique(UmsAdmin umsAdmin) {
-        UmsAdmin user = getOne(Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, umsAdmin.getUsername()).last("limit 1"));
+        UmsAdmin user =
+                getOne(Wrappers.<UmsAdmin>lambdaQuery()
+                        .eq(UmsAdmin::getUsername, umsAdmin.getUsername())
+                        .last("limit 1"));
         return user != null && !umsAdmin.getId().equals(user.getId());
     }
 }

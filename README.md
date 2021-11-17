@@ -14,7 +14,6 @@
 
 github: [https://github.com/zhongshuyi/mall](https://github.com/zhongshuyi/mall)
 
-
 业务参考: [jeecg-boot](http://jeecg.com)
 代码参考: [ruoyi](http://doc.ruoyi.vip)
 
@@ -30,8 +29,6 @@ github: [https://github.com/zhongshuyi/mall](https://github.com/zhongshuyi/mall)
 | Jackson              | 序列化工具                    |
 | Hutool、Lombok       | 工具集,减少代码冗余 增加安全性 |
 
-
 目前项目还在缓慢开发中,作为自己的学习项目
-
 
 学习记录: [语雀文档 , 总库中的spring boot] (https://www.yuque.com/rookieteam/bvc9h3)

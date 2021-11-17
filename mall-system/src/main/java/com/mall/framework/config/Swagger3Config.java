@@ -10,9 +10,9 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-
 /**
  * Swagger3 配置类
+ *
  * @author 钟舒艺
  * @date 2021-05-08-9:53
  **/
@@ -20,21 +20,27 @@ import springfox.documentation.spring.web.plugins.Docket;
 @EnableOpenApi
 public class Swagger3Config {
 
+    /**
+     * 构建的配置项
+     *
+     * @return 构建
+     */
     @Bean
-    public Docket createRestApi(){
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包下controller生成API文档
                 .apis(RequestHandlerSelectors.basePackage("com.mall.system.controller"))
-                //为有@Api注解的Controller生成API文档
-//                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                //为有@ApiOperation注解的方法生成API文档
-//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build();
     }
 
+    /**
+     * 文档信息
+     *
+     * @return Api文档的信息
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("mall")

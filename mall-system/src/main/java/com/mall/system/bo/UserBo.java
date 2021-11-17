@@ -6,13 +6,14 @@ import com.mall.common.constant.Regular;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.Data;
 
 /**
+ * 用户信息操作类
+ *
  * @author 钟舒艺
  * @date 2021-11-16-11:00
  **/
@@ -53,7 +54,10 @@ public class UserBo {
      * 手机号码
      */
     @ApiModelProperty(value = "手机号码")
-    @Pattern(message = "必须是中国大陆电话号码", regexp = Regular.CHINA_TEL_NO, groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+    @Pattern(
+            message = "必须是中国大陆电话号码",
+            regexp = Regular.CHINA_TEL_NO,
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String tel;
 
     /**

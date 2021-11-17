@@ -41,6 +41,11 @@ public class BusinessErrorException extends RuntimeException {
         this.code = 500;
     }
 
+    /**
+     * 传入本身异常信息
+     *
+     * @param e 异常
+     */
     public BusinessErrorException(Exception e) {
         this.code = 500;
         this.message = "系统异常";
@@ -48,6 +53,13 @@ public class BusinessErrorException extends RuntimeException {
     }
 
 
+    /**
+     * 初始化全部参数
+     *
+     * @param code    自定义状态码
+     * @param message 提示信息
+     * @param e       异常
+     */
     public BusinessErrorException(int code, String message, Exception e) {
         this.code = code;
         this.message = message;

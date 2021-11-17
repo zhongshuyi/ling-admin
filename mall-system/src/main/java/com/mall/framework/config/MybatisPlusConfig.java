@@ -11,15 +11,15 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.mall.common.core.mybatisplus.methods.InsertAll;
 import com.mall.framework.mybatisplus.CreateAndUpdateMetaObjectHandler;
+import java.util.List;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.List;
-
 /**
  * mybatisPlus 配置
+ *
  * @author 钟舒艺
  * @date 2021-10-28-13:51
  **/
@@ -29,6 +29,11 @@ import java.util.List;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class MybatisPlusConfig {
 
+    /**
+     * 插件配置
+     *
+     * @return 配置好拦截器
+     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -37,7 +42,7 @@ public class MybatisPlusConfig {
         // 乐观锁插件
         interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
         // 阻断插件
-		interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
+        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
 
@@ -45,6 +50,8 @@ public class MybatisPlusConfig {
     /**
      * 分页插件，自动识别数据库类型
      * https://baomidou.com/guide/interceptor-pagination.html
+     *
+     * @return 分页插件配置
      */
     public PaginationInnerInterceptor paginationInnerInterceptor() {
         PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
@@ -58,6 +65,8 @@ public class MybatisPlusConfig {
     /**
      * 乐观锁插件
      * https://baomidou.com/guide/interceptor-optimistic-locker.html
+     *
+     * @return 乐观锁插件配置
      */
     public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
         return new OptimisticLockerInnerInterceptor();
@@ -66,15 +75,19 @@ public class MybatisPlusConfig {
     /**
      * 如果是对全表的删除或更新操作，就会终止该操作
      * https://baomidou.com/guide/interceptor-block-attack.html
+     *
+     * @return 全表操作拦截器
      */
-	public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
-		return new BlockAttackInnerInterceptor();
-	}
+    public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
+        return new BlockAttackInnerInterceptor();
+    }
 
 
     /**
      * 元对象字段填充控制器 用于填充创建时间/创建人/修改时间/修改人
      * https://baomidou.com/guide/auto-fill-metainfo.html
+     *
+     * @return 元对象字段填充控制器
      */
     @Bean
     public MetaObjectHandler metaObjectHandler() {
@@ -84,6 +97,8 @@ public class MybatisPlusConfig {
     /**
      * sql注入器配置
      * https://baomidou.com/guide/sql-injector.html
+     *
+     * @return sql注入器配置
      */
     @Bean
     public ISqlInjector sqlInjector() {
@@ -96,7 +111,6 @@ public class MybatisPlusConfig {
             }
         };
     }
-
 
 
 }

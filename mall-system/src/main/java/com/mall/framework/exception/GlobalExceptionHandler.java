@@ -2,6 +2,7 @@ package com.mall.framework.exception;
 
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.exception.BusinessErrorException;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
 
 
 /**
@@ -36,7 +35,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public CommonResult handleHttpMessageNotReadableException(
             MissingServletRequestParameterException ex) {
-        ex.printStackTrace();
+        log.error("错误" + ex);
         log.error("缺少请求参数，{}", ex.getMessage());
         return CommonResult.failed(400, "缺少必要的请求参数");
     }
@@ -50,6 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public CommonResult parameterValidationException(MethodArgumentNotValidException ex) {
+        log.error("错误" + ex);
         BindingResult result = ex.getBindingResult();
         StringBuilder errorMsg = new StringBuilder();
         if (result.hasErrors()) {
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleTypeMismatchException(NullPointerException ex) {
-        ex.printStackTrace();
+        log.error("错误" + ex);
         log.error("空指针异常，{}", ex.getMessage());
         return CommonResult.failed(500, "空指针异常了");
     }
@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessErrorException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleBusinessError(BusinessErrorException ex) {
-        ex.printStackTrace();
+        log.error("错误" + ex);
         return CommonResult.failed(ex.getCode(), ex.getMessage());
     }
 

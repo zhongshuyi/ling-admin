@@ -8,9 +8,8 @@ import com.mall.common.core.domain.entity.UmsDept;
 import com.mall.system.bo.DeptBo;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * 部门服务实现类
@@ -19,7 +18,9 @@ import java.util.List;
  * @since 2021-10-08
  */
 @Service
-public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> implements IUmsDeptService {
+public class UmsDeptServiceImpl
+        extends ServiceImpl<UmsDeptMapper, UmsDept>
+        implements IUmsDeptService {
 
     private static final long serialVersionUID = 8302483662294489594L;
 

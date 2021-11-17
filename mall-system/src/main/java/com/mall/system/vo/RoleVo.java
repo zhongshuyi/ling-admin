@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
+ * 角色信息视图
+ *
  * @author 钟舒艺
  * @date 2021-10-26-14:51
  **/

@@ -3,6 +3,7 @@ package com.mall.framework.security.service;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
+import javax.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,9 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
 /**
+ * 登录服务层
+ *
  * @author 钟舒艺
  * @date 2021-07-07-17:23
  **/
@@ -21,11 +22,10 @@ import javax.annotation.Resource;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LoginService {
 
+    private final transient JwtTokenUtil jwtTokenUtil;
+
     @Resource
-    private AuthenticationManager authenticationManager;
-
-    private final JwtTokenUtil jwtTokenUtil;
-
+    private transient AuthenticationManager authenticationManager;
 
     /**
      * 登录验证
@@ -43,12 +43,10 @@ public class LoginService {
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (BadCredentialsException e) {
+            throw new BusinessErrorException(403, "用户名或密码错误", e);
         } catch (Exception e) {
-            if (e instanceof BadCredentialsException) {
-                throw new BusinessErrorException(403, "用户名或密码错误", e);
-            } else {
-                throw new BusinessErrorException(e);
-            }
+            throw new BusinessErrorException(e);
         }
         AdminUserDetails adminUserDetails = (AdminUserDetails) authentication.getPrincipal();
 

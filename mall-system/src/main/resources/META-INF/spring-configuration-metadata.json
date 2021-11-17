@@ -26,11 +26,12 @@
     {
       "name": "token.userKey",
       "type": "java.lang.String",
-      "description":"储存的键名 for token.userKey."
+      "description": "储存的键名 for token.userKey."
     },
     {
       "name": "mybatis-plus.mapperPackage",
       "type": "java.lang.String",
-      "description":"扫描包路径 for mybatis-plus.mapperPackage."
+      "description": "扫描包路径 for mybatis-plus.mapperPackage."
     }
-  ] }
+  ]
+}

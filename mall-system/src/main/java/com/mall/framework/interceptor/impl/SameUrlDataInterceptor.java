@@ -8,17 +8,16 @@ import com.mall.common.constant.GlobalConstants;
 import com.mall.common.filter.RepeatedlyRequestWrapper;
 import com.mall.common.util.RedisUtils;
 import com.mall.framework.interceptor.BaseRepeatSubmitInterceptor;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 判断请求url和数据是否和上一次相同，
@@ -32,31 +31,27 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implements Serializable {
 
+    /**
+     * 防重提交 redis key
+     */
+    public static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
+    public static final String REPEAT_PARAMS = "repeatParams";
+    public static final String REPEAT_TIME = "repeatTime";
     private static final long serialVersionUID = 3670730997054064652L;
-
-    public final String REPEAT_PARAMS = "repeatParams";
-
-    public final String REPEAT_TIME = "repeatTime";
-
     /**
      * 令牌自定义标识
      */
     @Value("${token.token-header}")
     private String header;
-
-
     /**
      * 间隔时间，单位:秒 默认10秒
-     * <p>
      * 两次相同参数的请求，如果间隔时间大于该参数，系统不会认定为重复提交的数据
      */
     private Long intervalTime = 10L;
 
-    /**
-     * 防重提交 redis key
-     */
-    public static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
-
+    public Long getIntervalTime() {
+        return intervalTime;
+    }
 
     public void setIntervalTime(Long intervalTime) {
         this.intervalTime = intervalTime;
@@ -112,6 +107,9 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     private boolean compareParams(Map<String, Object> nowMap, Map<String, Object> preMap) {
         String nowParams = (String) nowMap.get(REPEAT_PARAMS);
         String preParams = (String) preMap.get(REPEAT_PARAMS);
+        if (nowParams == null || preParams == null) {
+            return false;
+        }
         return nowParams.equals(preParams);
     }
 
@@ -119,8 +117,11 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
      * 判断两次间隔时间
      */
     private boolean compareTime(Map<String, Object> nowMap, Map<String, Object> preMap) {
-        long time1 = (Long) nowMap.get(REPEAT_TIME);
-        long time2 = (Long) preMap.get(REPEAT_TIME);
+        Long time1 = (Long) nowMap.get(REPEAT_TIME);
+        Long time2 = (Long) preMap.get(REPEAT_TIME);
+        if (time1 == null || time2 == null) {
+            return false;
+        }
         return (time1 - time2) < (this.intervalTime * GlobalConstants.SECONDS);
     }
 }

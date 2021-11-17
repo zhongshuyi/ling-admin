@@ -2,14 +2,15 @@ package com.mall.system.bo;
 
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
+import java.io.Serializable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+import lombok.Data;
 
 /**
+ * 菜单操作类
+ *
  * @author 钟舒艺
  * @date 2021-11-07-14:59
  **/
@@ -30,45 +31,69 @@ public class MenuBo implements Serializable {
      * 父菜单id
      */
     @ApiModelProperty(value = "父菜单id")
-    @NotNull(message = "父部门id不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
-    @Min(value = 0, message = "父部门id最低为0", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(
+            message = "父部门id不能为空",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Min(
+            value = 0,
+            message = "父部门id最低为0",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private Long parentId;
 
     /**
      * 权限标识
      */
     @ApiModelProperty(value = "权限标识")
-    @Size(max = 200, message = "权限标识最大200个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 200,
+            message = "权限标识最大200个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String perms;
 
     /**
      * 菜单排序
      */
     @ApiModelProperty(value = "菜单排序")
-    @NotNull(message = "显示顺序不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
-    @Min(value = 0, message = "显示顺序最低为0", groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+    @NotNull(
+            message = "显示顺序不能为空",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Min(
+            value = 0,
+            message = "显示顺序最低为0",
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private Integer orderNo;
 
     /**
      * 路由地址
      */
     @ApiModelProperty(value = "路由地址")
-    @Size(max = 300, message = "路由地址最大300个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 300,
+            message = "路由地址最大300个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String path;
 
     /**
      * 菜单名字
      */
     @ApiModelProperty(value = "菜单名字")
-    @Size(max = 200, message = "菜单名字最大200个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
-    @NotNull(message = "菜单名称不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 200,
+            message = "菜单名字最大200个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(
+            message = "菜单名称不能为空",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String title;
 
     /**
      * 组件路径
      */
     @ApiModelProperty(value = "组件路径")
-    @Size(max = 300, message = "菜单名字最大300个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 300,
+            message = "菜单名字最大300个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String component;
 
     /**
@@ -87,14 +112,20 @@ public class MenuBo implements Serializable {
      * 图标
      */
     @ApiModelProperty(value = "图标")
-    @Size(max = 300, message = "图标最大100个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 300,
+            message = "图标最大100个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String icon;
 
     /**
      * 内嵌iframe的地址
      */
     @ApiModelProperty(value = "内嵌iframe的地址")
-    @Size(max = 300, message = "内嵌iframe的地址最大500个字符", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Size(
+            max = 300,
+            message = "内嵌iframe的地址最大500个字符",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String frameSrc;
 
     /**

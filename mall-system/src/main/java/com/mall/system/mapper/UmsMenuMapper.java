@@ -3,11 +3,10 @@ package com.mall.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
-import org.apache.ibatis.annotations.CacheNamespace;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Set;
+import org.apache.ibatis.annotations.CacheNamespace;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 菜单表 Mapper 接口
@@ -15,7 +14,9 @@ import java.util.Set;
  * @author 钟舒艺
  * @since 2021-09-14
  */
-@CacheNamespace(implementation = MybatisPlusRedisCache.class, eviction = MybatisPlusRedisCache.class)
+@CacheNamespace(
+        implementation = MybatisPlusRedisCache.class,
+        eviction = MybatisPlusRedisCache.class)
 public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
 
     /**

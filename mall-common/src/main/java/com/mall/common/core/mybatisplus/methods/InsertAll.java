@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import java.util.List;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
-import java.util.List;
-
 /**
+ * 批量插入增强
+ *
  * @author 钟舒艺
  * @date 2021-10-28-21:29
  **/
@@ -22,10 +23,12 @@ public class InsertAll extends AbstractMethod {
 
     private static final long serialVersionUID = 5839519053059873280L;
 
-    private final static String[] FILL_PROPERTY = {"createTime", "createBy", "updateTime", "updateBy"};
+    private static final String[] FILL_PROPERTY =
+            {"createTime", "createBy", "updateTime", "updateBy"};
 
     @Override
-    public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
+    public MappedStatement injectMappedStatement(
+            Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
         final String sql = "<script>insert into %s %s values %s</script>";
         final String fieldSql = prepareFieldSql(tableInfo);
         final String valueSql = prepareValuesSqlForMysqlBatch(tableInfo);
@@ -42,7 +45,8 @@ public class InsertAll extends AbstractMethod {
                 keyColumn = tableInfo.getKeyColumn();
             } else {
                 if (null != tableInfo.getKeySequence()) {
-                    keyGenerator = TableInfoHelper.genKeyGenerator(sqlMethod, tableInfo, builderAssistant);
+                    keyGenerator = TableInfoHelper
+                            .genKeyGenerator(sqlMethod, tableInfo, builderAssistant);
                     keyProperty = tableInfo.getKeyProperty();
                     keyColumn = tableInfo.getKeyColumn();
                 }
@@ -50,12 +54,15 @@ public class InsertAll extends AbstractMethod {
         }
         final String sqlResult = String.format(sql, tableInfo.getTableName(), fieldSql, valueSql);
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
-        return this.addInsertMappedStatement(mapperClass, modelClass, sqlMethod, sqlSource, keyGenerator, keyProperty, keyColumn);
+        return this.addInsertMappedStatement(
+                mapperClass, modelClass, sqlMethod,
+                sqlSource, keyGenerator, keyProperty, keyColumn);
     }
 
 
     /**
      * 列名集合
+     *
      * @param tableInfo 表信息
      * @return 列名
      */
@@ -73,12 +80,14 @@ public class InsertAll extends AbstractMethod {
 
     /**
      * 值的集合
+     *
      * @param tableInfo 类信息
      * @return 值集合
      */
     private String prepareValuesSqlForMysqlBatch(TableInfo tableInfo) {
         final StringBuilder valueSql = new StringBuilder();
-        valueSql.append("<foreach collection=\"list\" item=\"item\" index=\"index\" open=\"(\" separator=\"),(\" close=\")\">");
+        valueSql.append("<foreach collection=\"list\" item=\"item\" index=\"index\""
+                + " open=\"(\" separator=\"),(\" close=\")\">");
         if (StrUtil.isNotBlank(tableInfo.getKeyColumn())) {
             valueSql.append("\n#{item.").append(tableInfo.getKeyProperty()).append("},\n");
         }

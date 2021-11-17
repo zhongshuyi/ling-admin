@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * 项目启动类
+ *
  * @author 钟舒艺
  * @date 2021-06-20-15:17
  **/

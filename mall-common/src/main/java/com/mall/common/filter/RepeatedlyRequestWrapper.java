@@ -1,17 +1,16 @@
 package com.mall.common.filter;
 
 import cn.hutool.core.io.IoUtil;
-
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * 构建可重复读取inputStream的request
@@ -19,12 +18,19 @@ import java.nio.charset.StandardCharsets;
  * @author ruoyi
  */
 @SuppressWarnings("unused")
-public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper
-{
-    private final byte[] body;
+public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
 
-    public RepeatedlyRequestWrapper(HttpServletRequest request, ServletResponse response) throws IOException
-    {
+    private final transient byte[] body;
+
+    /**
+     * 获取信息并储存
+     *
+     * @param request  请求信息
+     * @param response 返回信息
+     * @throws IOException Io异常
+     */
+    public RepeatedlyRequestWrapper(
+            HttpServletRequest request, ServletResponse response) throws IOException {
         super(request);
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -33,44 +39,36 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper
     }
 
     @Override
-    public BufferedReader getReader()
-    {
+    public BufferedReader getReader() {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
     @Override
-    public ServletInputStream getInputStream()
-    {
+    public ServletInputStream getInputStream() {
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body);
-        return new ServletInputStream()
-        {
+        return new ServletInputStream() {
             @Override
-            public int read()
-            {
+            public int read() {
                 return byteArrayInputStream.read();
             }
 
             @Override
-            public int available()
-            {
+            public int available() {
                 return body.length;
             }
 
             @Override
-            public boolean isFinished()
-            {
+            public boolean isFinished() {
                 return false;
             }
 
             @Override
-            public boolean isReady()
-            {
+            public boolean isReady() {
                 return false;
             }
 
             @Override
-            public void setReadListener(ReadListener readListener)
-            {
+            public void setReadListener(ReadListener readListener) {
 
             }
         };

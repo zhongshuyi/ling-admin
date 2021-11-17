@@ -8,12 +8,13 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.LinkedList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 菜单构建工具类
+ *
  * @author 钟舒艺
  * @date 2021-09-17-9:39
  **/
@@ -90,7 +91,9 @@ public class MenuUtil {
                 continue;
             }
             RouterVo router = BeanUtil.toBean(menu, RouterVo.class);
-            router.setName(router.getPath().substring(0, 1).toUpperCase() + router.getPath().substring(1));
+            router.setName(
+                    router.getPath().substring(0, 1).toUpperCase()
+                            + router.getPath().substring(1));
             if (menu.getParentId().equals(0L)) {
                 router.setPath("/" + router.getPath());
             }

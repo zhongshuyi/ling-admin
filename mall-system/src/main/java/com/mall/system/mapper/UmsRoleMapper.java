@@ -4,9 +4,8 @@ package com.mall.system.mapper;
 import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
-import org.apache.ibatis.annotations.CacheNamespace;
-
 import java.util.List;
+import org.apache.ibatis.annotations.CacheNamespace;
 
 /**
  * 角色信息表 Mapper 接口
@@ -14,7 +13,9 @@ import java.util.List;
  * @author 钟舒艺
  * @since 2021-07-07
  */
-@CacheNamespace(implementation = MybatisPlusRedisCache.class, eviction = MybatisPlusRedisCache.class)
+@CacheNamespace(
+        implementation = MybatisPlusRedisCache.class,
+        eviction = MybatisPlusRedisCache.class)
 public interface UmsRoleMapper extends BaseMapperPlus<UmsRole> {
     /**
      * 根据用户id查询角色列表

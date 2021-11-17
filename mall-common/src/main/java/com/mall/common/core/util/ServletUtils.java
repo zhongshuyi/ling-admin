@@ -1,15 +1,14 @@
 package com.mall.common.core.util;
 
 import cn.hutool.core.convert.Convert;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * Servlet工具类
@@ -75,29 +74,47 @@ public class ServletUtils {
         }
     }
 
+
     /**
      * 获取String参数
+     *
+     * @param name 参数名
+     * @return 参数值
      */
     public static String getParameter(String name) {
         return getRequest().getParameter(name);
     }
 
+
     /**
-     * 获取String参数
+     * 获取String参数(有默认值)
+     *
+     * @param name         键
+     * @param defaultValue 默认值
+     * @return 值
      */
     public static String getParameter(String name, String defaultValue) {
         return Convert.toStr(getRequest().getParameter(name), defaultValue);
     }
 
+
     /**
      * 获取Integer参数
+     *
+     * @param name 键名
+     * @return 值
      */
     public static Integer getParameterToInt(String name) {
         return Convert.toInt(getRequest().getParameter(name));
     }
 
+
     /**
-     * 获取Integer参数
+     * 获取Integer参数(默认值)
+     *
+     * @param name         键
+     * @param defaultValue 默认值
+     * @return 值
      */
     public static Integer getParameterToInt(String name, Integer defaultValue) {
         return Convert.toInt(getRequest().getParameter(name), defaultValue);

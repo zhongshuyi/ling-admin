@@ -20,36 +20,52 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * SpringSecurity的配置类
  * 文档记录: https://www.yuque.com/rookieteam/bvc9h3/gbvtga#g5MxD
+ * Spring Security默认是禁用注解的,要想开启注解需要在继承WebSecurityConfigurerAdapter的类上加@EnableGlobalMethodSecurity注解
+ * 判断用户对某个控制层的方法是否具有访问权限
+ *
  * @author 钟舒艺
  * @date 2021-07-01-15:56
- *
- * @EnableWebSecurity Spring Security默认是禁用注解的,要想开启注解,需要在继承WebSecurityConfigurerAdapter的类上加@EnableGlobalMethodSecurity注解来判断用户对某个控制层的方法是否具有访问权限
- *
+ * @EnableWebSecurity 开启注解
  **/
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
+    /**
+     * 登录用户服务类
+     */
+    private final transient UserDetailsService userDetailsService;
 
     /**
      * 认证失败处理类 返回未授权
      */
-    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    private final transient RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
     /**
      * 当未登录或者token失效访问接口时，自定义的返回结果
      */
-    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final transient RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     /**
      * token认证过滤器
      */
-    private final JwtAuthenticationTokenFilter authenticationTokenFilter;
+    private final transient JwtAuthenticationTokenFilter authenticationTokenFilter;
 
 
-    public SecurityConfig(RestfulAccessDeniedHandler restfulAccessDeniedHandler, RestAuthenticationEntryPoint restAuthenticationEntryPoint, UserDetailsService userDetailsService, JwtAuthenticationTokenFilter authenticationTokenFilter) {
+    /**
+     * 构造方法
+     *
+     * @param restfulAccessDeniedHandler   认证失败处理类
+     * @param restAuthenticationEntryPoint 当未登录或者token失效访问接口时，自定义的返回
+     * @param userDetailsService           登录用户服务类
+     * @param authenticationTokenFilter    token认证过滤器
+     */
+    public SecurityConfig(
+            RestfulAccessDeniedHandler restfulAccessDeniedHandler,
+            RestAuthenticationEntryPoint restAuthenticationEntryPoint,
+            UserDetailsService userDetailsService,
+            JwtAuthenticationTokenFilter authenticationTokenFilter) {
         this.restfulAccessDeniedHandler = restfulAccessDeniedHandler;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
@@ -59,7 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 用于配置需要拦截的url路径、jwt过滤器及出异常后的处理器
-     *
      * anyRequest          |   匹配所有请求路径
      * access              |   SpringEl表达式结果为true时可以访问
      * anonymous           |   匿名可以访问
@@ -111,13 +126,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 将安全标头添加到响应
                 .headers()
-                    // 允许 x-frame-options deny iframe调用
-                    .frameOptions().disable()
-                    // 禁用缓存
-                    .cacheControl();
+                // 允许 x-frame-options deny iframe调用
+                .frameOptions().disable()
+                // 禁用缓存
+                .cacheControl();
 
         // 添加JWT过滤器
-        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(
+                authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 添加自定义未授权和未登录结果返回
         httpSecurity.exceptionHandling()
@@ -127,21 +143,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(cryptPasswordEncoder());
+    }
+
     /**
      * 强散列哈希加密实现
+     *
      * @return 强散列哈希加密实现
      */
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder()
-    {
+    public BCryptPasswordEncoder cryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
 

@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.SecurityUtils;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
-import java.util.Date;
-
 /**
+ * mybatisPlus 更新与新增时
+ *
  * @author 钟舒艺
  * @date 2021-10-28-15:24
  **/
@@ -26,9 +27,15 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
      */
     private static final String CREATE_BY_STR = "createBy";
 
+    /**
+     * 更新人
+     */
     private static final String UPDATE_BY = "updateBy";
 
-    private static final String UPDATE_TIME = "updateBy";
+    /**
+     * 更新时间
+     */
+    private static final String UPDATE_TIME = "updateTime";
 
 
     /**
@@ -47,7 +54,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 this.setFieldValByName(CREATE_BY_STR, getLoginUsername(), metaObject);
             }
         } catch (Exception e) {
-            throw new BusinessErrorException("自动注入异常 => " + e.getMessage());
+            throw new BusinessErrorException(500, "自动注入异常 => " + e.getMessage(), e);
         }
         updateFill(metaObject);
     }
@@ -59,10 +66,10 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 this.setFieldValByName(UPDATE_BY, getLoginUsername(), metaObject);
             }
             if (metaObject.hasGetter(UPDATE_TIME)) {
-                this.setFieldValByName("updateTime", new Date(), metaObject);
+                this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
             }
         } catch (Exception e) {
-            throw new BusinessErrorException("自动注入异常 => " + e.getMessage());
+            throw new BusinessErrorException(500, "自动注入异常 => " + e.getMessage(), e);
         }
     }
 

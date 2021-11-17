@@ -1,19 +1,22 @@
 package com.mall.common.core.util.ip;
 
-
-import cn.hutool.http.HTMLFilter;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import static com.mall.common.constant.GlobalConstants.LOCAL_HOST_IPV4_IP;
 
+import cn.hutool.http.HTMLFilter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
+
 /**
+ * ip地址工具类
+ *
  * @author 钟舒艺
  * @date 2021-07-02-23:51
  **/
 @SuppressWarnings("unused")
+@Slf4j
 public class IpUtils {
 
     /**
@@ -92,13 +95,16 @@ public class IpUtils {
                 if (b1 >= section3 && b1 <= section4) {
                     return true;
                 }
+                break;
             case section5:
                 if (b1 == section6) {
                     return true;
                 }
+                break;
             default:
                 return false;
         }
+        return false;
     }
 
     /**
@@ -240,7 +246,8 @@ public class IpUtils {
     public static String getHostIp() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException ignored) {
+        } catch (UnknownHostException e) {
+            log.error("无主机名", e);
         }
         return LOCAL_HOST_IPV4_IP;
     }
@@ -253,7 +260,8 @@ public class IpUtils {
     public static String getHostName() {
         try {
             return InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException ignored) {
+        } catch (UnknownHostException e) {
+            log.error("无主机名", e);
         }
         return "未知";
     }

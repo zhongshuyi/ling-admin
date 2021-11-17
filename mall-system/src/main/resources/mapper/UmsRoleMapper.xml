@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mall.system.mapper.UmsRoleMapper">
 
-    <select id="selectRoleListByUserId" resultType="com.mall.common.core.domain.entity.UmsRole" parameterType="long">
+    <select id="selectRoleListByUserId" resultType="com.mall.common.core.domain.entity.UmsRole"
+            parameterType="long">
         select distinct r.id,
                         r.role_name,
                         r.role_key,
@@ -11,8 +13,8 @@
                         r.status,
                         r.create_time,
                         r.remark
-        from  ums_role r
-                 left join ums_user_role ur on r.id =ur.role_id
+        from ums_role r
+                 left join ums_user_role ur on r.id = ur.role_id
         WHERE ur.user_id = #{userId}
     </select>
 </mapper>

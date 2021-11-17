@@ -6,9 +6,10 @@ import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
-import org.springframework.stereotype.Service;
-
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 参照若依的权限实现
@@ -18,6 +19,7 @@ import java.util.Set;
  **/
 @Service("ss")
 @SuppressWarnings("unused")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PermissionVerifyService {
     /**
      * 拥有所有权限标识符
@@ -39,12 +41,8 @@ public class PermissionVerifyService {
      */
     private static final String PERMISSION_DELIMETER = ",";
 
-    final
-    JwtTokenUtil jwtTokenUtil;
+    private final transient JwtTokenUtil jwtTokenUtil;
 
-    public PermissionVerifyService(JwtTokenUtil jwtTokenUtil) {
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     /**
      * 验证用户是否具备某权限
@@ -162,7 +160,8 @@ public class PermissionVerifyService {
      * @return 是否包含权限
      */
     private boolean hasPermissions(Set<String> permissions, String permission) {
-        return permissions.contains(ALL_PERMISSION) || permissions.contains(StrUtil.trim(permission));
+        return permissions.contains(ALL_PERMISSION)
+                || permissions.contains(StrUtil.trim(permission));
     }
 
 

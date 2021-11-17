@@ -5,7 +5,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -15,8 +14,8 @@ import java.util.function.Function;
 /**
  * 自定义 Service 接口, 实现 数据库实体与 vo 对象转换返回
  *
- * @param <T>
- * @param <V>
+ * @param <T> 实体类
+ * @param <V> Vo视图类
  * @author 钟舒艺
  * @date 2021-11-02-9:07
  */
@@ -144,6 +143,43 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
         return listVo(Wrappers.emptyWrapper(), convertor);
     }
 
+
+    /**
+     * 根据map进行查询
+     *
+     * @param columnMap   表字段 map 对象: 字段名,值
+     * @param copyOptions copy条件
+     * @return Vo对象
+     */
+    List<V> listVoByMap(Map<String, Object> columnMap, CopyOptions copyOptions);
+
+    /**
+     * 无copy条件根据map进行查询
+     *
+     * @param columnMap 表字段 map 对象: 字段名,值
+     * @return Vo对象
+     */
+    default List<V> listVoByMap(Map<String, Object> columnMap) {
+        return listVoByMap(columnMap, new CopyOptions());
+    }
+
+    /**
+     * 自定义转换器根据map进行查询
+     *
+     * @param columnMap 表字段 map 对象: 字段名,值
+     * @param convertor 自定义转换器
+     * @return Vo对象
+     */
+    default List<V> listVoByMap(Map<String, Object> columnMap,
+                                Function<Collection<T>, List<V>> convertor) {
+        List<T> list = getBaseMapper().selectByMap(columnMap);
+        if (list == null) {
+            return null;
+        }
+        return convertor.apply(list);
+    }
+
+
     /**
      * 查询分页实体集合并转Vo集合
      *
@@ -163,41 +199,6 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      */
     default PagePlus<T, V> pageVo(PagePlus<T, V> page, CopyOptions copyOptions) {
         return pageVo(page, Wrappers.emptyWrapper(), copyOptions);
-    }
-
-    /**
-     * 根据map进行查询
-     *
-     * @param columnMap   表字段 map 对象: <字段名,值>
-     * @param copyOptions copy条件
-     * @return Vo对象
-     */
-    List<V> listVoByMap(Map<String, Object> columnMap, CopyOptions copyOptions);
-
-    /**
-     * 无copy条件根据map进行查询
-     *
-     * @param columnMap 表字段 map 对象: <字段名,值>
-     * @return Vo对象
-     */
-    default List<V> listVoByMap(Map<String, Object> columnMap) {
-        return listVoByMap(columnMap, new CopyOptions());
-    }
-
-    /**
-     * 自定义转换器根据map进行查询
-     *
-     * @param columnMap 表字段 map 对象: <字段名,值>
-     * @param convertor 自定义转换器
-     * @return Vo对象
-     */
-    default List<V> listVoByMap(Map<String, Object> columnMap,
-                                Function<Collection<T>, List<V>> convertor) {
-        List<T> list = getBaseMapper().selectByMap(columnMap);
-        if (list == null) {
-            return null;
-        }
-        return convertor.apply(list);
     }
 
     /**
@@ -226,6 +227,7 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      *
      * @param page 分页对象
      * @param bo   查询条件
+     * @param <B>  Bo操作类
      * @return 分页对象
      */
     <B> PagePlus<T, V> pageVo(PagePlus<T, V> page, B bo);
@@ -238,7 +240,9 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param convertor    自定义转换器
      * @return 分页集合
      */
-    default PagePlus<T, V> pageVo(PagePlus<T, V> page, Wrapper<T> queryWrapper, Function<Collection<T>, List<V>> convertor) {
+    default PagePlus<T, V> pageVo(
+            PagePlus<T, V> page,
+            Wrapper<T> queryWrapper, Function<Collection<T>, List<V>> convertor) {
         PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
         return result.setRecordsVo(convertor.apply(result.getRecords()));
     }

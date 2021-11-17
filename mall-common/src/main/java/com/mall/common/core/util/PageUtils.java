@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.mybatisplus.core.PagePlus;
-
 import java.util.regex.Pattern;
 
 /**
@@ -61,7 +60,8 @@ public class PageUtils {
     /**
      * 列名校验正则 首位可以是字母以及下划线.首位之后可以是字母,数字以及下划线.下划线后不能接下划线
      */
-    public static final String COLUMN_NAME_REG = "/(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/";
+    public static final String COLUMN_NAME_REG =
+            "/(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/";
 
 
     /**
@@ -131,12 +131,13 @@ public class PageUtils {
      */
     private static OrderItem buildOrderItem(String orderByColumn, String isAsc) {
         if (StrUtil.isNotBlank(orderByColumn)) {
-            orderByColumn = StrUtil.toUnderlineCase(orderByColumn);
-            orderByColumn = Pattern.matches(COLUMN_NAME_REG, orderByColumn) ? orderByColumn : "";
+            String newOrderByColumn = StrUtil.toUnderlineCase(orderByColumn);
+            newOrderByColumn =
+                    Pattern.matches(COLUMN_NAME_REG, newOrderByColumn) ? newOrderByColumn : "";
             if (ASC.equals(isAsc)) {
-                return OrderItem.asc(orderByColumn);
+                return OrderItem.asc(newOrderByColumn);
             } else if (DESC.equals(isAsc)) {
-                return OrderItem.desc(orderByColumn);
+                return OrderItem.desc(newOrderByColumn);
             }
         }
         return null;

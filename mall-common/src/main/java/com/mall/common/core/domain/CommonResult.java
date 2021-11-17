@@ -2,9 +2,8 @@ package com.mall.common.core.domain;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * 通用返回对象
@@ -57,10 +56,13 @@ public class CommonResult<T> implements Serializable {
         return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功", null, "success");
     }
 
+
     /**
      * 成功返回结果
      *
      * @param data 获取的数据
+     * @param <T>  要返回的类型
+     * @return 通用返回
      */
     public static <T> CommonResult<T> success(T data) {
         return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功", data, "success");
@@ -71,6 +73,8 @@ public class CommonResult<T> implements Serializable {
      *
      * @param data    获取的数据
      * @param message 提示信息
+     * @param <T>     要返回的类型
+     * @return 通用返回
      */
     public static <T> CommonResult<T> success(T data, String message) {
         return new CommonResult<>(HttpStatus.HTTP_OK, message, data, "success");
@@ -80,6 +84,8 @@ public class CommonResult<T> implements Serializable {
      * 成功返回结果
      *
      * @param message 提示信息
+     * @param <T>     要返回的类型
+     * @return 通用返回
      */
     public static <T> CommonResult<T> success(String message) {
         return new CommonResult<>(HttpStatus.HTTP_OK, message, null, "success");
@@ -142,6 +148,7 @@ public class CommonResult<T> implements Serializable {
      * 参数验证失败返回结果
      *
      * @param message 提示信息
+     * @return 通用返回结果
      */
     public static CommonResult validateFailed(String message) {
         return new CommonResult<>(HttpStatus.HTTP_NOT_FOUND, message, null, "error");
@@ -149,6 +156,8 @@ public class CommonResult<T> implements Serializable {
 
     /**
      * 未登录返回结果
+     *
+     * @return 通用返回结果
      */
     public static CommonResult unauthorized() {
         return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED, "未登录或已过期", null, "error");
