@@ -31,14 +31,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-
-        <!--JWT(Json Web Token)登录支持-->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.mall</groupId>
             <artifactId>mall-common</artifactId>

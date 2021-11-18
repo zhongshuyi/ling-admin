@@ -3,11 +3,10 @@ package com.mall.framework.util;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
 import com.mall.common.util.RedisUtils;
 import com.mall.framework.model.AdminUserDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,12 +73,7 @@ public class JwtTokenUtil implements Serializable {
      * @return token
      */
     private String generateToken(final Map<String, Object> claims) {
-        return Jwts.builder()
-                // jwt内存的信息
-                .setClaims(claims)
-                // 加密方式
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
+        return JWTUtil.createToken(claims, secret.getBytes());
     }
 
     /**
@@ -98,29 +92,21 @@ public class JwtTokenUtil implements Serializable {
         log.info("过期时间:" + expiration);
         RedisUtils.setCacheObject(
                 getTokenKey(uuid), user, expiration, TimeUnit.MINUTES);
-        Map<String, Object> claims = new HashMap<>(2);
+        Map<String, Object> claims = new HashMap<>(1);
         claims.put(userKey, uuid);
         return generateToken(claims);
     }
 
     /**
-     * 从token中获取JWT中的负载.
+     * 验证token是否有效
      *
-     * @param token token值
-     * @return Claims
+     * @param token token
+     * @return 是否有效
      */
-    private Claims getClaimsFromToken(final String token) {
-        Claims claims = null;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            log.info("JWT格式验证失败:{}", token);
-        }
-        return claims;
+    public boolean validationToken(String token) {
+        return JWTUtil.verify(token, secret.getBytes());
     }
+
 
     /**
      * 根据请求获取token.
@@ -145,10 +131,11 @@ public class JwtTokenUtil implements Serializable {
     public AdminUserDetails getAdminUserDetails(
             final HttpServletRequest request) {
         String token = getToken(request);
-        if (StrUtil.isNotEmpty(token)) {
+        // 检查token是否被篡改
+        if (StrUtil.isNotEmpty(token) && validationToken(token)) {
             // 解析token获取存的负载对象
-            Claims claims = getClaimsFromToken(token);
-            String uuid = (String) claims.get(userKey);
+            final JWT jwt = JWTUtil.parseToken(token);
+            String uuid = jwt.getPayload(userKey).toString();
             return RedisUtils.getCacheObject(getTokenKey(uuid));
         }
         return null;

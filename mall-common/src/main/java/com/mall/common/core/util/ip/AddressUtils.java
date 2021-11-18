@@ -1,5 +1,6 @@
 package com.mall.common.core.util.ip;
 
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -35,7 +36,7 @@ public class AddressUtils {
      */
     public static String getAddressByIp(String ip) {
         // 内网不查询
-        if (IpUtils.internalIp(ip)) {
+        if (NetUtil.isInnerIP(ip)) {
             return "内网IP";
         }
         try {

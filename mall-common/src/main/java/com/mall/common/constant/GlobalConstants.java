@@ -8,16 +8,10 @@ package com.mall.common.constant;
  **/
 public class GlobalConstants {
 
-
     /**
      * 超级管理员角色id.
      */
     public static final Long SUPER_ADMIN_ROLE_ID = 1L;
-
-    /**
-     * ipv4本地ip地址.
-     */
-    public static final String LOCAL_HOST_IPV4_IP = "127.0.0.1";
 
 
     /**
