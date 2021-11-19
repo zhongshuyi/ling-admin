@@ -3,19 +3,20 @@ package com.mall.framework.security.handle;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.core.domain.CommonResult;
-import com.mall.common.core.util.ServletUtils;
-import com.mall.common.core.util.ip.IpUtils;
-import java.io.IOException;
-import java.io.Serializable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.mall.common.util.ServletUtils;
+import com.mall.common.util.ip.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
+
 /**
- * 当未登录或者token失效访问接口时，自定义的返回结果
+ * 当未登录或者token失效访问接口时，自定义的返回结果.
  *
  * @author 钟舒艺
  * @date 2021-07-02-22:58

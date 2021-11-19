@@ -1,55 +1,60 @@
-package com.mall.common.core.domain.entity;
+package com.mall.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.mall.common.core.domain.BaseEntity;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
- * 角色信息表
+ * 部门表.
  *
  * @author 钟舒艺
- * @since 2021-09-22
+ * @since 2021-10-08
  */
-
-@Data
 @EqualsAndHashCode(callSuper = true)
+@Data
 @Accessors(chain = true)
-public class UmsRole extends BaseEntity implements Serializable {
+public class UmsDept extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色ID
+     * 部门id.
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 角色名称
+     * 父id.
      */
-    private String roleName;
+    private Long parentId;
 
     /**
-     * 角色权限字符串
+     * 部门名称.
      */
-    private String roleKey;
+    private String deptName;
 
     /**
-     * 显示顺序
+     * 显示顺序.
      */
     private Integer orderNo;
 
     /**
-     * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）
+     * 负责人.
      */
-    private Integer dataScope;
+    private String leader;
 
     /**
-     * 角色状态（0正常 1停用）
+     * 联系电话.
      */
-    private Integer status;
+    private String phone;
+
+    /**
+     * 邮箱.
+     */
+    private String email;
 }

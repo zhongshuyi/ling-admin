@@ -2,23 +2,26 @@ package com.mall.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.system.entity.UmsRole;
 import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 角色信息表 服务实现类
+ * 角色信息表 服务实现类.
  *
  * @author 钟舒艺
  * @since 2021-07-07
  */
 @Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UmsRoleServiceImpl
         extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo>
         implements IUmsRoleService {
@@ -29,10 +32,6 @@ public class UmsRoleServiceImpl
 
     private final transient IUmsAdminService umsAdminService;
 
-    public UmsRoleServiceImpl(IUmsMenuService umsMenuService, IUmsAdminService umsAdminService) {
-        this.umsMenuService = umsMenuService;
-        this.umsAdminService = umsAdminService;
-    }
 
     @Override
     public void validEntityBeforeSave(UmsRole umsRole) {

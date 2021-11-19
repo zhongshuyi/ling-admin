@@ -4,22 +4,24 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mall.common.core.domain.entity.UmsMenu;
 import com.mall.system.bo.MenuBo;
+import com.mall.system.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
+import org.springframework.stereotype.Service;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import org.springframework.stereotype.Service;
 
 /**
- * 菜单表 服务实现类
+ * 菜单表 服务实现类.
  *
  * @author 钟舒艺
  * @since 2021-09-14
  */
 @Service
+@SuppressWarnings("unused")
 public class UmsMenuServiceImpl
         extends ServiceImpl<UmsMenuMapper, UmsMenu>
         implements IUmsMenuService {
@@ -27,7 +29,7 @@ public class UmsMenuServiceImpl
     private static final long serialVersionUID = -5579437013223054201L;
 
     /**
-     * 获取所有菜单列表
+     * 获取所有菜单列表.
      *
      * @return 菜单列表
      */
@@ -70,7 +72,6 @@ public class UmsMenuServiceImpl
     @Override
     public Boolean addByAddBo(MenuBo menuBo) {
         UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
-        validEntityBeforeSave(menu);
         return save(menu);
     }
 
@@ -142,10 +143,5 @@ public class UmsMenuServiceImpl
             return true;
         }
         return baseMapper.removeRolePerm(roleId, permIds) == permIds.size();
-    }
-
-    @SuppressWarnings("unused")
-    private void validEntityBeforeSave(UmsMenu menu) {
-
     }
 }

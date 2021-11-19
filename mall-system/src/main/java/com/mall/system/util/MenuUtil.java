@@ -5,15 +5,16 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import com.mall.common.core.domain.entity.UmsMenu;
+import com.mall.system.entity.UmsMenu;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
-import java.util.LinkedList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
- * 菜单构建工具类
+ * 菜单构建工具类.
  *
  * @author 钟舒艺
  * @date 2021-09-17-9:39
@@ -23,7 +24,7 @@ public class MenuUtil {
 
 
     /**
-     * 获取处理好后的路由
+     * 获取处理好后的路由.
      *
      * @param menus 从数据库中直接查出来的菜单信息
      * @return 处理好的
@@ -33,7 +34,7 @@ public class MenuUtil {
     }
 
     /**
-     * 构建菜单树
+     * 构建菜单树.
      *
      * @param menus 菜单列表
      * @return 处理后菜单树
@@ -53,7 +54,7 @@ public class MenuUtil {
     }
 
     /**
-     * 构建权限树结构
+     * 构建权限树结构.
      *
      * @param menus 菜单
      * @return 树结构
@@ -72,7 +73,7 @@ public class MenuUtil {
 
 
     /**
-     * 构建路由树
+     * 构建路由树.
      *
      * @param menus    菜单
      * @param parentId 父id
@@ -117,7 +118,7 @@ public class MenuUtil {
     }
 
     /**
-     * 设置重定向路由
+     * 设置重定向路由.
      *
      * @param routers 路由
      * @return 设置好后的路由

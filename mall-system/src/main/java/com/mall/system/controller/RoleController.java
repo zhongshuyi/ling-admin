@@ -4,7 +4,7 @@ import com.mall.common.constant.GlobalConstants;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.domain.PageInfo;
-import com.mall.common.core.util.PageUtils;
+import com.mall.common.core.mybatisplus.util.PageUtils;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.system.bo.RoleBo;
@@ -13,23 +13,17 @@ import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * 角色管理操作
+ * 角色管理操作.
  *
  * @author 钟舒艺
  * @date 2021-10-26-14:47
@@ -47,7 +41,7 @@ public class RoleController extends BaseController {
     private final transient IUmsMenuService umsMenuService;
 
     /**
-     * 分页获取角色列表
+     * 分页获取角色列表.
      *
      * @param role 查询信息
      * @return 分页后的角色列表
@@ -64,26 +58,26 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 添加角色列表
+     * 添加角色列表.
      *
      * @param role 角色信息
      * @return 是否添加成功
      */
     @PostMapping
     @ApiOperation("添加角色")
-    public CommonResult add(@Validated(ValidationGroups.Add.class) @RequestBody RoleBo role) {
+    public CommonResult<Void> add(@Validated(ValidationGroups.Add.class) @RequestBody RoleBo role) {
         return toAjax(umsRoleService.insertByBo(role));
     }
 
     /**
-     * 修改角色
+     * 修改角色.
      *
      * @param role 角色信息
      * @return 是否修改成功
      */
     @PutMapping
     @ApiOperation("修改角色")
-    public CommonResult edit(@Validated(ValidationGroups.Edit.class) @RequestBody RoleBo role) {
+    public CommonResult<Void> edit(@Validated(ValidationGroups.Edit.class) @RequestBody RoleBo role) {
         if (role.getId().equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(400, "超级管理员角色不能操作");
         }
@@ -91,7 +85,7 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 更改角色状态
+     * 更改角色状态.
      *
      * @param id    角色id
      * @param state 新的角色状态
@@ -99,7 +93,7 @@ public class RoleController extends BaseController {
      */
     @PutMapping("/{id}/{state}")
     @ApiOperation("更改角色状态")
-    public CommonResult stateChanges(@PathVariable Long id, @PathVariable Integer state) {
+    public CommonResult<Void> stateChanges(@PathVariable Long id, @PathVariable Integer state) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(400, "超级管理员角色不能操作");
         }
@@ -107,14 +101,14 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 根据id删除角色(如果有关联的用户或菜单则不允许删除)
+     * 根据id删除角色(如果有关联的用户或菜单则不允许删除).
      *
      * @param id 角色id
      * @return 是否删除成功
      */
     @ApiOperation("根据id删除角色")
     @DeleteMapping("/{id}")
-    public CommonResult del(@PathVariable Long id) {
+    public CommonResult<Void> del(@PathVariable Long id) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(400, "超级管理员角色不能操作");
         }
@@ -122,7 +116,7 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 获取角色的权限id集合
+     * 获取角色的权限id集合.
      *
      * @param id 角色id
      * @return 角色的权限id集合
@@ -134,7 +128,7 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 更改角色的权限
+     * 更改角色的权限.
      *
      * @param id     角色id
      * @param newIds 新的角色权限集合
@@ -142,7 +136,7 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("更改角色权限")
     @PutMapping("perm/{id}")
-    public CommonResult setPerm(@PathVariable Long id, @RequestBody Set<Long> newIds) {
+    public CommonResult<Void> setPerm(@PathVariable Long id, @RequestBody Set<Long> newIds) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(400, "超级管理员角色不能操作");
         }

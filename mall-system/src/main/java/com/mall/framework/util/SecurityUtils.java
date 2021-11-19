@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * security 工具类
+ * security 工具类.
  *
  * @author 钟舒艺
  * @date 2021-06-29
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SuppressWarnings("unused")
 public class SecurityUtils {
     /**
-     * 获取用户
+     * 获取用户.
      *
      * @return 用户信息
      */
@@ -24,7 +24,7 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取Authentication
+     * 获取Authentication.
      *
      * @return Authentication
      */
@@ -33,7 +33,7 @@ public class SecurityUtils {
     }
 
     /**
-     * 生成BCryptPasswordEncoder密码
+     * 生成BCryptPasswordEncoder密码.
      *
      * @param password 密码
      * @return 加密字符串
@@ -44,7 +44,7 @@ public class SecurityUtils {
     }
 
     /**
-     * 判断密码是否相同
+     * 判断密码是否相同.
      *
      * @param rawPassword     真实密码
      * @param encodedPassword 加密后字符

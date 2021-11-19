@@ -2,24 +2,19 @@ package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.mall.common.core.domain.CommonResult;
-import com.mall.common.core.domain.entity.UmsMenu;
-import com.mall.common.core.util.ServletUtils;
 import com.mall.common.enums.BusinessMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.model.LoginBody;
 import com.mall.framework.security.service.LoginService;
 import com.mall.framework.util.JwtTokenUtil;
+import com.mall.system.entity.UmsMenu;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import com.mall.system.vo.RouterVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +22,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
- * 登录操作
+ * 登录操作.
  *
  * @author 钟舒艺
  * @date 2021-07-07-21:09
@@ -45,7 +46,7 @@ public class LoginController {
     private final transient IUmsMenuService umsMenuService;
 
     /**
-     * 登录接口
+     * 登录接口.
      *
      * @param user 登录用户接收类
      * @return token
@@ -60,7 +61,7 @@ public class LoginController {
     }
 
     /**
-     * 获取用户信息接口,获取用户的权限,角色信息,以及基本信息
+     * 获取用户信息接口,获取用户的权限,角色信息,以及基本信息.
      *
      * @return 信息集合
      */
@@ -80,7 +81,7 @@ public class LoginController {
     }
 
     /**
-     * 获取权限键列表
+     * 获取权限键列表.
      *
      * @return 权限键列表
      */
@@ -97,7 +98,7 @@ public class LoginController {
     }
 
     /**
-     * 获取菜单
+     * 获取菜单.
      *
      * @return 菜单列表
      */

@@ -1,19 +1,20 @@
 package com.mall.common.filter;
 
 import cn.hutool.core.io.IoUtil;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
- * 构建可重复读取inputStream的request
+ * 构建可重复读取inputStream的request.
  *
  * @author ruoyi
  */
@@ -23,7 +24,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
     private final transient byte[] body;
 
     /**
-     * 获取信息并储存
+     * 获取信息并储存.
      *
      * @param request  请求信息
      * @param response 返回信息

@@ -1,4 +1,4 @@
-package com.mall.common.core.util.ip;
+package com.mall.common.util.ip;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.CharsetUtil;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 /**
- * 地址工具类
+ * 地址工具类.
  *
  * @author 钟舒艺
  * @date 2021-07-02-23:47
@@ -19,17 +19,17 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 public class AddressUtils {
     /**
-     * IP地址查询网站
+     * IP地址查询网站.
      */
     public static final String IP_URL = "https://whois.pconline.com.cn/ipJson.jsp";
 
     /**
-     * 未知地址
+     * 未知地址.
      */
     public static final String UNKNOWN = "XX XX";
 
     /**
-     * 获取ip的地理位置
+     * 获取ip的地理位置.
      *
      * @param ip ip地址
      * @return 地理位置

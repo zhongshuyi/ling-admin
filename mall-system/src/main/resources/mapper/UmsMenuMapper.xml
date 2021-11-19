@@ -52,7 +52,7 @@
         order by m.parent_id, m.order_no;
     </select>
 
-    <select id="getDeptPerm" resultType="com.mall.common.core.domain.entity.UmsMenu">
+    <select id="getDeptPerm" resultType="com.mall.system.entity.UmsMenu">
         select ums_menu.id,
                parent_id,
                perms,

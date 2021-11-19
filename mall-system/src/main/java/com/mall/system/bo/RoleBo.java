@@ -3,15 +3,16 @@ package com.mall.system.bo;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
- * 角色操作Bo
+ * 角色操作Bo.
  *
  * @author 钟舒艺
  * @date 2021-11-06-20:45
@@ -25,7 +26,7 @@ public class RoleBo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色id
+     * 角色id.
      */
     @ApiModelProperty(value = "角色id")
     @NotNull(
@@ -35,7 +36,7 @@ public class RoleBo {
     private Long id;
 
     /**
-     * 角色名称
+     * 角色名称.
      */
     @ApiModelProperty(value = "角色名称")
     @NotNull(
@@ -44,7 +45,7 @@ public class RoleBo {
     private String roleName;
 
     /**
-     * 角色权限字符串
+     * 角色权限字符串.
      */
     @NotNull(
             message = "角色权限字符串不能为空",
@@ -53,7 +54,7 @@ public class RoleBo {
     private String roleKey;
 
     /**
-     * 显示顺序
+     * 显示顺序.
      */
     @NotNull(
             message = "显示顺序不能为空",
@@ -66,7 +67,7 @@ public class RoleBo {
     private Integer orderNo;
 
     /**
-     * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）
+     * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）.
      */
     @NotNull(
             message = "数据范围为空",
@@ -83,7 +84,7 @@ public class RoleBo {
 
 
     /**
-     * 角色状态（0正常 1停用）
+     * 角色状态（0正常 1停用）.
      */
     @NotNull(
             message = "角色状态不能为空",
@@ -100,7 +101,7 @@ public class RoleBo {
     private Integer status;
 
     /**
-     * 备注
+     * 备注.
      */
     @ApiModelProperty(value = "备注")
     @Size(max = 500, message = "最大是500")

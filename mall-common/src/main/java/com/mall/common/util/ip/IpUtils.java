@@ -1,13 +1,14 @@
-package com.mall.common.core.util.ip;
+package com.mall.common.util.ip;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.http.HTMLFilter;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * ip地址工具类
+ * ip地址工具类.
  *
  * @author 钟舒艺
  * @date 2021-07-02-23:51
@@ -17,12 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 public class IpUtils {
 
     /**
-     * 未知地址
+     * 未知地址.
      */
     public static final String UNKNOWN = "unknown";
 
     /**
-     * 根据请求获取ip地址
+     * 根据请求获取ip地址.
      *
      * @param request HttpServletRequest
      * @return ip地址

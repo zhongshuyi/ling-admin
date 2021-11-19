@@ -4,15 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mall.common.core.domain.entity.UmsDept;
 import com.mall.system.bo.DeptBo;
+import com.mall.system.entity.UmsDept;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- * 部门服务实现类
+ * 部门服务实现类.
  *
  * @author 钟舒艺
  * @since 2021-10-08

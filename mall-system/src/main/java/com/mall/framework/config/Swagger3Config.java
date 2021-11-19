@@ -11,7 +11,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
- * Swagger3 配置类
+ * Swagger3 配置类.
  *
  * @author 钟舒艺
  * @date 2021-05-08-9:53
@@ -21,7 +21,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class Swagger3Config {
 
     /**
-     * 构建的配置项
+     * 构建的配置项.
      *
      * @return 构建
      */
@@ -37,7 +37,7 @@ public class Swagger3Config {
     }
 
     /**
-     * 文档信息
+     * 文档信息.
      *
      * @return Api文档的信息
      */

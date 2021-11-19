@@ -1,13 +1,14 @@
 package com.mall.system.mapper;
 
-import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
-import java.util.List;
+import com.mall.system.entity.UmsAdmin;
 import org.apache.ibatis.annotations.CacheNamespace;
 
+import java.util.List;
+
 /**
- * 用户信息表 Mapper 接口
+ * 用户信息表 Mapper 接口.
  *
  * @author 钟舒艺
  * @since 2021-07-06
@@ -17,7 +18,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
         eviction = MybatisPlusRedisCache.class)
 public interface UmsAdminMapper extends BaseMapperPlus<UmsAdmin> {
     /**
-     * 根据角色id获取用户列表
+     * 根据角色id获取用户列表.
      *
      * @param roleId 角色id
      * @return 用户列表

@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import java.util.List;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
+import java.util.List;
+
 /**
- * 批量插入增强
+ * 批量插入增强.
  *
  * @author 钟舒艺
  * @date 2021-10-28-21:29
@@ -61,7 +62,7 @@ public class InsertAll extends AbstractMethod {
 
 
     /**
-     * 列名集合
+     * 列名集合.
      *
      * @param tableInfo 表信息
      * @return 列名
@@ -79,7 +80,7 @@ public class InsertAll extends AbstractMethod {
     }
 
     /**
-     * 值的集合
+     * 值的集合.
      *
      * @param tableInfo 类信息
      * @return 值集合

@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.SecurityUtils;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
+import java.util.Date;
+
 /**
- * mybatisPlus 更新与新增时
+ * mybatisPlus 更新与新增时.
  *
  * @author 钟舒艺
  * @date 2021-10-28-15:24
@@ -18,28 +19,28 @@ import org.apache.ibatis.reflection.MetaObject;
 public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
 
     /**
-     * 创建时间属性名
+     * 创建时间属性名.
      */
     private static final String CREATE_TIME_STR = "createTime";
 
     /**
-     * 创建人
+     * 创建人.
      */
     private static final String CREATE_BY_STR = "createBy";
 
     /**
-     * 更新人
+     * 更新人.
      */
     private static final String UPDATE_BY = "updateBy";
 
     /**
-     * 更新时间
+     * 更新时间.
      */
     private static final String UPDATE_TIME = "updateTime";
 
 
     /**
-     * 插入时填充
+     * 插入时填充.
      *
      * @param metaObject 操作对象
      */
@@ -74,7 +75,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
     }
 
     /**
-     * 获取登录用户名
+     * 获取登录用户名.
      */
     private String getLoginUsername() {
         AdminUserDetails loginUser;

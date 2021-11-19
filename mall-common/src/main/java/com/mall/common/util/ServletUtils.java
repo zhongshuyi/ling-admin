@@ -1,17 +1,18 @@
-package com.mall.common.core.util;
+package com.mall.common.util;
 
 import cn.hutool.core.convert.Convert;
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 /**
- * Servlet工具类
+ * Servlet工具类.
  *
  * @author 钟舒艺
  * @date 2021-07-02-17:41
@@ -21,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ServletUtils {
 
     /**
-     * 获取RequestAttributes
+     * 获取RequestAttributes.
      *
      * @return RequestAttributes
      */
@@ -31,7 +32,7 @@ public class ServletUtils {
     }
 
     /**
-     * 获取request
+     * 获取request.
      *
      * @return HttpServletRequest
      */
@@ -40,7 +41,7 @@ public class ServletUtils {
     }
 
     /**
-     * 获取response
+     * 获取response.
      *
      * @return HttpServletResponse
      */
@@ -49,7 +50,7 @@ public class ServletUtils {
     }
 
     /**
-     * 获取session
+     * 获取session.
      *
      * @return HttpSession
      */
@@ -58,7 +59,7 @@ public class ServletUtils {
     }
 
     /**
-     * 将字符串渲染到客户端
+     * 将字符串渲染到客户端.
      *
      * @param response 渲染对象
      * @param string   待渲染的字符串
@@ -76,7 +77,7 @@ public class ServletUtils {
 
 
     /**
-     * 获取String参数
+     * 获取String参数.
      *
      * @param name 参数名
      * @return 参数值
@@ -87,7 +88,7 @@ public class ServletUtils {
 
 
     /**
-     * 获取String参数(有默认值)
+     * 获取String参数(有默认值).
      *
      * @param name         键
      * @param defaultValue 默认值
@@ -99,7 +100,7 @@ public class ServletUtils {
 
 
     /**
-     * 获取Integer参数
+     * 获取Integer参数.
      *
      * @param name 键名
      * @return 值
@@ -110,7 +111,7 @@ public class ServletUtils {
 
 
     /**
-     * 获取Integer参数(默认值)
+     * 获取Integer参数(默认值).
      *
      * @param name         键
      * @param defaultValue 默认值

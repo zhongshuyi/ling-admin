@@ -4,14 +4,27 @@ package com.mall.common.constant;
  * 应用全局常量.
  *
  * @author 钟舒艺
- * @date 2021-09-23-15:12
  **/
-public class GlobalConstants {
+@SuppressWarnings("unused")
+public final class GlobalConstants {
+
+    private GlobalConstants() {
+    }
 
     /**
      * 超级管理员角色id.
      */
     public static final Long SUPER_ADMIN_ROLE_ID = 1L;
+
+    /**
+     * 默认分页大小.
+     */
+    public static final Long DEFAULT_PAGE_SIZE = 10L;
+
+    /**
+     * 默认当前页.
+     */
+    public static final Long DEFAULT_PAGE_NUM = 1L;
 
 
     /**

@@ -11,14 +11,15 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.mall.common.core.mybatisplus.methods.InsertAll;
 import com.mall.framework.mybatisplus.CreateAndUpdateMetaObjectHandler;
-import java.util.List;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
+
 /**
- * mybatisPlus 配置
+ * mybatisPlus 配置.
  *
  * @author 钟舒艺
  * @date 2021-10-28-13:51
@@ -30,7 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class MybatisPlusConfig {
 
     /**
-     * 插件配置
+     * 插件配置.
      *
      * @return 配置好拦截器
      */

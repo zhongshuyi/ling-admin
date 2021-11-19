@@ -1,17 +1,18 @@
 package com.mall.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.mall.common.core.domain.entity.UmsAdmin;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.system.entity.UmsAdmin;
 import com.mall.system.mapper.UmsAdminMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.vo.UserVo;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- * 用户信息表 服务实现类
+ * 用户信息表 服务实现类.
  *
  * @author 钟舒艺
  * @since 2021-07-06
@@ -25,7 +26,7 @@ public class UmsAdminServiceImpl
 
     @Override
     public List<UmsAdmin> getUserListByRoleId(Long roleId) {
-        return baseMapper.getUserListByRoleId(roleId);
+        return getBaseMapper().getUserListByRoleId(roleId);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class UmsAdminServiceImpl
     }
 
     /**
-     * 检查用户名是否唯一
+     * 检查用户名是否唯一.
      *
      * @param umsAdmin 用户信息
      * @return true就是唯一的

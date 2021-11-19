@@ -19,8 +19,8 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected CommonResult toAjax(int rows) {
-        return rows > 0 ? CommonResult.success() : CommonResult.failed();
+    protected CommonResult<Void> toAjax(int rows) {
+        return rows > 0 ? success() : error();
     }
 
     /**
@@ -29,7 +29,7 @@ public class BaseController {
      * @param result 结果
      * @return 操作结果
      */
-    protected CommonResult toAjax(boolean result) {
+    protected CommonResult<Void> toAjax(boolean result) {
         return result ? success() : error();
     }
 
@@ -38,7 +38,7 @@ public class BaseController {
      *
      * @return 信息
      */
-    public CommonResult success() {
+    public CommonResult<Void> success() {
         return CommonResult.success();
     }
 
@@ -57,7 +57,7 @@ public class BaseController {
      *
      * @return 信息
      */
-    public CommonResult error() {
+    public CommonResult<Void> error() {
         return CommonResult.failed();
     }
 
@@ -68,7 +68,7 @@ public class BaseController {
      * @param message 信息
      * @return 信息
      */
-    public CommonResult error(String message) {
+    public CommonResult<Void> error(String message) {
         return CommonResult.failed(message);
     }
 

@@ -2,14 +2,15 @@ package com.mall.system.bo;
 
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
+import lombok.Data;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
+import java.io.Serializable;
 
 /**
- * 菜单操作类
+ * 菜单操作类.
  *
  * @author 钟舒艺
  * @date 2021-11-07-14:59
@@ -20,7 +21,7 @@ public class MenuBo implements Serializable {
     private static final long serialVersionUID = 8541870643648167086L;
 
     /**
-     * 主键id
+     * 主键id.
      */
     @NotNull(message = "主键不能为空", groups = {ValidationGroups.Edit.class})
     @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
@@ -28,7 +29,7 @@ public class MenuBo implements Serializable {
     private Long id;
 
     /**
-     * 父菜单id
+     * 父菜单id.
      */
     @ApiModelProperty(value = "父菜单id")
     @NotNull(
@@ -41,7 +42,7 @@ public class MenuBo implements Serializable {
     private Long parentId;
 
     /**
-     * 权限标识
+     * 权限标识.
      */
     @ApiModelProperty(value = "权限标识")
     @Size(
@@ -51,7 +52,7 @@ public class MenuBo implements Serializable {
     private String perms;
 
     /**
-     * 菜单排序
+     * 菜单排序.
      */
     @ApiModelProperty(value = "菜单排序")
     @NotNull(
@@ -64,7 +65,7 @@ public class MenuBo implements Serializable {
     private Integer orderNo;
 
     /**
-     * 路由地址
+     * 路由地址.
      */
     @ApiModelProperty(value = "路由地址")
     @Size(
@@ -74,7 +75,7 @@ public class MenuBo implements Serializable {
     private String path;
 
     /**
-     * 菜单名字
+     * 菜单名字.
      */
     @ApiModelProperty(value = "菜单名字")
     @Size(
@@ -87,7 +88,7 @@ public class MenuBo implements Serializable {
     private String title;
 
     /**
-     * 组件路径
+     * 组件路径.
      */
     @ApiModelProperty(value = "组件路径")
     @Size(
@@ -97,19 +98,19 @@ public class MenuBo implements Serializable {
     private String component;
 
     /**
-     * 是否忽略缓存(0 忽略,1 不忽略)
+     * 是否忽略缓存(0 忽略,1 不忽略).
      */
     @ApiModelProperty(value = "是否忽略缓存(0 忽略,1 不忽略)")
     private Integer ignoreKeepAlive = 1;
 
     /**
-     * 是否固定标签(0不固定,1固定)
+     * 是否固定标签(0不固定,1固定).
      */
     @ApiModelProperty(value = "是否固定标签(0不固定,1固定)")
     private Integer affix = 0;
 
     /**
-     * 图标
+     * 图标.
      */
     @ApiModelProperty(value = "图标")
     @Size(
@@ -119,7 +120,7 @@ public class MenuBo implements Serializable {
     private String icon;
 
     /**
-     * 内嵌iframe的地址
+     * 内嵌iframe的地址.
      */
     @ApiModelProperty(value = "内嵌iframe的地址")
     @Size(
@@ -129,43 +130,43 @@ public class MenuBo implements Serializable {
     private String frameSrc;
 
     /**
-     * 该路由切换的动画名
+     * 该路由切换的动画名.
      */
     @ApiModelProperty(value = "该路由切换的动画名")
     private String transitionName;
 
     /**
-     * 是否在面包屑上隐藏该路由(0隐藏,1不隐藏)
+     * 是否在面包屑上隐藏该路由(0隐藏,1不隐藏).
      */
     @ApiModelProperty(value = "是否在面包屑上隐藏该路由(0隐藏,1不隐藏)")
     private Integer hideBreadcrumb = 1;
 
     /**
-     * 是否隐藏所有子菜单(0隐藏,1不隐藏)
+     * 是否隐藏所有子菜单(0隐藏,1不隐藏).
      */
     @ApiModelProperty(value = "是否隐藏所有子菜单(0隐藏,1不隐藏)")
     private Integer hideChildrenInMenu = 1;
 
     /**
-     * 当前路由不再标签页显示 (0隐藏,1不隐藏)
+     * 当前路由不再标签页显示 (0隐藏,1不隐藏).
      */
     @ApiModelProperty(value = "当前路由不再标签页显示 (0隐藏,1不隐藏)")
     private Integer hideTab = 1;
 
     /**
-     * 当前路由不再菜单显示 (0隐藏,1不隐藏)
+     * 当前路由不再菜单显示 (0隐藏,1不隐藏).
      */
     @ApiModelProperty(value = "当前路由不再菜单显示 (0隐藏,1不隐藏)")
     private Integer hideMenu = 1;
 
     /**
-     * 是否是外链( 0是,1不是)
+     * 是否是外链( 0是,1不是).
      */
     @ApiModelProperty(value = "是否是外链( 0是,1不是)")
     private Integer isLink = 1;
 
     /**
-     * 菜单类型( 0 目录,1 菜单,2 按钮)
+     * 菜单类型( 0 目录,1 菜单,2 按钮).
      */
     @ApiModelProperty(value = "菜单类型( 0目录,1菜单,2按钮)")
     private Integer menuType = 1;
@@ -174,13 +175,13 @@ public class MenuBo implements Serializable {
     private String remark;
 
     /**
-     * 状态(0启用 1禁用)
+     * 状态(0启用 1禁用).
      */
     @ApiModelProperty(value = "状态(0启用 1禁用)")
     private Integer status = 0;
 
     /**
-     * 是否是内联 0是,1不是
+     * 是否是内联 0是,1不是.
      */
     @ApiModelProperty(value = "是否是外链 0是,1不是")
     private Integer isFrame = 0;

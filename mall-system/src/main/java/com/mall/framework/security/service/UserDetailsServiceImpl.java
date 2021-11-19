@@ -2,16 +2,15 @@ package com.mall.framework.security.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.constant.GlobalConstants;
-import com.mall.common.core.domain.entity.UmsAdmin;
-import com.mall.common.core.domain.entity.UmsRole;
 import com.mall.common.enums.BusinessMsgEnum;
 import com.mall.common.enums.Status;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
+import com.mall.system.entity.UmsAdmin;
+import com.mall.system.entity.UmsRole;
 import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsDeptService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
- * 用户验证处理
+ * 用户验证处理.
  *
  * @author 钟舒艺
  * @date 2021-07-06-17:31

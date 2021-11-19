@@ -3,7 +3,6 @@ package com.mall.framework.security.service;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
-import javax.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,8 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
- * 登录服务层
+ * 登录服务层.
  *
  * @author 钟舒艺
  * @date 2021-07-07-17:23
@@ -28,7 +29,7 @@ public class LoginService {
     private transient AuthenticationManager authenticationManager;
 
     /**
-     * 登录验证
+     * 登录验证.
      *
      * @param username 用户名
      * @param password 密码

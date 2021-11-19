@@ -1,14 +1,15 @@
 package com.mall.framework.config;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 /**
- * 校验配置
+ * 校验配置.
  *
  * @author 钟舒艺
  * @date 2021-11-06-22:10
@@ -18,7 +19,7 @@ public class ValidatorConfig {
 
 
     /**
-     * 配置校验框架 快速返回模式
+     * 配置校验框架 快速返回模式.
      *
      * @return 校验
      */

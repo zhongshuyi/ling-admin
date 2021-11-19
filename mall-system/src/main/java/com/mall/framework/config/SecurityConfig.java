@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  *
  * @author 钟舒艺
  * @date 2021-07-01-15:56
- * @EnableWebSecurity 开启注解
+ * '@EnableWebSecurity注解用来开启注解
  **/
 @Configuration
 @EnableWebSecurity
@@ -33,28 +33,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
-     * 登录用户服务类
+     * 登录用户服务类.
      */
     private final transient UserDetailsService userDetailsService;
 
     /**
-     * 认证失败处理类 返回未授权
+     * 认证失败处理类 返回未授权.
      */
     private final transient RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
     /**
-     * 当未登录或者token失效访问接口时，自定义的返回结果
+     * 当未登录或者token失效访问接口时，自定义的返回结果.
      */
     private final transient RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     /**
-     * token认证过滤器
+     * token认证过滤器.
      */
     private final transient JwtAuthenticationTokenFilter authenticationTokenFilter;
 
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param restfulAccessDeniedHandler   认证失败处理类
      * @param restAuthenticationEntryPoint 当未登录或者token失效访问接口时，自定义的返回
@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /**
-     * 用于配置需要拦截的url路径、jwt过滤器及出异常后的处理器
+     * 用于配置需要拦截的url路径、jwt过滤器及出异常后的处理器.
      * anyRequest          |   匹配所有请求路径
      * access              |   SpringEl表达式结果为true时可以访问
      * anonymous           |   匿名可以访问
@@ -149,7 +149,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 强散列哈希加密实现
+     * 强散列哈希加密实现.
      *
      * @return 强散列哈希加密实现
      */

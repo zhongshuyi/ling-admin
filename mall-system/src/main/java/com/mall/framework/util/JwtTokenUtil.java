@@ -7,15 +7,16 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.mall.common.util.RedisUtils;
 import com.mall.framework.model.AdminUserDetails;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import javax.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -98,7 +99,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * 验证token是否有效
+     * 验证token是否有效.
      *
      * @param token token
      * @return 是否有效

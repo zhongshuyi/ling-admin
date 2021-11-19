@@ -5,17 +5,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.annotation.RepeatSubmit;
 import com.mall.common.core.domain.CommonResult;
-import com.mall.common.core.util.ServletUtils;
-import java.lang.reflect.Method;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.mall.common.util.ServletUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+
 /**
- * 防止重复提交拦截器
+ * 防止重复提交拦截器.
  *
  * @author ruoyi
  */
@@ -32,7 +33,7 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
             RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
             if (annotation != null) {
                 if (this.isRepeatSubmit(request)) {
-                    CommonResult ajaxResult = CommonResult.failed("不允许重复提交，请稍后再试");
+                    CommonResult<Void> ajaxResult = CommonResult.failed("不允许重复提交，请稍后再试");
                     ServletUtils.renderString(
                             response, new ObjectMapper().writeValueAsString(ajaxResult));
                     return false;
@@ -45,7 +46,7 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
     }
 
     /**
-     * 验证是否重复提交由子类实现具体地防重复提交的规则
+     * 验证是否重复提交由子类实现具体地防重复提交的规则.
      *
      * @param request 请求
      * @return 是否重复
