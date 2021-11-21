@@ -3,14 +3,13 @@ package com.mall.common.core.mybatisplus.core;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.mall.common.constant.GlobalConstants;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 分页增强.
@@ -100,17 +99,18 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param size    每页数量
      * @param total   总条数
      */
-    public PagePlus(long current, long size, long total) {
+    public PagePlus(final long current, final long size, final long total) {
         this(current, size, total, true);
     }
 
     /**
      * PagePlus构造函数.
+     *
      * @param current       当前页
      * @param size          每页数量
      * @param isSearchCount 是否进行 count 查询.
      */
-    public PagePlus(long current, long size, boolean isSearchCount) {
+    public PagePlus(final long current, final long size, final boolean isSearchCount) {
         this(current, size, 0L, isSearchCount);
     }
 
@@ -122,7 +122,9 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param total         总条数
      * @param isSearchCount 是否进行count查询
      */
-    public PagePlus(final Long current, long size, long total, boolean isSearchCount) {
+    public PagePlus(
+            final Long current, final long size, final long total, final boolean isSearchCount
+    ) {
         if (current > 1L) {
             this.current = current;
         }
@@ -141,7 +143,7 @@ public class PagePlus<T, V> implements IPage<T> {
      *
      * @param items 排序规则
      */
-    public void addOrder(OrderItem... items) {
+    public void addOrder(final OrderItem... items) {
         this.orders.addAll(Arrays.asList(items));
     }
 
@@ -160,7 +162,7 @@ public class PagePlus<T, V> implements IPage<T> {
     }
 
     @Override
-    public final IPage<T> setRecords(List<T> records) {
+    public final IPage<T> setRecords(final List<T> records) {
         this.records = records;
         return this;
     }
@@ -171,7 +173,7 @@ public class PagePlus<T, V> implements IPage<T> {
     }
 
     @Override
-    public final IPage<T> setTotal(long total) {
+    public final IPage<T> setTotal(final long total) {
         this.total = total;
         return this;
     }
@@ -182,7 +184,7 @@ public class PagePlus<T, V> implements IPage<T> {
     }
 
     @Override
-    public final IPage<T> setSize(long size) {
+    public final IPage<T> setSize(final long size) {
         this.size = size;
         return this;
     }

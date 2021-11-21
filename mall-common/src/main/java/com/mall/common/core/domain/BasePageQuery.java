@@ -1,15 +1,13 @@
 package com.mall.common.core.domain;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * 公共分页查询.
  *
  * @author 钟舒艺
- * @date 2021-11-06-16:58
  **/
 @Data
 public class BasePageQuery implements Serializable {

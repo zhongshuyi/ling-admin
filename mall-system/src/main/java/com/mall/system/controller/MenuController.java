@@ -19,19 +19,24 @@ import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 菜单操作.
  *
  * @author 钟舒艺
- * @date 2021-09-21-14:08
  **/
 @Slf4j
 @RestController
@@ -40,8 +45,14 @@ import java.util.List;
 @RequestMapping("/system/menu")
 public class MenuController extends BaseController {
 
+    /**
+     * 权限服务.
+     */
     private final transient IUmsMenuService umsMenuService;
 
+    /**
+     * jwt工具类.
+     */
     private final transient JwtTokenUtil jwtTokenUtil;
 
     /**
@@ -75,7 +86,10 @@ public class MenuController extends BaseController {
      */
     @PostMapping
     @ApiOperation("增加菜单")
-    public CommonResult<Void> addMenu(@Validated(ValidationGroups.Add.class) @RequestBody MenuBo addBo) {
+    public CommonResult<Void> addMenu(
+            @Validated(ValidationGroups.Add.class)
+            @RequestBody final MenuBo addBo
+    ) {
         if (umsMenuService.checkMenuUnique(BeanUtil.toBean(addBo, UmsMenu.class))) {
             return CommonResult.failed("菜单" + addBo.getTitle() + "已存在");
         }
@@ -90,7 +104,7 @@ public class MenuController extends BaseController {
      */
     @ApiOperation("删除菜单")
     @DeleteMapping("/{id}")
-    public CommonResult<Void> delMenu(@PathVariable Long id) {
+    public CommonResult<Void> delMenu(@PathVariable final Long id) {
         return toAjax(umsMenuService.deleteById(id));
     }
 
@@ -104,7 +118,9 @@ public class MenuController extends BaseController {
     @ApiOperation("编辑菜单")
     @PutMapping
     @RepeatSubmit
-    public CommonResult<Void> editMenu(@Validated(ValidationGroups.Edit.class) @RequestBody MenuBo bo) {
+    public CommonResult<Void> editMenu(
+            @Validated(ValidationGroups.Edit.class)
+            @RequestBody final MenuBo bo) {
         if (bo.getId().equals(bo.getParentId())) {
             return CommonResult.failed("上级菜单不能为自己");
         } else if (umsMenuService.checkMenuUnique(BeanUtil.toBean(bo, UmsMenu.class))) {
@@ -121,7 +137,7 @@ public class MenuController extends BaseController {
      */
     @ApiOperation("检查菜单是否有子菜单")
     @GetMapping("checkMenuHasChildren/{id}")
-    public CommonResult<Boolean> checkMenuHasChildren(@PathVariable Long id) {
+    public CommonResult<Boolean> checkMenuHasChildren(@PathVariable final Long id) {
         return CommonResult.success(CollUtil.isNotEmpty(umsMenuService.getMenuChildren(id)));
     }
 

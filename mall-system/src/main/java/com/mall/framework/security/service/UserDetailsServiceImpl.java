@@ -8,9 +8,10 @@ import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.system.entity.UmsAdmin;
 import com.mall.system.entity.UmsRole;
-import com.mall.system.mapper.UmsRoleMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsDeptService;
+import com.mall.system.service.IUmsRoleService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +20,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 /**
  * 用户验证处理.
  *
  * @author 钟舒艺
- * @date 2021-07-06-17:31
  **/
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * 用户服务.
+     */
     private final transient IUmsAdminService umsAdminService;
 
+    /**
+     * 部门服务.
+     */
     private final transient IUmsDeptService umsDeptService;
 
+    /**
+     * 权限服务.
+     */
     private final transient PermissionService permissionService;
 
-    private final transient UmsRoleMapper umsRoleMapper;
+    /**
+     * 角色服务.
+     */
+    private final transient IUmsRoleService umsRoleService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public final UserDetails loadUserByUsername(
+            final String username
+    ) throws UsernameNotFoundException {
         log.info(username + "尝试登录");
         UmsAdmin umsAdmin = umsAdminService.getOne(
                 Wrappers.<UmsAdmin>lambdaQuery()
@@ -57,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DISABLE);
         }
-        List<UmsRole> roles = umsRoleMapper.selectRoleListByUserId(umsAdmin.getId());
+        List<UmsRole> roles = umsRoleService.selectRoleListByUserId(umsAdmin.getId());
         roles.forEach((r) -> {
             if (r.getStatus().equals(Status.DISABLE.getCode())) {
                 log.info("登录用户：{} 角色{}已被停用.", username, r.getRoleName());

@@ -3,9 +3,8 @@ package com.mall.system.mapper;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
 import com.mall.system.entity.UmsAdmin;
-import org.apache.ibatis.annotations.CacheNamespace;
-
 import java.util.List;
+import org.apache.ibatis.annotations.CacheNamespace;
 
 /**
  * 用户信息表 Mapper 接口.

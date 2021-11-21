@@ -18,13 +18,18 @@ import org.springframework.util.CollectionUtils;
  * = MybatisPlusRedisCache.class).
  *
  * @author 钟舒艺
- * @date 2021-11-09-21:11
  **/
 @Slf4j
 public class MybatisPlusRedisCache implements Cache {
 
+    /**
+     * id.
+     */
     private final String id;
 
+    /**
+     * 读写锁.
+     */
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
     /**
@@ -41,19 +46,19 @@ public class MybatisPlusRedisCache implements Cache {
 
 
     @Override
-    public String getId() {
+    public final String getId() {
         return this.id;
     }
 
     @Override
-    public void putObject(Object o, Object o1) {
+    public final void putObject(final Object o, final Object o1) {
         if (o1 != null) {
             RedisUtils.setCacheObject(o.toString(), o1);
         }
     }
 
     @Override
-    public Object getObject(Object o) {
+    public final Object getObject(final Object o) {
         try {
             if (o != null) {
                 return RedisUtils.getCacheObject(o.toString());
@@ -65,7 +70,7 @@ public class MybatisPlusRedisCache implements Cache {
     }
 
     @Override
-    public Object removeObject(Object o) {
+    public final Object removeObject(final Object o) {
         if (o != null) {
             RedisUtils.deleteObject(o.toString());
         }
@@ -73,7 +78,7 @@ public class MybatisPlusRedisCache implements Cache {
     }
 
     @Override
-    public void clear() {
+    public final void clear() {
         log.debug("清空缓存");
         Collection<String> keys = RedisUtils.keys("*:" + this.id + "*");
         if (!CollectionUtils.isEmpty(keys)) {
@@ -82,7 +87,7 @@ public class MybatisPlusRedisCache implements Cache {
     }
 
     @Override
-    public int getSize() {
+    public final int getSize() {
         RedisTemplate<String, Object> redisTemplate = SpringUtil.getBean("redisTemplate");
         Long size = redisTemplate.execute(RedisServerCommands::dbSize);
         assert size != null;
@@ -90,7 +95,7 @@ public class MybatisPlusRedisCache implements Cache {
     }
 
     @Override
-    public ReadWriteLock getReadWriteLock() {
+    public final ReadWriteLock getReadWriteLock() {
         return this.readWriteLock;
     }
 }

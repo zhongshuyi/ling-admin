@@ -1,6 +1,8 @@
 package com.mall.framework.interceptor.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.lang.Validator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,17 +10,16 @@ import com.mall.common.constant.GlobalConstants;
 import com.mall.common.filter.RepeatedlyRequestWrapper;
 import com.mall.common.util.RedisUtils;
 import com.mall.framework.interceptor.BaseRepeatSubmitInterceptor;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 判断请求url和数据是否和上一次相同.
@@ -68,15 +69,16 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     /**
      * 设置间隔时间.
      *
-     * @param intervalTime 间隔时间.
+     * @param intervalTime 间隔时间
      */
-    public void setIntervalTime(Long intervalTime) {
+    public void setIntervalTime(final Long intervalTime) {
         this.intervalTime = intervalTime;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public boolean isRepeatSubmit(HttpServletRequest request) throws JsonProcessingException {
+    public final boolean isRepeatSubmit(
+            final HttpServletRequest request
+    ) throws JsonProcessingException {
         String nowParams = "";
         if (request instanceof RepeatedlyRequestWrapper) {
             RepeatedlyRequestWrapper repeatedlyRequest = (RepeatedlyRequestWrapper) request;
@@ -106,7 +108,9 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
         Map<String, Object> session = RedisUtils.getCacheObject(cacheRepeatKey);
         if (session != null) {
             if (session.containsKey(url)) {
-                Map<String, Object> preDataMap = (Map<String, Object>) session.get(url);
+                Map<String, Object> preDataMap =
+                        Convert.convert(new TypeReference<Map<String, Object>>() {
+                        }, session.get(url));
                 if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap)) {
                     return true;
                 }
@@ -121,7 +125,10 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     /**
      * 判断参数是否相同.
      */
-    private boolean compareParams(Map<String, Object> nowMap, Map<String, Object> preMap) {
+    private boolean compareParams(
+            final Map<String, Object> nowMap,
+            final Map<String, Object> preMap
+    ) {
         String nowParams = (String) nowMap.get(REPEAT_PARAMS);
         String preParams = (String) preMap.get(REPEAT_PARAMS);
         if (nowParams == null || preParams == null) {
@@ -133,7 +140,10 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     /**
      * 判断两次间隔时间.
      */
-    private boolean compareTime(Map<String, Object> nowMap, Map<String, Object> preMap) {
+    private boolean compareTime(
+            final Map<String, Object> nowMap,
+            final Map<String, Object> preMap
+    ) {
         Long time1 = (Long) nowMap.get(REPEAT_TIME);
         Long time2 = (Long) preMap.get(REPEAT_TIME);
         if (time1 == null || time2 == null) {

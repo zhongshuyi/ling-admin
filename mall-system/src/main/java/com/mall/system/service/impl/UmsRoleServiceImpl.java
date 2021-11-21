@@ -1,6 +1,7 @@
 package com.mall.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.exception.BusinessErrorException;
@@ -10,6 +11,7 @@ import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,37 +30,48 @@ public class UmsRoleServiceImpl
 
     private static final long serialVersionUID = 6794454144163365234L;
 
+    /**
+     * 菜单权限服务.
+     */
     private final transient IUmsMenuService umsMenuService;
 
+    /**
+     * 用户服务.
+     */
     private final transient IUmsAdminService umsAdminService;
 
 
     @Override
-    public void validEntityBeforeSave(UmsRole umsRole) {
+    public final void validEntityBeforeSave(final UmsRole umsRole) {
         checkRoleKeyUnique(umsRole);
     }
 
     @Override
-    public void checkRoleKeyUnique(UmsRole roleBo) {
+    public final void checkRoleKeyUnique(final UmsRole roleBo) {
         UmsRole umsRole =
                 getOne(Wrappers.<UmsRole>lambdaQuery()
                         .eq(UmsRole::getRoleKey, roleBo.getRoleKey()).last("limit 1"));
         if (umsRole != null && !umsRole.getId().equals(roleBo.getId())) {
-            throw new BusinessErrorException(400, "角色键值已存在");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "角色键值已存在");
         }
     }
 
     @Override
-    public boolean stateChanges(Long id, Integer state) {
+    public final boolean stateChanges(final Long id, final Integer state) {
         return update(Wrappers.<UmsRole>lambdaUpdate()
                 .eq(UmsRole::getId, id).set(UmsRole::getStatus, state));
     }
 
     @Override
-    public void validEntityBeforeDel(Long id) {
+    public final List<UmsRole> selectRoleListByUserId(final Long userId) {
+        return getBaseMapper().selectRoleListByUserId(userId);
+    }
+
+    @Override
+    public final void validEntityBeforeDel(final Long id) {
         if (CollUtil.isNotEmpty(umsMenuService.getRolePerm(id))
                 || CollUtil.isNotEmpty(umsAdminService.getUserListByRoleId(id))) {
-            throw new BusinessErrorException(400, "此角色还有关联用户或菜单");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "此角色还有关联用户或菜单");
         }
     }
 }

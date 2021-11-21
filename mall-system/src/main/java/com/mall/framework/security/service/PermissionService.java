@@ -4,27 +4,31 @@ import com.mall.system.entity.UmsAdmin;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.mapper.UmsRoleMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 用户权限处理.
  *
  * @author 钟舒艺
- * @date 2021-07-07-11:20
  **/
 @Service
 @SuppressWarnings("unused")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PermissionService {
 
+    /**
+     * 菜单服务.
+     */
     private final UmsMenuMapper umsMenuMapper;
 
+    /**
+     * 角色服务.
+     */
     private final UmsRoleMapper umsRoleMapper;
 
 
@@ -34,7 +38,7 @@ public class PermissionService {
      * @param umsAdmin 用户信息
      * @return 权限列表
      */
-    public List<UmsMenu> getPermissionList(UmsAdmin umsAdmin) {
+    public List<UmsMenu> getPermissionList(final UmsAdmin umsAdmin) {
 
         List<UmsMenu> perms = new ArrayList<>();
 

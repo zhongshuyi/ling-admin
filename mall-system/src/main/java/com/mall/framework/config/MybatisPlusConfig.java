@@ -11,18 +11,16 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.mall.common.core.mybatisplus.methods.InsertAll;
 import com.mall.framework.mybatisplus.CreateAndUpdateMetaObjectHandler;
+import java.util.List;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.List;
-
 /**
  * mybatisPlus 配置.
  *
  * @author 钟舒艺
- * @date 2021-10-28-13:51
  **/
 
 @Configuration
@@ -49,7 +47,7 @@ public class MybatisPlusConfig {
 
 
     /**
-     * 分页插件，自动识别数据库类型
+     * 分页插件，自动识别数据库类型.
      * https://baomidou.com/guide/interceptor-pagination.html
      *
      * @return 分页插件配置
@@ -64,7 +62,7 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 乐观锁插件
+     * 乐观锁插件.
      * https://baomidou.com/guide/interceptor-optimistic-locker.html
      *
      * @return 乐观锁插件配置
@@ -74,7 +72,7 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 如果是对全表的删除或更新操作，就会终止该操作
+     * 如果是对全表的删除或更新操作，就会终止该操作.
      * https://baomidou.com/guide/interceptor-block-attack.html
      *
      * @return 全表操作拦截器
@@ -85,7 +83,7 @@ public class MybatisPlusConfig {
 
 
     /**
-     * 元对象字段填充控制器 用于填充创建时间/创建人/修改时间/修改人
+     * 元对象字段填充控制器 用于填充创建时间/创建人/修改时间/修改人.
      * https://baomidou.com/guide/auto-fill-metainfo.html
      *
      * @return 元对象字段填充控制器
@@ -96,7 +94,7 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * sql注入器配置
+     * sql注入器配置.
      * https://baomidou.com/guide/sql-injector.html
      *
      * @return sql注入器配置
@@ -105,7 +103,10 @@ public class MybatisPlusConfig {
     public ISqlInjector sqlInjector() {
         return new DefaultSqlInjector() {
             @Override
-            public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
+            public List<AbstractMethod> getMethodList(
+                    final Class<?> mapperClass,
+                    final TableInfo tableInfo
+            ) {
                 List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
                 methodList.add(new InsertAll());
                 return methodList;

@@ -1,9 +1,10 @@
 package com.mall.system.service;
 
-import com.mall.system.entity.UmsRole;
 import com.mall.common.core.mybatisplus.core.IServicePlus;
+import com.mall.system.entity.UmsRole;
 import com.mall.system.vo.RoleVo;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 角色信息表 服务类.
@@ -29,4 +30,12 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializ
      * @return 是否成功
      */
     boolean stateChanges(Long id, Integer state);
+
+    /**
+     * 根据用户id查询角色列表.
+     *
+     * @param userId 用户id
+     * @return 角色列表
+     */
+    List<UmsRole> selectRoleListByUserId(Long userId);
 }

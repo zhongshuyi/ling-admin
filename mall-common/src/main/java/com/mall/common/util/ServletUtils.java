@@ -1,25 +1,27 @@
 package com.mall.common.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.http.HttpStatus;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-
 /**
  * Servlet工具类.
  *
  * @author 钟舒艺
- * @date 2021-07-02-17:41
  **/
 @SuppressWarnings("unused")
 @Slf4j
-public class ServletUtils {
+public final class ServletUtils {
+
+    private ServletUtils() {
+    }
 
     /**
      * 获取RequestAttributes.
@@ -64,9 +66,9 @@ public class ServletUtils {
      * @param response 渲染对象
      * @param string   待渲染的字符串
      */
-    public static void renderString(HttpServletResponse response, String string) {
+    public static void renderString(final HttpServletResponse response, final String string) {
         try {
-            response.setStatus(200);
+            response.setStatus(HttpStatus.HTTP_OK);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
@@ -82,7 +84,7 @@ public class ServletUtils {
      * @param name 参数名
      * @return 参数值
      */
-    public static String getParameter(String name) {
+    public static String getParameter(final String name) {
         return getRequest().getParameter(name);
     }
 
@@ -94,7 +96,7 @@ public class ServletUtils {
      * @param defaultValue 默认值
      * @return 值
      */
-    public static String getParameter(String name, String defaultValue) {
+    public static String getParameter(final String name, final String defaultValue) {
         return Convert.toStr(getRequest().getParameter(name), defaultValue);
     }
 
@@ -105,7 +107,7 @@ public class ServletUtils {
      * @param name 键名
      * @return 值
      */
-    public static Integer getParameterToInt(String name) {
+    public static Integer getParameterToInt(final String name) {
         return Convert.toInt(getRequest().getParameter(name));
     }
 
@@ -117,7 +119,7 @@ public class ServletUtils {
      * @param defaultValue 默认值
      * @return 值
      */
-    public static Integer getParameterToInt(String name, Integer defaultValue) {
+    public static Integer getParameterToInt(final String name, final Integer defaultValue) {
         return Convert.toInt(getRequest().getParameter(name), defaultValue);
     }
 }

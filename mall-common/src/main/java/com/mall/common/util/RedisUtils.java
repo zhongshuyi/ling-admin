@@ -2,28 +2,35 @@ package com.mall.common.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.redisson.api.*;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import org.redisson.api.RBatch;
+import org.redisson.api.RBucket;
+import org.redisson.api.RList;
+import org.redisson.api.RMap;
+import org.redisson.api.RSet;
+import org.redisson.api.RTopic;
+import org.redisson.api.RedissonClient;
 
 /**
  * redis 工具类.
  *
  * @author 钟舒艺
- * @date 2021-11-09-22:20
  **/
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuppressWarnings("unused")
-public class RedisUtils {
+public final class RedisUtils {
 
+    /**
+     * RedissonClient.
+     */
     private static final RedissonClient CLIENT = SpringUtil.getBean(RedissonClient.class);
+
+    private RedisUtils() {
+    }
 
     /**
      * 发布通道消息.
@@ -33,7 +40,9 @@ public class RedisUtils {
      * @param consumer   自定义处理
      * @param <T>        实体
      */
-    public static <T> void publish(String channelKey, T msg, Consumer<T> consumer) {
+    public static <T> void publish(
+            final String channelKey, final T msg, final Consumer<T> consumer
+    ) {
         RTopic topic = CLIENT.getTopic(channelKey);
         topic.publish(msg);
         consumer.accept(msg);
@@ -46,7 +55,7 @@ public class RedisUtils {
      * @param msg        发送数据
      * @param <T>        实体
      */
-    public static <T> void publish(String channelKey, T msg) {
+    public static <T> void publish(final String channelKey, final T msg) {
         RTopic topic = CLIENT.getTopic(channelKey);
         topic.publish(msg);
     }
@@ -59,7 +68,9 @@ public class RedisUtils {
      * @param consumer   自定义处理
      * @param <T>        实体
      */
-    public static <T> void subscribe(String channelKey, Class<T> clazz, Consumer<T> consumer) {
+    public static <T> void subscribe(
+            final String channelKey, final Class<T> clazz, final Consumer<T> consumer
+    ) {
         RTopic topic = CLIENT.getTopic(channelKey);
         topic.addListener(clazz, (channel, msg) -> consumer.accept(msg));
     }

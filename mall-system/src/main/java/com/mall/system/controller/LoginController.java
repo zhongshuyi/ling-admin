@@ -15,6 +15,11 @@ import com.mall.system.util.MenuUtil;
 import com.mall.system.vo.RouterVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,27 +27,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 /**
  * 登录操作.
  *
  * @author 钟舒艺
- * @date 2021-07-07-21:09
  **/
 @RestController
 @Api(tags = "登录注册等")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LoginController {
 
+    /**
+     * 登录服务.
+     */
     private final transient LoginService loginService;
 
+    /**
+     * jwt工具类.
+     */
     private final transient JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * 权限服务.
+     */
     private final transient IUmsMenuService umsMenuService;
 
     /**
@@ -53,7 +60,7 @@ public class LoginController {
      */
     @PostMapping("/login")
     @ApiOperation("登录接口")
-    public CommonResult<? extends Map<String, String>> login(@RequestBody LoginBody user) {
+    public CommonResult<? extends Map<String, String>> login(@RequestBody final LoginBody user) {
         String token = loginService.login(user.getUsername(), user.getPassword());
         Map<String, String> map = new HashMap<>(1);
         map.put("token", token);

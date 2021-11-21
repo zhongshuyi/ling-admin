@@ -1,5 +1,6 @@
 package com.mall.system.controller;
 
+import cn.hutool.http.HttpStatus;
 import com.mall.common.constant.GlobalConstants;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
@@ -13,20 +14,25 @@ import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 角色管理操作.
  *
  * @author 钟舒艺
- * @date 2021-10-26-14:47
  **/
 @Slf4j
 @Validated
@@ -36,8 +42,14 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RoleController extends BaseController {
 
+    /**
+     * 角色服务.
+     */
     private final transient IUmsRoleService umsRoleService;
 
+    /**
+     * 权限菜单服务.
+     */
     private final transient IUmsMenuService umsMenuService;
 
     /**
@@ -48,7 +60,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping
     @ApiOperation("分页获取角色列表")
-    public CommonResult<PageInfo<RoleVo>> getList(RoleBo role) {
+    public CommonResult<PageInfo<RoleVo>> getList(final RoleBo role) {
         log.info(role.toString());
         return CommonResult.success(
                 PageUtils.buildPageInfo(
@@ -65,7 +77,10 @@ public class RoleController extends BaseController {
      */
     @PostMapping
     @ApiOperation("添加角色")
-    public CommonResult<Void> add(@Validated(ValidationGroups.Add.class) @RequestBody RoleBo role) {
+    public CommonResult<Void> add(
+            @Validated(ValidationGroups.Add.class)
+            @RequestBody final RoleBo role
+    ) {
         return toAjax(umsRoleService.insertByBo(role));
     }
 
@@ -77,9 +92,12 @@ public class RoleController extends BaseController {
      */
     @PutMapping
     @ApiOperation("修改角色")
-    public CommonResult<Void> edit(@Validated(ValidationGroups.Edit.class) @RequestBody RoleBo role) {
+    public CommonResult<Void> edit(
+            @Validated(ValidationGroups.Edit.class)
+            @RequestBody final RoleBo role
+    ) {
         if (role.getId().equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(400, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
         }
         return toAjax(umsRoleService.updateByBo(role));
     }
@@ -93,9 +111,12 @@ public class RoleController extends BaseController {
      */
     @PutMapping("/{id}/{state}")
     @ApiOperation("更改角色状态")
-    public CommonResult<Void> stateChanges(@PathVariable Long id, @PathVariable Integer state) {
+    public CommonResult<Void> stateChanges(
+            @PathVariable final Long id,
+            @PathVariable final Integer state
+    ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(400, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
         }
         return toAjax(umsRoleService.stateChanges(id, state));
     }
@@ -108,9 +129,9 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("根据id删除角色")
     @DeleteMapping("/{id}")
-    public CommonResult<Void> del(@PathVariable Long id) {
+    public CommonResult<Void> del(@PathVariable final Long id) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(400, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
         }
         return toAjax(umsRoleService.removeById(id));
     }
@@ -123,7 +144,7 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("获取角色权限")
     @GetMapping("perm/{id}")
-    public CommonResult<Set<Long>> getPerm(@PathVariable Long id) {
+    public CommonResult<Set<Long>> getPerm(@PathVariable final Long id) {
         return CommonResult.success(umsMenuService.getRolePerm(id));
     }
 
@@ -136,9 +157,12 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("更改角色权限")
     @PutMapping("perm/{id}")
-    public CommonResult<Void> setPerm(@PathVariable Long id, @RequestBody Set<Long> newIds) {
+    public CommonResult<Void> setPerm(
+            @PathVariable final Long id,
+            @RequestBody final Set<Long> newIds
+    ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(400, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
         }
         Set<Long> oldIds = umsMenuService.getRolePerm(id);
         Set<Long> result = new HashSet<>(oldIds);

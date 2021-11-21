@@ -24,8 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * 判断用户对某个控制层的方法是否具有访问权限
  *
  * @author 钟舒艺
- * @date 2021-07-01-15:56
- * '@EnableWebSecurity注解用来开启注解
  **/
 @Configuration
 @EnableWebSecurity
@@ -62,10 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @param authenticationTokenFilter    token认证过滤器
      */
     public SecurityConfig(
-            RestfulAccessDeniedHandler restfulAccessDeniedHandler,
-            RestAuthenticationEntryPoint restAuthenticationEntryPoint,
-            UserDetailsService userDetailsService,
-            JwtAuthenticationTokenFilter authenticationTokenFilter) {
+            final RestfulAccessDeniedHandler restfulAccessDeniedHandler,
+            final RestAuthenticationEntryPoint restAuthenticationEntryPoint,
+            final UserDetailsService userDetailsService,
+            final JwtAuthenticationTokenFilter authenticationTokenFilter) {
         this.restfulAccessDeniedHandler = restfulAccessDeniedHandler;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
@@ -93,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @throws Exception 异常
      */
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
+    protected void configure(final HttpSecurity httpSecurity) throws Exception {
         // CSRF禁用，因为不使用session
         httpSecurity
                 .csrf().disable()
@@ -144,7 +142,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected final void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(cryptPasswordEncoder());
     }
 
@@ -159,6 +157,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    /**
+     * 获取身份验证管理器Bean.
+     *
+     * @return AuthenticationManager
+     * @throws Exception bean获取异常
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

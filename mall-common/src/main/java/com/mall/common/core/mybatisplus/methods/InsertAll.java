@@ -6,30 +6,31 @@ import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import java.util.List;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
-import java.util.List;
-
 /**
  * 批量插入增强.
  *
  * @author 钟舒艺
- * @date 2021-10-28-21:29
  **/
 public class InsertAll extends AbstractMethod {
 
     private static final long serialVersionUID = 5839519053059873280L;
 
+    /**
+     * 需要填充的字段.
+     */
     private static final String[] FILL_PROPERTY =
             {"createTime", "createBy", "updateTime", "updateBy"};
 
     @Override
-    public MappedStatement injectMappedStatement(
-            Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
+    public final MappedStatement injectMappedStatement(
+            final Class<?> mapperClass, final Class<?> modelClass, final TableInfo tableInfo) {
         final String sql = "<script>insert into %s %s values %s</script>";
         final String fieldSql = prepareFieldSql(tableInfo);
         final String valueSql = prepareValuesSqlForMysqlBatch(tableInfo);
@@ -67,7 +68,7 @@ public class InsertAll extends AbstractMethod {
      * @param tableInfo 表信息
      * @return 列名
      */
-    private String prepareFieldSql(TableInfo tableInfo) {
+    private String prepareFieldSql(final TableInfo tableInfo) {
         StringBuilder fieldSql = new StringBuilder();
         if (StrUtil.isNotBlank(tableInfo.getKeyColumn())) {
             fieldSql.append(tableInfo.getKeyColumn()).append(",");
@@ -85,7 +86,7 @@ public class InsertAll extends AbstractMethod {
      * @param tableInfo 类信息
      * @return 值集合
      */
-    private String prepareValuesSqlForMysqlBatch(TableInfo tableInfo) {
+    private String prepareValuesSqlForMysqlBatch(final TableInfo tableInfo) {
         final StringBuilder valueSql = new StringBuilder();
         valueSql.append("<foreach collection=\"list\" item=\"item\" index=\"index\""
                 + " open=\"(\" separator=\"),(\" close=\")\">");

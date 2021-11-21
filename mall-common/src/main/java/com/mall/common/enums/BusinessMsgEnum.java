@@ -6,7 +6,6 @@ import lombok.Getter;
  * 业务异常提示信息枚举类.
  *
  * @author 钟舒艺
- * @date 2021-07-06-11:19
  **/
 @Getter
 public enum BusinessMsgEnum {
@@ -40,6 +39,7 @@ public enum BusinessMsgEnum {
      */
     DEPT_DISABLE(401, "部门已被禁用");
 
+
     /**
      * 消息码.
      */
@@ -49,7 +49,7 @@ public enum BusinessMsgEnum {
      */
     private final String msg;
 
-    BusinessMsgEnum(int code, String msg) {
+    BusinessMsgEnum(final int code, final String msg) {
         this.code = code;
         this.msg = msg;
     }

@@ -3,19 +3,17 @@ package com.mall.system.bo;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 角色操作Bo.
  *
  * @author 钟舒艺
- * @date 2021-11-06-20:45
  **/
 
 @Data

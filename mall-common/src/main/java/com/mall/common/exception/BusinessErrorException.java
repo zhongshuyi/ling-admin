@@ -1,5 +1,6 @@
 package com.mall.common.exception;
 
+import cn.hutool.http.HttpStatus;
 import com.mall.common.enums.BusinessMsgEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +9,6 @@ import lombok.EqualsAndHashCode;
  * 自定义业务异常.
  *
  * @author 钟舒艺
- * @date 2021-07-06-11:27
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -36,7 +36,7 @@ public class BusinessErrorException extends RuntimeException {
      *
      * @param businessMsgEnum 异常枚举
      */
-    public BusinessErrorException(BusinessMsgEnum businessMsgEnum) {
+    public BusinessErrorException(final BusinessMsgEnum businessMsgEnum) {
         this.code = businessMsgEnum.getCode();
         this.message = businessMsgEnum.getMsg();
     }
@@ -46,9 +46,9 @@ public class BusinessErrorException extends RuntimeException {
      *
      * @param message 异常信息.
      */
-    public BusinessErrorException(String message) {
+    public BusinessErrorException(final String message) {
         this.message = message;
-        this.code = 500;
+        this.code = HttpStatus.HTTP_INTERNAL_ERROR;
     }
 
     /**
@@ -56,8 +56,8 @@ public class BusinessErrorException extends RuntimeException {
      *
      * @param e 异常
      */
-    public BusinessErrorException(Exception e) {
-        this.code = 500;
+    public BusinessErrorException(final Exception e) {
+        this.code = HttpStatus.HTTP_INTERNAL_ERROR;
         this.message = "系统异常";
         this.exception = e;
     }
@@ -70,7 +70,7 @@ public class BusinessErrorException extends RuntimeException {
      * @param message 提示信息
      * @param e       异常
      */
-    public BusinessErrorException(int code, String message, Exception e) {
+    public BusinessErrorException(final int code, final String message, final Exception e) {
         this.code = code;
         this.message = message;
         this.exception = e;
@@ -83,7 +83,7 @@ public class BusinessErrorException extends RuntimeException {
      * @param code    状态码.
      * @param message 异常信息.
      */
-    public BusinessErrorException(int code, String message) {
+    public BusinessErrorException(final int code, final String message) {
         this.message = message;
         this.code = code;
     }

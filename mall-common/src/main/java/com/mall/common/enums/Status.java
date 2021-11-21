@@ -6,7 +6,6 @@ import lombok.Getter;
  * 系统用户状态.
  *
  * @author 钟舒艺
- * @date 2021-07-07-17:43
  **/
 @Getter
 public enum Status {
@@ -24,10 +23,17 @@ public enum Status {
      */
     DELETED(2, "删除");
 
+    /**
+     * 状态码.
+     */
     private final Integer code;
+
+    /**
+     * 描述.
+     */
     private final String info;
 
-    Status(Integer code, String info) {
+    Status(final Integer code, final String info) {
         this.code = code;
         this.info = info;
     }

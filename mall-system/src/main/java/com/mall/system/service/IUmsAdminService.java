@@ -1,7 +1,7 @@
 package com.mall.system.service;
 
-import com.mall.system.entity.UmsAdmin;
 import com.mall.common.core.mybatisplus.core.IServicePlus;
+import com.mall.system.entity.UmsAdmin;
 import com.mall.system.vo.UserVo;
 import java.util.List;
 

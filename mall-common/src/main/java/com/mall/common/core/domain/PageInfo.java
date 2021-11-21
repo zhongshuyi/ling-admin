@@ -1,18 +1,16 @@
 package com.mall.common.core.domain;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * 分页信息类.
  *
  * @author 钟舒艺
- * @date 2021-11-02-0:09
  **/
 @Data
 @NoArgsConstructor

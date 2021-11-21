@@ -23,25 +23,26 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * 文档记录 : https://www.yuque.com/rookieteam/bvc9h3/gbvtga#PAnLH
  *
  * @author 钟舒艺
- * @date 2021-07-04-12:42
  **/
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
+    /**
+     * jwt工具类.
+     */
     private final transient JwtTokenUtil jwtTokenUtil;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
+    protected final void doFilterInternal(
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final FilterChain filterChain)
             throws ServletException, IOException {
 
         // 从token中获取用户信息
         AdminUserDetails user = jwtTokenUtil.getAdminUserDetails(request);
-        // SecurityContextHolder.getContext().getAuthentication()获取当前用户权限
         if (user != null
                 && SecurityUtils.getAuthentication() == null) {
             log.info("使用用户信息与用户权限构建 认证用户");

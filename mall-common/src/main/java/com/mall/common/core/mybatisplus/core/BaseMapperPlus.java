@@ -1,15 +1,14 @@
 package com.mall.common.core.mybatisplus.core;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.Collection;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 增强mybatisPlus Mapper.
  *
+ * @param <T> 实体类
  * @author 钟舒艺
- * @date 2021-10-28-21:49
  **/
 public interface BaseMapperPlus<T> extends BaseMapper<T> {
 

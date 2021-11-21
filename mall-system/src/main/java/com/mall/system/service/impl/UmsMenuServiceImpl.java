@@ -8,11 +8,10 @@ import com.mall.system.bo.MenuBo;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
-import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import org.springframework.stereotype.Service;
 
 /**
  * 菜单表 服务实现类.
@@ -41,7 +40,7 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public List<UmsMenu> selectRouterListAll() {
+    public final List<UmsMenu> selectRouterListAll() {
         return list(Wrappers
                 .<UmsMenu>lambdaQuery()
                 .eq(UmsMenu::getStatus, 0)
@@ -50,7 +49,7 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public List<UmsMenu> selectMenuByIds(List<Long> permIds) {
+    public final List<UmsMenu> selectMenuByIds(final List<Long> permIds) {
         return list(
                 Wrappers.<UmsMenu>lambdaQuery()
                         .in(UmsMenu::getId, permIds)
@@ -60,23 +59,23 @@ public class UmsMenuServiceImpl
 
 
     @Override
-    public Set<Long> selectRolePermsId(Long userId) {
+    public final Set<Long> selectRolePermsId(final Long userId) {
         return baseMapper.selectUserPermsIdsById(userId);
     }
 
     @Override
-    public Set<Long> selectDeptPermsId(Long userId) {
+    public final Set<Long> selectDeptPermsId(final Long userId) {
         return baseMapper.selectDeptPermsId(userId);
     }
 
     @Override
-    public Boolean addByAddBo(MenuBo menuBo) {
+    public final Boolean addByAddBo(final MenuBo menuBo) {
         UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
         return save(menu);
     }
 
     @Override
-    public Boolean deleteById(Long id) {
+    public final Boolean deleteById(final Long id) {
         List<UmsMenu> list = getMenuChildren(id);
         if (CollUtil.isNotEmpty(list)) {
             for (UmsMenu menu : list) {
@@ -87,7 +86,7 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public Boolean checkMenuUnique(UmsMenu bo) {
+    public final Boolean checkMenuUnique(final UmsMenu bo) {
         return !this.list(
                         Wrappers.<UmsMenu>lambdaQuery()
                                 .ne(UmsMenu::getId, bo.getId())
@@ -99,17 +98,17 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public List<UmsMenu> getMenuChildren(Long id) {
+    public final List<UmsMenu> getMenuChildren(final Long id) {
         return this.list(Wrappers.<UmsMenu>lambdaQuery().eq(UmsMenu::getParentId, id));
     }
 
     @Override
-    public List<UmsMenu> getDeptPerm(Long id) {
+    public final List<UmsMenu> getDeptPerm(final Long id) {
         return baseMapper.getDeptPerm(id);
     }
 
     @Override
-    public Boolean addDeptPerm(Long deptId, Set<Long> permIds) {
+    public final Boolean addDeptPerm(final Long deptId, final Set<Long> permIds) {
         if (permIds.size() == 0) {
             return true;
         }
@@ -117,7 +116,7 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public Boolean removeDeptPerm(Long deptId, Set<Long> permIds) {
+    public final Boolean removeDeptPerm(final Long deptId, final Set<Long> permIds) {
         if (permIds.size() == 0) {
             return true;
         }
@@ -125,12 +124,12 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public Set<Long> getRolePerm(Long id) {
+    public final Set<Long> getRolePerm(final Long id) {
         return baseMapper.getRolePerm(id);
     }
 
     @Override
-    public Boolean addRolePerm(Long roleId, Set<Long> permIds) {
+    public final Boolean addRolePerm(final Long roleId, final Set<Long> permIds) {
         if (permIds.size() == 0) {
             return true;
         }
@@ -138,7 +137,7 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public Boolean removeRolePerm(Long roleId, Set<Long> permIds) {
+    public final Boolean removeRolePerm(final Long roleId, final Set<Long> permIds) {
         if (permIds.size() == 0) {
             return true;
         }

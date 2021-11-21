@@ -19,7 +19,7 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected CommonResult<Void> toAjax(int rows) {
+    protected CommonResult<Void> toAjax(final int rows) {
         return rows > 0 ? success() : error();
     }
 
@@ -29,7 +29,7 @@ public class BaseController {
      * @param result 结果
      * @return 操作结果
      */
-    protected CommonResult<Void> toAjax(boolean result) {
+    protected CommonResult<Void> toAjax(final boolean result) {
         return result ? success() : error();
     }
 
@@ -48,7 +48,7 @@ public class BaseController {
      * @param message 信息
      * @return 通用返回类
      */
-    public CommonResult<Void> success(String message) {
+    public CommonResult<Void> success(final String message) {
         return CommonResult.success(message);
     }
 
@@ -68,7 +68,7 @@ public class BaseController {
      * @param message 信息
      * @return 信息
      */
-    public CommonResult<Void> error(String message) {
+    public CommonResult<Void> error(final String message) {
         return CommonResult.failed(message);
     }
 
@@ -78,7 +78,7 @@ public class BaseController {
      * @param url 充定向的url
      * @return 重定向信息
      */
-    public String redirect(String url) {
+    public String redirect(final String url) {
         return StrUtil.format("redirect:{}", url);
     }
 }

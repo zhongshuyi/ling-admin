@@ -54,7 +54,7 @@ public class RedisConfig {
      * @return 缓存管理器
      */
     @Bean
-    public CacheManager cacheManager(RedissonClient redissonClient) {
+    public CacheManager cacheManager(final RedissonClient redissonClient) {
         Map<String, CacheConfig> config = new HashMap<>(16);
         return new RedissonSpringCacheManager(redissonClient, config, JsonJacksonCodec.INSTANCE);
     }

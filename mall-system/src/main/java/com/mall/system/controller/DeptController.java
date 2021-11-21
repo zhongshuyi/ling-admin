@@ -8,31 +8,36 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
-import com.mall.system.entity.UmsDept;
-import com.mall.system.entity.UmsMenu;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.system.bo.DeptBo;
+import com.mall.system.entity.UmsDept;
+import com.mall.system.entity.UmsMenu;
 import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 部门操作.
  *
  * @author 钟舒艺
- * @date 2021-10-09-10:33
  **/
 @RestController
 @Api(tags = "部门操作")
@@ -45,12 +50,12 @@ public class DeptController extends BaseController {
     /**
      * 部门操作服务.
      */
-    public final transient IUmsDeptService umsDeptService;
+    private final transient IUmsDeptService umsDeptService;
 
     /**
      * 菜单权限操作服务.
      */
-    public final transient IUmsMenuService umsMenuService;
+    private final transient IUmsMenuService umsMenuService;
 
     /**
      * 获取部门树.
@@ -84,7 +89,9 @@ public class DeptController extends BaseController {
      */
     @PostMapping
     @ApiOperation(value = "增加部门")
-    public CommonResult<Void> addDept(@Validated(ValidationGroups.Add.class) @RequestBody DeptBo addBo) {
+    public CommonResult<Void> addDept(
+            @Validated(ValidationGroups.Add.class)
+            @RequestBody final DeptBo addBo) {
         if (umsDeptService.checkDeptUnique(addBo)) {
             return CommonResult.failed("部门'" + addBo.getDeptName() + "' 已存在");
         } else {
@@ -100,7 +107,7 @@ public class DeptController extends BaseController {
      */
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除部门")
-    public CommonResult<Void> deleteById(@PathVariable Long id) {
+    public CommonResult<Void> deleteById(@PathVariable final Long id) {
         return toAjax(umsDeptService.deleteById(id));
     }
 
@@ -112,7 +119,7 @@ public class DeptController extends BaseController {
      */
     @PutMapping
     @ApiOperation(value = "更改部门")
-    public CommonResult<Void> editDept(@RequestBody DeptBo dept) {
+    public CommonResult<Void> editDept(@RequestBody final DeptBo dept) {
         if (umsDeptService.checkDeptUnique(dept)) {
             return CommonResult.failed("部门'" + dept.getDeptName() + "' 已存在");
         } else {
@@ -128,7 +135,7 @@ public class DeptController extends BaseController {
      */
     @ApiOperation("检查菜单是否有子菜单")
     @GetMapping("checkMenuHasChildren/{id}")
-    public CommonResult<Boolean> checkMenuHasChildren(@PathVariable Long id) {
+    public CommonResult<Boolean> checkMenuHasChildren(@PathVariable final Long id) {
         return CommonResult.success(CollUtil.isNotEmpty(umsDeptService.getDeptChildren(id)));
     }
 
@@ -140,7 +147,7 @@ public class DeptController extends BaseController {
      */
     @ApiOperation("获取部门详细信息")
     @GetMapping("/{id}")
-    public CommonResult<UmsDept> getDept(@PathVariable Long id) {
+    public CommonResult<UmsDept> getDept(@PathVariable final Long id) {
         return CommonResult.success(umsDeptService.getById(id));
     }
 
@@ -152,7 +159,7 @@ public class DeptController extends BaseController {
      */
     @ApiOperation("获取部门权限")
     @GetMapping("DeptPerm/{id}")
-    public CommonResult<Set<Long>> getDeptPerm(@PathVariable Long id) {
+    public CommonResult<Set<Long>> getDeptPerm(@PathVariable final Long id) {
         return CommonResult.success(
                 umsMenuService
                         .getDeptPerm(id)
@@ -170,7 +177,9 @@ public class DeptController extends BaseController {
      */
     @ApiOperation("更改部门权限")
     @PutMapping("DeptPerm/{deptId}")
-    public CommonResult<Void> setDeptPerm(@PathVariable Long deptId, @RequestBody Set<Long> newIds) {
+    public CommonResult<Void> setDeptPerm(
+            @PathVariable final Long deptId,
+            @RequestBody final Set<Long> newIds) {
         Set<Long> oldIds = umsMenuService
                 .getDeptPerm(deptId)
                 .stream()

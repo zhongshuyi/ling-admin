@@ -8,20 +8,20 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.LinkedList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 菜单构建工具类.
  *
  * @author 钟舒艺
- * @date 2021-09-17-9:39
  **/
 @Slf4j
-public class MenuUtil {
+public final class MenuUtil {
 
+    private MenuUtil() {
+    }
 
     /**
      * 获取处理好后的路由.
@@ -29,7 +29,7 @@ public class MenuUtil {
      * @param menus 从数据库中直接查出来的菜单信息
      * @return 处理好的
      */
-    public static List<RouterVo> getRouter(List<UmsMenu> menus) {
+    public static List<RouterVo> getRouter(final List<UmsMenu> menus) {
         return setRedirect(buildRouters(menus, 0L));
     }
 
@@ -39,7 +39,7 @@ public class MenuUtil {
      * @param menus 菜单列表
      * @return 处理后菜单树
      */
-    public static List<Tree<Long>> getMenuList(List<UmsMenu> menus) {
+    public static List<Tree<Long>> getMenuList(final List<UmsMenu> menus) {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
         treeNodeConfig.setNameKey("title");
@@ -59,7 +59,7 @@ public class MenuUtil {
      * @param menus 菜单
      * @return 树结构
      */
-    public static List<Tree<Long>> buildPermTree(List<UmsMenu> menus) {
+    public static List<Tree<Long>> buildPermTree(final List<UmsMenu> menus) {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
         return TreeUtil.build(menus, 0L, treeNodeConfig,
@@ -79,7 +79,7 @@ public class MenuUtil {
      * @param parentId 父id
      * @return 菜单树
      */
-    private static List<RouterVo> buildRouters(List<UmsMenu> menus, Long parentId) {
+    private static List<RouterVo> buildRouters(final List<UmsMenu> menus, final Long parentId) {
 
         LinkedList<RouterVo> routers = new LinkedList<>();
 
@@ -123,7 +123,7 @@ public class MenuUtil {
      * @param routers 路由
      * @return 设置好后的路由
      */
-    private static List<RouterVo> setRedirect(List<RouterVo> routers) {
+    private static List<RouterVo> setRedirect(final List<RouterVo> routers) {
         for (RouterVo router : routers) {
             StringBuilder redirect = new StringBuilder(router.getPath());
             RouterVo i = router;

@@ -1,8 +1,8 @@
 package com.mall.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.mall.system.entity.UmsDept;
 import com.mall.system.bo.DeptBo;
+import com.mall.system.entity.UmsDept;
 import java.io.Serializable;
 import java.util.List;
 

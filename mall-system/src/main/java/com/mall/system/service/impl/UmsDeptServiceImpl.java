@@ -8,9 +8,8 @@ import com.mall.system.bo.DeptBo;
 import com.mall.system.entity.UmsDept;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * 部门服务实现类.
@@ -26,14 +25,14 @@ public class UmsDeptServiceImpl
     private static final long serialVersionUID = 8302483662294489594L;
 
     @Override
-    public Boolean addDept(DeptBo addBo) {
+    public final Boolean addDept(final DeptBo addBo) {
         UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
         return save(dept);
     }
 
 
     @Override
-    public Boolean checkDeptUnique(DeptBo addBo) {
+    public final Boolean checkDeptUnique(final DeptBo addBo) {
         return
                 getOne(
                         Wrappers.<UmsDept>lambdaQuery()
@@ -43,12 +42,12 @@ public class UmsDeptServiceImpl
     }
 
     @Override
-    public List<UmsDept> getDeptChildren(Long parentId) {
+    public final List<UmsDept> getDeptChildren(final Long parentId) {
         return list(Wrappers.<UmsDept>lambdaQuery().eq(UmsDept::getParentId, parentId));
     }
 
     @Override
-    public Boolean deleteById(Long id) {
+    public final Boolean deleteById(final Long id) {
         List<UmsDept> list = getDeptChildren(id);
         if (CollUtil.isNotEmpty(list)) {
             for (UmsDept dept : list) {
@@ -59,7 +58,7 @@ public class UmsDeptServiceImpl
     }
 
     @Override
-    public List<UmsDept> getDeptListByUserId(Long userId) {
+    public final List<UmsDept> getDeptListByUserId(final Long userId) {
         return baseMapper.getDeptListByUserId(userId);
     }
 

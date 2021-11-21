@@ -7,20 +7,24 @@ import com.mall.system.entity.UmsAdmin;
 import com.mall.system.entity.UmsDept;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.entity.UmsRole;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * 用户信息类.
  *
  * @author 钟舒艺
- * @date 2021-07-03-20:02
  **/
 @SuppressWarnings("unused")
 @Data
@@ -80,9 +84,10 @@ public class AdminUserDetails implements UserDetails, Serializable {
      * @param depts          用户部门组
      */
     public AdminUserDetails(
-            UmsAdmin umsAdmin,
-            List<UmsMenu> permissionList,
-            List<UmsRole> umsRoles, List<UmsDept> depts) {
+            final UmsAdmin umsAdmin,
+            final List<UmsMenu> permissionList,
+            final List<UmsRole> umsRoles,
+            final List<UmsDept> depts) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
         this.roles = umsRoles;
@@ -117,38 +122,38 @@ public class AdminUserDetails implements UserDetails, Serializable {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public final Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
         return null;
     }
 
     @Override
-    public String getPassword() {
+    public final String getPassword() {
         return umsAdmin.getPassword();
     }
 
     @Override
-    public String getUsername() {
+    public final String getUsername() {
         return umsAdmin.getUsername();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
+    public final boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public final boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public final boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() {
+    public final boolean isEnabled() {
         return umsAdmin.getStatus() == 0;
     }
 }

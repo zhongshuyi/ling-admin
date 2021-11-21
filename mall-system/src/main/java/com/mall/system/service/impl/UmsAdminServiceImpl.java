@@ -1,5 +1,6 @@
 package com.mall.system.service.impl;
 
+import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.exception.BusinessErrorException;
@@ -7,9 +8,8 @@ import com.mall.system.entity.UmsAdmin;
 import com.mall.system.mapper.UmsAdminMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.vo.UserVo;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * 用户信息表 服务实现类.
@@ -25,15 +25,15 @@ public class UmsAdminServiceImpl
     private static final long serialVersionUID = -6767396404407827925L;
 
     @Override
-    public List<UmsAdmin> getUserListByRoleId(Long roleId) {
+    public final List<UmsAdmin> getUserListByRoleId(final Long roleId) {
         return getBaseMapper().getUserListByRoleId(roleId);
     }
 
     @Override
-    public void validEntityBeforeSave(UmsAdmin umsAdmin) {
+    public final void validEntityBeforeSave(final UmsAdmin umsAdmin) {
         super.validEntityBeforeSave(umsAdmin);
         if (!checkUserNameUnique(umsAdmin)) {
-            throw new BusinessErrorException(400, "用户名已存在");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "用户名已存在");
         }
     }
 
@@ -43,7 +43,7 @@ public class UmsAdminServiceImpl
      * @param umsAdmin 用户信息
      * @return true就是唯一的
      */
-    public Boolean checkUserNameUnique(UmsAdmin umsAdmin) {
+    public Boolean checkUserNameUnique(final UmsAdmin umsAdmin) {
         UmsAdmin user =
                 getOne(Wrappers.<UmsAdmin>lambdaQuery()
                         .eq(UmsAdmin::getUsername, umsAdmin.getUsername())

@@ -2,15 +2,13 @@ package com.mall.system.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 /**
  * 用户.
  *
  * @author 钟舒艺
- * @date 2021-11-16-8:56
  **/
 @ApiModel("用户信息")
 @Data

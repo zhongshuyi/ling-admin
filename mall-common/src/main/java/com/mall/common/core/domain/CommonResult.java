@@ -2,15 +2,14 @@ package com.mall.common.core.domain;
 
 import cn.hutool.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * 通用返回对象.
  *
+ * @param <T> 需要返回的类型
  * @author 钟舒艺
- * @date 2021-07-02-14:32
  **/
 @Data
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -41,7 +40,7 @@ public class CommonResult<T> implements Serializable {
     protected CommonResult() {
     }
 
-    protected CommonResult(int code, String message, T data, String type) {
+    protected CommonResult(final int code, final String message, final T data, final String type) {
         this.code = code;
         this.message = message;
         this.result = data;
@@ -65,7 +64,7 @@ public class CommonResult<T> implements Serializable {
      * @param <T>  要返回的类型
      * @return 通用返回
      */
-    public static <T> CommonResult<T> success(T data) {
+    public static <T> CommonResult<T> success(final T data) {
         return new CommonResult<>(HttpStatus.HTTP_OK, "操作成功", data, "success");
     }
 
@@ -77,7 +76,7 @@ public class CommonResult<T> implements Serializable {
      * @param <T>     要返回的类型
      * @return 通用返回
      */
-    public static <T> CommonResult<T> success(T data, String message) {
+    public static <T> CommonResult<T> success(final T data, final String message) {
         return new CommonResult<>(HttpStatus.HTTP_OK, message, data, "success");
     }
 
@@ -88,7 +87,7 @@ public class CommonResult<T> implements Serializable {
      * @param <T>     要返回的类型
      * @return 通用返回
      */
-    public static <T> CommonResult<T> success(String message) {
+    public static <T> CommonResult<T> success(final String message) {
         return new CommonResult<>(HttpStatus.HTTP_OK, message, null, "success");
     }
 
@@ -107,7 +106,7 @@ public class CommonResult<T> implements Serializable {
      * @param msg 信息
      * @return 通用返回结果
      */
-    public static CommonResult<Void> failed(String msg) {
+    public static CommonResult<Void> failed(final String msg) {
         return new CommonResult<>(HttpStatus.HTTP_INTERNAL_ERROR, msg, null, "error");
     }
 
@@ -119,7 +118,7 @@ public class CommonResult<T> implements Serializable {
      * @param msg  提示信息
      * @return 通用返回类型
      */
-    public static CommonResult<Void> failed(Integer code, String msg) {
+    public static CommonResult<Void> failed(final Integer code, final String msg) {
         return new CommonResult<>(code, msg, null, "error");
     }
 
@@ -132,7 +131,7 @@ public class CommonResult<T> implements Serializable {
      * @param <T>  数据类型
      * @return 通用返回类
      */
-    public static <T> CommonResult<T> failed(Integer code, String msg, T data) {
+    public static <T> CommonResult<T> failed(final Integer code, final String msg, final T data) {
         return new CommonResult<>(code, msg, data, "error");
     }
 
@@ -151,7 +150,7 @@ public class CommonResult<T> implements Serializable {
      * @param message 提示信息
      * @return 通用返回结果
      */
-    public static CommonResult<Void> validateFailed(String message) {
+    public static CommonResult<Void> validateFailed(final String message) {
         return new CommonResult<>(HttpStatus.HTTP_NOT_FOUND, message, null, "error");
     }
 
@@ -170,7 +169,7 @@ public class CommonResult<T> implements Serializable {
      * @param msg 信息
      * @return 通用返回结果
      */
-    public static CommonResult<Void> unauthorized(String msg) {
+    public static CommonResult<Void> unauthorized(final String msg) {
         return new CommonResult<>(HttpStatus.HTTP_UNAUTHORIZED, "未登录或已过期", null, "error");
     }
 
@@ -180,7 +179,7 @@ public class CommonResult<T> implements Serializable {
      * @param msg 信息
      * @return 通用返回类
      */
-    public static CommonResult<Void> forbidden(String msg) {
+    public static CommonResult<Void> forbidden(final String msg) {
         return new CommonResult<>(HttpStatus.HTTP_FORBIDDEN, msg, null, "error");
     }
 }

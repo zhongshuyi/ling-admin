@@ -89,6 +89,7 @@ public class DeptBo implements Serializable {
      * 邮箱.
      */
     @ApiModelProperty(value = "邮箱")
-    @Email(message = "必须是邮箱", groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+    @Email(message = "必须是邮箱",
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String email;
 }

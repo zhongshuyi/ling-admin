@@ -13,11 +13,10 @@ import lombok.extern.slf4j.Slf4j;
  * 地址工具类.
  *
  * @author 钟舒艺
- * @date 2021-07-02-23:47
  **/
 @Slf4j
 @SuppressWarnings("unused")
-public class AddressUtils {
+public final class AddressUtils {
     /**
      * IP地址查询网站.
      */
@@ -28,13 +27,17 @@ public class AddressUtils {
      */
     public static final String UNKNOWN = "XX XX";
 
+
+    private AddressUtils() {
+    }
+
     /**
      * 获取ip的地理位置.
      *
      * @param ip ip地址
      * @return 地理位置
      */
-    public static String getAddressByIp(String ip) {
+    public static String getAddressByIp(final String ip) {
         // 内网不查询
         if (NetUtil.isInnerIP(ip)) {
             return "内网IP";

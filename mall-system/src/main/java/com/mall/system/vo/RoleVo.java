@@ -8,7 +8,6 @@ import lombok.Data;
  * 角色信息视图.
  *
  * @author 钟舒艺
- * @date 2021-10-26-14:51
  **/
 @Data
 @ApiModel("角色信息")
@@ -16,6 +15,9 @@ public class RoleVo {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键id.
+     */
     @ApiModelProperty("角色id")
     private Long id;
 

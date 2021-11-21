@@ -2,25 +2,26 @@ package com.mall.common.util.ip;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.http.HTMLFilter;
-import lombok.extern.slf4j.Slf4j;
-
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * ip地址工具类.
  *
  * @author 钟舒艺
- * @date 2021-07-02-23:51
  **/
 @SuppressWarnings("unused")
 @Slf4j
-public class IpUtils {
+public final class IpUtils {
 
     /**
      * 未知地址.
      */
     public static final String UNKNOWN = "unknown";
+
+    private IpUtils() {
+    }
 
     /**
      * 根据请求获取ip地址.
@@ -28,7 +29,7 @@ public class IpUtils {
      * @param request HttpServletRequest
      * @return ip地址
      */
-    public static String getIpAdder(HttpServletRequest request) {
+    public static String getIpAdder(final HttpServletRequest request) {
         if (request == null) {
             return "unknown";
         }

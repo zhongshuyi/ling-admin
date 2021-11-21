@@ -1,17 +1,16 @@
 package com.mall.common.filter;
 
 import cn.hutool.core.io.IoUtil;
-
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * 构建可重复读取inputStream的request.
@@ -21,6 +20,9 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("unused")
 public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
 
+    /**
+     * 储存request信息.
+     */
     private final transient byte[] body;
 
     /**
@@ -31,7 +33,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
      * @throws IOException Io异常
      */
     public RepeatedlyRequestWrapper(
-            HttpServletRequest request, ServletResponse response) throws IOException {
+            final HttpServletRequest request, final ServletResponse response) throws IOException {
         super(request);
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -40,12 +42,12 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
-    public BufferedReader getReader() {
+    public final BufferedReader getReader() {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
     @Override
-    public ServletInputStream getInputStream() {
+    public final ServletInputStream getInputStream() {
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body);
         return new ServletInputStream() {
             @Override
@@ -69,7 +71,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
             }
 
             @Override
-            public void setReadListener(ReadListener readListener) {
+            public void setReadListener(final ReadListener readListener) {
 
             }
         };

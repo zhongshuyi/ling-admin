@@ -1,19 +1,18 @@
 package com.mall.framework.mybatisplus;
 
+import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.SecurityUtils;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-
-import java.util.Date;
 
 /**
  * mybatisPlus 更新与新增时.
  *
  * @author 钟舒艺
- * @date 2021-10-28-15:24
  **/
 @Slf4j
 public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
@@ -45,7 +44,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
      * @param metaObject 操作对象
      */
     @Override
-    public void insertFill(MetaObject metaObject) {
+    public void insertFill(final MetaObject metaObject) {
         try {
             //根据属性名字设置要填充的值
             if (metaObject.hasGetter(CREATE_TIME_STR)) {
@@ -55,13 +54,16 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 this.setFieldValByName(CREATE_BY_STR, getLoginUsername(), metaObject);
             }
         } catch (Exception e) {
-            throw new BusinessErrorException(500, "自动注入异常 => " + e.getMessage(), e);
+            throw new BusinessErrorException(
+                    HttpStatus.HTTP_INTERNAL_ERROR,
+                    "自动注入异常 => " + e.getMessage(),
+                    e);
         }
         updateFill(metaObject);
     }
 
     @Override
-    public void updateFill(MetaObject metaObject) {
+    public final void updateFill(final MetaObject metaObject) {
         try {
             if (metaObject.hasGetter(UPDATE_BY)) {
                 this.setFieldValByName(UPDATE_BY, getLoginUsername(), metaObject);
@@ -70,12 +72,17 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
             }
         } catch (Exception e) {
-            throw new BusinessErrorException(500, "自动注入异常 => " + e.getMessage(), e);
+            throw new BusinessErrorException(
+                    HttpStatus.HTTP_INTERNAL_ERROR,
+                    "自动注入异常 => " + e.getMessage(),
+                    e);
         }
     }
 
     /**
      * 获取登录用户名.
+     *
+     * @return 登录用户名
      */
     private String getLoginUsername() {
         AdminUserDetails loginUser;

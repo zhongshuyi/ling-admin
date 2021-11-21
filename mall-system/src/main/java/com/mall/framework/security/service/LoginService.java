@@ -1,8 +1,10 @@
 package com.mall.framework.security.service;
 
+import cn.hutool.http.HttpStatus;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
+import javax.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,20 +13,22 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
 /**
  * 登录服务层.
  *
  * @author 钟舒艺
- * @date 2021-07-07-17:23
  **/
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LoginService {
-
+    /**
+     * jwt工具类.
+     */
     private final transient JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * 认证管理器.
+     */
     @Resource
     private transient AuthenticationManager authenticationManager;
 
@@ -35,7 +39,7 @@ public class LoginService {
      * @param password 密码
      * @return token
      */
-    public String login(String username, String password) {
+    public String login(final String username, final String password) {
 
         // 用户验证
         Authentication authentication;
@@ -45,7 +49,7 @@ public class LoginService {
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException e) {
-            throw new BusinessErrorException(403, "用户名或密码错误", e);
+            throw new BusinessErrorException(HttpStatus.HTTP_FORBIDDEN, "用户名或密码错误", e);
         } catch (Exception e) {
             throw new BusinessErrorException(e);
         }

@@ -6,17 +6,15 @@ import com.mall.common.constant.Regular;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.Data;
 
 /**
  * 用户信息操作类.
  *
  * @author 钟舒艺
- * @date 2021-11-16-11:00
  **/
 @Data
 @ApiModel("用户信息")

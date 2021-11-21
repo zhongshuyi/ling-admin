@@ -6,17 +6,15 @@ import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.system.entity.UmsRole;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 /**
  * 参照若依的权限实现.
  *
  * @author 钟舒艺
- * @date 2021-07-07-16:22
  **/
 @Service("ss")
 @SuppressWarnings("unused")
@@ -42,6 +40,9 @@ public class PermissionVerifyService {
      */
     private static final String PERMISSION_DELIMETER = ",";
 
+    /**
+     * jwt工具类.
+     */
     private final transient JwtTokenUtil jwtTokenUtil;
 
 
@@ -51,7 +52,7 @@ public class PermissionVerifyService {
      * @param permission 权限字符串
      * @return 是否有权限
      */
-    public boolean hasPermi(String permission) {
+    public boolean hasPermi(final String permission) {
         if (StrUtil.isEmpty(permission)) {
             return false;
         }
@@ -69,7 +70,7 @@ public class PermissionVerifyService {
      * @param permission 权限字符串
      * @return 是否不具备该权限
      */
-    public boolean lacksPermi(String permission) {
+    public boolean lacksPermi(final String permission) {
         return !hasPermi(permission);
     }
 
@@ -79,7 +80,7 @@ public class PermissionVerifyService {
      * @param permissions 以 PERMISSION_NAMES_DELIMETER 为分隔符的权限列表
      * @return 用户是否具有以下任意一个权限
      */
-    public boolean hasAnyPermi(String permissions) {
+    public boolean hasAnyPermi(final String permissions) {
         if (StrUtil.isEmpty(permissions)) {
             return false;
         }
@@ -102,7 +103,7 @@ public class PermissionVerifyService {
      * @param role 角色键名
      * @return 是否属于该角色
      */
-    public boolean hasRole(String role) {
+    public boolean hasRole(final String role) {
         if (StrUtil.isEmpty(role)) {
             return false;
         }
@@ -125,7 +126,7 @@ public class PermissionVerifyService {
      * @param role 角色名称
      * @return 用户是否不具备某角色
      */
-    public boolean lacksRole(String role) {
+    public boolean lacksRole(final String role) {
         return !hasRole(role);
     }
 
@@ -136,7 +137,7 @@ public class PermissionVerifyService {
      * @param roles 以 ROLE_NAMES_DELIMETER 为分隔符的角色列表
      * @return 用户是否具有以下任意一个角色
      */
-    public boolean hasAnyRoles(String roles) {
+    public boolean hasAnyRoles(final String roles) {
         if (StrUtil.isEmpty(roles)) {
             return false;
         }
@@ -160,7 +161,7 @@ public class PermissionVerifyService {
      * @param permission  单个权限
      * @return 是否包含权限
      */
-    private boolean hasPermissions(Set<String> permissions, String permission) {
+    private boolean hasPermissions(final Set<String> permissions, final String permission) {
         return permissions.contains(ALL_PERMISSION)
                 || permissions.contains(StrUtil.trim(permission));
     }

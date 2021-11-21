@@ -3,11 +3,10 @@ package com.mall.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.system.entity.UmsMenu;
-import org.apache.ibatis.annotations.CacheNamespace;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Set;
+import org.apache.ibatis.annotations.CacheNamespace;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 菜单表 Mapper 接口.

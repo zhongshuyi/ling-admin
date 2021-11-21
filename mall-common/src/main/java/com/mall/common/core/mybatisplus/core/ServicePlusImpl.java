@@ -7,13 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * IServicePlus 实现类.
@@ -29,24 +28,21 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         implements IServicePlus<T, V> {
 
     private static final long serialVersionUID = -2447762079455049677L;
-
-    /**
-     * 注入mybatisPlus的mapper层操作对象.
-     */
-    @Autowired(required = false)
-    private M baseMapper;
-
     /**
      * mapper 的class信息.
      */
     @Getter
     private final Class<M> mapperClass = currentMapperClass();
-
     /**
      * 视图对象的class信息.
      */
     @Getter
     private final Class<V> voClass = currentVoClass();
+    /**
+     * 注入mybatisPlus的mapper层操作对象.
+     */
+    @Autowired(required = false)
+    private M baseMapper;
 
     @Override
     public final M getBaseMapper() {

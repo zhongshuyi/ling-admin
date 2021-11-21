@@ -2,18 +2,16 @@ package com.mall.system.bo;
 
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
+import java.io.Serializable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+import lombok.Data;
 
 /**
  * 菜单操作类.
  *
  * @author 钟舒艺
- * @date 2021-11-07-14:59
  **/
 @Data
 public class MenuBo implements Serializable {
@@ -171,6 +169,9 @@ public class MenuBo implements Serializable {
     @ApiModelProperty(value = "菜单类型( 0目录,1菜单,2按钮)")
     private Integer menuType = 1;
 
+    /**
+     * 备注.
+     */
     @ApiModelProperty(value = "备注")
     private String remark;
 

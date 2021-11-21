@@ -6,65 +6,55 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.mybatisplus.core.PagePlus;
 import com.mall.common.util.ServletUtils;
-
 import java.util.regex.Pattern;
 
 /**
  * 分页工具类.
  *
  * @author 钟舒艺
- * @date 2021-10-29-23:54
  **/
 @SuppressWarnings("unused")
-public class PageUtils {
-
+public final class PageUtils {
     /**
      * 当前记录起始索引.
      */
     public static final String PAGE_NUM = "pageNum";
-
     /**
      * 每页显示记录数.
      */
     public static final String PAGE_SIZE = "pageSize";
-
     /**
      * 排序列.
      */
     public static final String ORDER_BY_COLUMN = "orderByColumn";
-
     /**
      * 排序的方向 "desc" 或者 "asc".
      */
     public static final String IS_ASC = "isAsc";
-
     /**
      * 前端传递的排序方向字符串 desc.
      */
     public static final String DESC = "desc";
-
     /**
      * 前端传递的排序方向字符串 asc.
      */
     public static final String ASC = "asc";
-
-
     /**
      * 当前记录起始索引 默认值.
      */
     public static final int DEFAULT_PAGE_NUM = 1;
-
     /**
      * 每页显示记录数 默认值 默认查全部.
      */
     public static final int DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
-
     /**
      * 列名校验正则 首位可以是字母以及下划线.首位之后可以是字母,数字以及下划线.下划线后不能接下划线.
      */
     public static final String COLUMN_NAME_REG =
             "/(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/";
 
+    private PageUtils() {
+    }
 
     /**
      * 构建 plus 分页对象.
@@ -108,7 +98,9 @@ public class PageUtils {
      * @param <T>                  实体
      * @return 分页对象
      */
-    public static <T> Page<T> buildPage(String defaultOrderByColumn, String defaultIsAsc) {
+    public static <T> Page<T> buildPage(
+            final String defaultOrderByColumn, final String defaultIsAsc
+    ) {
         Integer pageNum = ServletUtils.getParameterToInt(PAGE_NUM, DEFAULT_PAGE_NUM);
         Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
         String orderByColumn = ServletUtils.getParameter(ORDER_BY_COLUMN, defaultOrderByColumn);
@@ -131,7 +123,7 @@ public class PageUtils {
      * @param isAsc         排序方向
      * @return 排序对象
      */
-    private static OrderItem buildOrderItem(String orderByColumn, String isAsc) {
+    private static OrderItem buildOrderItem(final String orderByColumn, final String isAsc) {
         if (StrUtil.isNotBlank(orderByColumn)) {
             String newOrderByColumn = StrUtil.toUnderlineCase(orderByColumn);
             newOrderByColumn =
@@ -153,7 +145,7 @@ public class PageUtils {
      * @param <K>  Vo
      * @return 分页结果对象
      */
-    public static <T, K> PageInfo<K> buildPageInfo(PagePlus<T, K> page) {
+    public static <T, K> PageInfo<K> buildPageInfo(final PagePlus<T, K> page) {
         return new PageInfo<>(page.getTotal(), page.getRecordsVo());
     }
 
@@ -164,7 +156,7 @@ public class PageUtils {
      * @param <T>  实体
      * @return 分页结果
      */
-    public static <T> PageInfo<T> buildPageInfo(Page<T> page) {
+    public static <T> PageInfo<T> buildPageInfo(final Page<T> page) {
         return new PageInfo<>(page.getTotal(), page.getRecords());
     }
 

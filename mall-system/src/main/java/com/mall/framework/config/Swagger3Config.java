@@ -14,7 +14,6 @@ import springfox.documentation.spring.web.plugins.Docket;
  * Swagger3 配置类.
  *
  * @author 钟舒艺
- * @date 2021-05-08-9:53
  **/
 @Configuration
 @EnableOpenApi
