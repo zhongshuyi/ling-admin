@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.mall.common.core.mybatisplus.methods.InsertAll;
 import com.mall.framework.mybatisplus.CreateAndUpdateMetaObjectHandler;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  * @author 钟舒艺
  **/
-
+@Slf4j
 @Configuration
 @MapperScan("${mybatis-plus.mapperPackage}")
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -35,6 +36,7 @@ public class MybatisPlusConfig {
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        log.info("mybatisPlus 插件加载");
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());

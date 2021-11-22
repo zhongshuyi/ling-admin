@@ -60,6 +60,7 @@ public class BusinessErrorException extends RuntimeException {
         this.code = HttpStatus.HTTP_INTERNAL_ERROR;
         this.message = "系统异常";
         this.exception = e;
+        e.printStackTrace();
     }
 
 

@@ -72,8 +72,7 @@ public class DeptController extends BaseController {
                 umsDeptService.list(
                         Wrappers.<UmsDept>lambdaQuery().orderByAsc(UmsDept::getOrderNo)),
                 0L,
-                treeNodeConfig,
-                (treeNode, tree) -> {
+                treeNodeConfig, (treeNode, tree) -> {
                     tree.setId(treeNode.getId());
                     tree.setParentId(treeNode.getParentId());
                     tree.setName(treeNode.getDeptName());

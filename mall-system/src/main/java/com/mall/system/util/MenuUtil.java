@@ -43,14 +43,13 @@ public final class MenuUtil {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
         treeNodeConfig.setNameKey("title");
-        return TreeUtil.build(menus, 0L, treeNodeConfig,
-                (treeNode, tree) -> {
-                    tree.setId(treeNode.getId());
-                    tree.setParentId(treeNode.getParentId());
-                    tree.setWeight(treeNode.getOrderNo());
-                    tree.setName(treeNode.getTitle());
-                    tree.putAll(BeanUtil.beanToMap(treeNode));
-                });
+        return TreeUtil.build(menus, 0L, treeNodeConfig, (treeNode, tree) -> {
+            tree.setId(treeNode.getId());
+            tree.setParentId(treeNode.getParentId());
+            tree.setWeight(treeNode.getOrderNo());
+            tree.setName(treeNode.getTitle());
+            tree.putAll(BeanUtil.beanToMap(treeNode));
+        });
     }
 
     /**
@@ -62,13 +61,12 @@ public final class MenuUtil {
     public static List<Tree<Long>> buildPermTree(final List<UmsMenu> menus) {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
-        return TreeUtil.build(menus, 0L, treeNodeConfig,
-                (treeNode, tree) -> {
-                    tree.setId(treeNode.getId());
-                    tree.setParentId(treeNode.getParentId());
-                    tree.setWeight(treeNode.getOrderNo());
-                    tree.setName(treeNode.getTitle());
-                });
+        return TreeUtil.build(menus, 0L, treeNodeConfig, (treeNode, tree) -> {
+            tree.setId(treeNode.getId());
+            tree.setParentId(treeNode.getParentId());
+            tree.setWeight(treeNode.getOrderNo());
+            tree.setName(treeNode.getTitle());
+        });
     }
 
 

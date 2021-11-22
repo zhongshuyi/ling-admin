@@ -3,6 +3,8 @@ package com.mall.common.core.mybatisplus.core;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
@@ -12,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * IServicePlus 实现类.
@@ -28,6 +29,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         implements IServicePlus<T, V> {
 
     private static final long serialVersionUID = -2447762079455049677L;
+
     /**
      * mapper 的class信息.
      */
@@ -38,35 +40,25 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      */
     @Getter
     private final Class<V> voClass = currentVoClass();
-    /**
-     * 注入mybatisPlus的mapper层操作对象.
-     */
-    @Autowired(required = false)
-    private M baseMapper;
 
     @Override
-    public final M getBaseMapper() {
-        return baseMapper;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     protected final Class<M> currentMapperClass() {
-        return (Class<M>) ReflectionKit
+        return Convert.convert(new TypeReference<Class<M>>() {
+        }, ReflectionKit
                 .getSuperClassGenericType(
                         this.getClass(),
                         ServicePlusImpl.class,
-                        0);
+                        0));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected final Class<T> currentModelClass() {
-        return (Class<T>) ReflectionKit
+        return Convert.convert(new TypeReference<Class<T>>() {
+        }, ReflectionKit
                 .getSuperClassGenericType(
                         this.getClass(),
                         ServicePlusImpl.class,
-                        1);
+                        1));
     }
 
     /**
@@ -74,24 +66,17 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      *
      * @return Vo类的class
      */
-    @SuppressWarnings("unchecked")
-    protected Class<V> currentVoClass() {
-        return (Class<V>) ReflectionKit
+    protected final Class<V> currentVoClass() {
+        return Convert.convert(new TypeReference<Class<V>>() {
+        }, ReflectionKit
                 .getSuperClassGenericType(
                         this.getClass(),
                         ServicePlusImpl.class,
-                        2);
+                        2));
     }
 
-    /**
-     * 根据id获取Vo对象.
-     *
-     * @param id          主键id
-     * @param copyOptions copy条件
-     * @return Vo对象
-     */
     @Override
-    public V getVoById(
+    public final V getVoById(
             final Serializable id,
             final CopyOptions copyOptions) {
         return BeanUtil.toBean(
@@ -101,15 +86,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         );
     }
 
-    /**
-     * 根据id集合获取Vo集合.
-     *
-     * @param idList      主键id集合
-     * @param copyOptions copy条件
-     * @return V对象
-     */
     @Override
-    public List<V> listVoByIds(
+    public final List<V> listVoByIds(
             final Collection<? extends Serializable> idList,
             final CopyOptions copyOptions) {
         return BeanUtil.copyToList(
@@ -119,15 +97,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         );
     }
 
-    /**
-     * 自定义转换器、查询条件转换Vo.
-     *
-     * @param queryWrapper 查询条件
-     * @param copyOptions  copy条件
-     * @return 转换后list
-     */
     @Override
-    public List<V> listVo(
+    public final List<V> listVo(
             final Wrapper<T> queryWrapper,
             final CopyOptions copyOptions
     ) {
@@ -138,31 +109,15 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         );
     }
 
-    /**
-     * 分页实体集合转Vo集合.
-     *
-     * @param page 分页对象
-     * @param bo   查询条件
-     * @param <B>  Bo操作类
-     * @return 分页对象
-     */
     @Override
-    public <B> PagePlus<T, V> pageVo(final PagePlus<T, V> page, final B bo) {
+    public final <B> PagePlus<T, V> pageVo(final PagePlus<T, V> page, final B bo) {
         return pageVo(
                 page,
                 new QueryWrapper<>(BeanUtil.toBean(bo, getEntityClass())));
     }
 
-    /**
-     * 查询分页实体集合并转Vo集合.
-     *
-     * @param page         分页对象
-     * @param queryWrapper 查询条件
-     * @param copyOptions  自定义转换器
-     * @return Vo对象
-     */
     @Override
-    public PagePlus<T, V> pageVo(
+    public final PagePlus<T, V> pageVo(
             final PagePlus<T, V> page,
             final Wrapper<T> queryWrapper,
             final CopyOptions copyOptions
@@ -176,15 +131,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         return result;
     }
 
-    /**
-     * 根据map进行查询.
-     *
-     * @param columnMap   表字段 map 对象: 字段名,值
-     * @param copyOptions copy条件
-     * @return Vo对象
-     */
     @Override
-    public List<V> listVoByMap(
+    public final List<V> listVoByMap(
             final Map<String, Object> columnMap,
             final CopyOptions copyOptions
     ) {

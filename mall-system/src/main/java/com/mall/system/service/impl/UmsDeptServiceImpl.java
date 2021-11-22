@@ -59,7 +59,7 @@ public class UmsDeptServiceImpl
 
     @Override
     public final List<UmsDept> getDeptListByUserId(final Long userId) {
-        return baseMapper.getDeptListByUserId(userId);
+        return getBaseMapper().getDeptListByUserId(userId);
     }
 
 }

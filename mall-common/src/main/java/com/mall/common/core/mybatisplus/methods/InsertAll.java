@@ -25,8 +25,8 @@ public class InsertAll extends AbstractMethod {
     /**
      * 需要填充的字段.
      */
-    private static final String[] FILL_PROPERTY =
-            {"createTime", "createBy", "updateTime", "updateBy"};
+    private static final
+    String[] FILL_PROPERTY = {"createTime", "createBy", "updateTime", "updateBy"};
 
     @Override
     public final MappedStatement injectMappedStatement(

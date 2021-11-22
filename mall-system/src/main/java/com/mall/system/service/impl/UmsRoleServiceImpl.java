@@ -64,7 +64,7 @@ public class UmsRoleServiceImpl
 
     @Override
     public final List<UmsRole> selectRoleListByUserId(final Long userId) {
-        return getBaseMapper().selectRoleListByUserId(userId);
+        return baseMapper.selectRoleListByUserId(userId);
     }
 
     @Override

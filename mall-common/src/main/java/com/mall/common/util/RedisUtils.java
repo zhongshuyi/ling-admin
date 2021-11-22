@@ -29,8 +29,6 @@ public final class RedisUtils {
      */
     private static final RedissonClient CLIENT = SpringUtil.getBean(RedissonClient.class);
 
-    private RedisUtils() {
-    }
 
     /**
      * 发布通道消息.

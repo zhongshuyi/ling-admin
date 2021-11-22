@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MallAdminApplication {
     /**
      * 启动主方法.
+     *
      * @param args 参数
      */
     public static void main(String[] args) {
