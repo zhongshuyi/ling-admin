@@ -14,7 +14,6 @@ import com.mall.system.service.IUmsRoleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +27,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @Slf4j
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
@@ -79,6 +78,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 umsAdmin.setIsAdmin(true);
             }
         });
+        if (umsAdmin.getIsAdmin() == null) {
+            umsAdmin.setIsAdmin(false);
+        }
         return new AdminUserDetails(
                 umsAdmin,
                 permissionService.getPermissionList(umsAdmin),

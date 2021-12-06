@@ -14,7 +14,7 @@
                         r.create_time,
                         r.remark
         from ums_role r
-                 left join ums_user_role ur on r.id = ur.role_id
+                 inner join ums_user_role ur on r.id = ur.role_id
         WHERE ur.user_id = #{userId}
     </select>
 </mapper>

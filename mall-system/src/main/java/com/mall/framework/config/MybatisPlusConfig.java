@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.mall.common.core.mybatisplus.methods.InsertAll;
 import com.mall.framework.mybatisplus.CreateAndUpdateMetaObjectHandler;
+import com.mall.framework.mybatisplus.interceptor.DataScopeInterceptor;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +29,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @MapperScan("${mybatis-plus.mapperPackage}")
 @EnableTransactionManagement(proxyTargetClass = true)
+@RequiredArgsConstructor
 public class MybatisPlusConfig {
+
+    /**
+     * 数据权限拦截器.
+     */
+    private final transient DataScopeInterceptor dataScopeInterceptor;
 
     /**
      * 插件配置.
@@ -38,6 +46,8 @@ public class MybatisPlusConfig {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         log.info("mybatisPlus 插件加载");
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 数据权限
+        interceptor.addInnerInterceptor(dataScopeInterceptor);
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
         // 乐观锁插件
@@ -46,7 +56,6 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
-
 
     /**
      * 分页插件，自动识别数据库类型.
@@ -115,6 +124,4 @@ public class MybatisPlusConfig {
             }
         };
     }
-
-
 }

@@ -6,7 +6,6 @@ import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import javax.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @author 钟舒艺
  **/
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class LoginService {
     /**
      * jwt工具类.

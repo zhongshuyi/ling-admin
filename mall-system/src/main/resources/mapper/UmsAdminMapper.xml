@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mall.system.mapper.UmsAdminMapper">
 
+    <resultMap id="user" type="com.mall.system.entity.UmsAdmin" autoMapping="true"/>
+
+    <resultMap id="count" type="java.lang.Long">
+        <result column="count"/>
+    </resultMap>
+
     <select id="getUserListByRoleId" resultType="com.mall.system.entity.UmsAdmin">
         select id,
                username,
@@ -12,7 +18,6 @@
                sex,
                avatar,
                password,
-               home_path,
                status,
                del_flag,
                login_ip,
@@ -25,7 +30,42 @@
                update_by,
                update_time
         from ums_admin u
-                 left join ums_user_role uur on u.id = uur.user_id
+                 join ums_user_role uur on u.id = uur.user_id
         where uur.role_id = #{roleId}
     </select>
+    <select id="queryUserList" resultType="com.mall.system.entity.UmsAdmin">
+        SELECT u.id,
+        username,
+        real_name,
+        u.email,
+        tel,
+        sex,
+        avatar,
+        password,
+        status,
+        del_flag,
+        login_ip,
+        depart_ids,
+        user_identity,
+        login_date,
+        u.remark,
+        login_address
+        FROM ums_admin u
+        join ums_user_dept uud on u.id = uud.user_id
+        join ums_dept ud on uud.dept_id = ud.id
+        <where>
+            <if test="deptId!=null">
+                ud.parent_list like CONCAT((select parent_list from ums_dept where id = #{deptId}),'%')
+            </if>
+            <if test="username!=null and username != ''">
+                username like CONCAT(#{username},'%')
+            </if>
+            <if test="realName!=null and realName != ''">
+                real_name like CONCAT(#{realName},'%')
+            </if>
+        </where>
+        order by u.id
+    </select>
+
+
 </mapper>

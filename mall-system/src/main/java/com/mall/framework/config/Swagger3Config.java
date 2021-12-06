@@ -30,7 +30,7 @@ public class Swagger3Config {
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包下controller生成API文档
-                .apis(RequestHandlerSelectors.basePackage("com.mall.system.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.mall"))
                 .paths(PathSelectors.any())
                 .build();
     }

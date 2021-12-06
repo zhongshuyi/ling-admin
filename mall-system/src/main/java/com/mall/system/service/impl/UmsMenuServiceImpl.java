@@ -104,7 +104,7 @@ public class UmsMenuServiceImpl
 
     @Override
     public final List<UmsMenu> getDeptPerm(final Long id) {
-        return baseMapper.getDeptPerm(id);
+        return getBaseMapper().getDeptPerm(id);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class UmsMenuServiceImpl
         if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.addDeptPerm(deptId, permIds) == permIds.size();
+        return getBaseMapper().addDeptPerm(deptId, permIds) == permIds.size();
     }
 
     @Override
@@ -120,12 +120,12 @@ public class UmsMenuServiceImpl
         if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.removeDeptPerm(deptId, permIds) == permIds.size();
+        return getBaseMapper().removeDeptPerm(deptId, permIds) == permIds.size();
     }
 
     @Override
     public final Set<Long> getRolePerm(final Long id) {
-        return baseMapper.getRolePerm(id);
+        return getBaseMapper().getRolePerm(id);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class UmsMenuServiceImpl
         if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.addRolePerm(roleId, permIds) == permIds.size();
+        return getBaseMapper().addRolePerm(roleId, permIds) == permIds.size();
     }
 
     @Override
@@ -141,6 +141,6 @@ public class UmsMenuServiceImpl
         if (permIds.size() == 0) {
             return true;
         }
-        return baseMapper.removeRolePerm(roleId, permIds) == permIds.size();
+        return getBaseMapper().removeRolePerm(roleId, permIds) == permIds.size();
     }
 }

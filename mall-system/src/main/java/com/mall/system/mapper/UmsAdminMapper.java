@@ -2,6 +2,7 @@ package com.mall.system.mapper;
 
 import com.mall.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.mall.common.core.mybatisplus.core.BaseMapperPlus;
+import com.mall.system.bo.UserBo;
 import com.mall.system.entity.UmsAdmin;
 import java.util.List;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -23,4 +24,13 @@ public interface UmsAdminMapper extends BaseMapperPlus<UmsAdmin> {
      * @return 用户列表
      */
     List<UmsAdmin> getUserListByRoleId(Long roleId);
+
+
+    /**
+     * 自定义分页查询.
+     *
+     * @param bo 查询条件
+     * @return 分页后结果及总行数
+     */
+    List<UmsAdmin> queryUserList(UserBo bo);
 }

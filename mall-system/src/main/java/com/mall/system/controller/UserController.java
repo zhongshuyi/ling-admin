@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = "用户管理操作")
 @RequestMapping("/system/user")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class UserController extends BaseController {
 
     /**
@@ -51,10 +50,23 @@ public class UserController extends BaseController {
             @Validated(ValidationGroups.Query.class) final UserBo user) {
         return CommonResult.success(
                 PageUtils.buildPageInfo(
-                        umsAdminService.pageVo(PageUtils.buildPagePlus(), user)
+                        umsAdminService.getUserListPage(PageUtils.buildPagePlus(), user)
                 )
         );
     }
+
+    /**
+     * 获取单个用户详细信息.
+     *
+     * @param id 用户id
+     * @return 用户vo
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("获取用户详细信息")
+    public CommonResult<UserVo> getUser(@PathVariable final Long id) {
+        return null;
+    }
+
 
     /**
      * 增加用户接口.

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.mall.common.core.domain.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -102,4 +103,10 @@ public class UmsAdmin extends BaseEntity implements Serializable {
      */
     @TableField(exist = false)
     private Boolean isAdmin;
+
+    /**
+     * 最后登录地点.
+     */
+    @ApiModelProperty("最后登录地点")
+    private String loginAddress;
 }

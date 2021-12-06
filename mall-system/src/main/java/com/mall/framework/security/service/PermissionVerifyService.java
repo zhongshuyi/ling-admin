@@ -8,7 +8,6 @@ import com.mall.framework.util.JwtTokenUtil;
 import com.mall.system.entity.UmsRole;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service("ss")
 @SuppressWarnings("unused")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class PermissionVerifyService {
     /**
      * 拥有所有权限标识符.

@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public CommonResult<Void> handleHttpMessageNotReadableException(
             final MissingServletRequestParameterException ex) {
-        log.error("错误" + ex);
+        log.error(ex.getMessage(), ex);
         log.error("缺少请求参数，{}", ex.getMessage());
         return CommonResult.failed(cn.hutool.http.HttpStatus.HTTP_BAD_REQUEST, "缺少必要的请求参数");
     }
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     public CommonResult<Void> parameterValidationException(
             final MethodArgumentNotValidException ex
     ) {
-        log.error("错误" + ex);
+        log.error(ex.getMessage(), ex);
         BindingResult result = ex.getBindingResult();
         StringBuilder errorMsg = new StringBuilder();
         if (result.hasErrors()) {
@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult<Void> handleTypeMismatchException(final NullPointerException ex) {
-        log.error("错误" + ex);
+        log.error(ex.getMessage(), ex);
         log.error("空指针异常，{}", ex.getMessage());
         return CommonResult.failed(cn.hutool.http.HttpStatus.HTTP_INTERNAL_ERROR, "空指针异常了");
     }
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessErrorException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult<Void> handleBusinessError(final BusinessErrorException ex) {
-        log.error("错误" + ex);
+        log.error(ex.getMessage(), ex);
         return CommonResult.failed(ex.getCode(), ex.getMessage());
     }
 

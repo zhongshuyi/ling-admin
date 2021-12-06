@@ -31,9 +31,16 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--公共模块-->
         <dependency>
             <groupId>com.mall</groupId>
             <artifactId>mall-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mall</groupId>
+            <artifactId>mall-dome</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

@@ -13,7 +13,6 @@ import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-07-07
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class UmsRoleServiceImpl
         extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo>
         implements IUmsRoleService {
@@ -64,7 +63,7 @@ public class UmsRoleServiceImpl
 
     @Override
     public final List<UmsRole> selectRoleListByUserId(final Long userId) {
-        return baseMapper.selectRoleListByUserId(userId);
+        return getBaseMapper().selectRoleListByUserId(userId);
     }
 
     @Override

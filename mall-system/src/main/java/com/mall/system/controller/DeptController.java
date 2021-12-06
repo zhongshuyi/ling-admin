@@ -20,10 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,10 +39,9 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @Api(tags = "部门操作")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 @RequestMapping("/system/dept")
 @Slf4j
-@Getter
 public class DeptController extends BaseController {
 
     /**
@@ -77,6 +74,7 @@ public class DeptController extends BaseController {
                     tree.setParentId(treeNode.getParentId());
                     tree.setName(treeNode.getDeptName());
                     tree.setWeight(treeNode.getOrderNo());
+                    tree.putExtra("parentList", treeNode.getParentList());
                 }));
     }
 

@@ -10,6 +10,7 @@ import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 部门服务实现类.
@@ -24,10 +25,25 @@ public class UmsDeptServiceImpl
 
     private static final long serialVersionUID = 8302483662294489594L;
 
+    /**
+     * 添加部门并设置父级列表.
+     *
+     * @param addBo 添加对象
+     * @return 是否成功
+     */
     @Override
-    public final Boolean addDept(final DeptBo addBo) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addDept(final DeptBo addBo) {
         UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
-        return save(dept);
+        UmsDept parent = getBaseMapper()
+                .selectOne(Wrappers.<UmsDept>lambdaQuery()
+                        .eq(UmsDept::getId, dept.getParentId())
+                        .select(UmsDept::getId, UmsDept::getParentList));
+        dept.setParentList(parent.getParentList() + parent.getId() + ",");
+        Boolean isSave = save(dept);
+        dept.setParentList(dept.getParentList() + dept.getId() + ",");
+        Boolean isUpdate = updateById(dept);
+        return isSave && isUpdate;
     }
 
 
@@ -46,15 +62,25 @@ public class UmsDeptServiceImpl
         return list(Wrappers.<UmsDept>lambdaQuery().eq(UmsDept::getParentId, parentId));
     }
 
+    /**
+     * 删除部门以及该部门的子部门.
+     *
+     * @param id 部门id
+     * @return 是否全部删除成功;
+     */
     @Override
-    public final Boolean deleteById(final Long id) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteById(final Long id) {
+        boolean isDeleted = true;
         List<UmsDept> list = getDeptChildren(id);
         if (CollUtil.isNotEmpty(list)) {
             for (UmsDept dept : list) {
-                deleteById(dept.getId());
+                if (!deleteById(dept.getId())) {
+                    isDeleted = false;
+                }
             }
         }
-        return removeById(id);
+        return removeById(id) && isDeleted;
     }
 
     @Override

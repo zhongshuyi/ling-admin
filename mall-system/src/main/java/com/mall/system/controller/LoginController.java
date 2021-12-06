@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @Api(tags = "登录注册等")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class LoginController {
 
     /**
@@ -82,6 +81,7 @@ public class LoginController {
         }
         assert adminUserDetails.getUmsAdmin() != null;
         Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
+        map.put("password", "");
         map.put("roles", adminUserDetails.getRoleKey());
         map.put("depts", adminUserDetails.getDepts());
         return CommonResult.success(map);

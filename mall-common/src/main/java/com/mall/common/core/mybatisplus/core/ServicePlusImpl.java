@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * IServicePlus 实现类.
@@ -29,7 +30,6 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         implements IServicePlus<T, V> {
 
     private static final long serialVersionUID = -2447762079455049677L;
-
     /**
      * mapper 的class信息.
      */
@@ -40,6 +40,21 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      */
     @Getter
     private final Class<V> voClass = currentVoClass();
+    /**
+     * 注入mybatisPlus的mapper层操作对象.
+     */
+    @Autowired(required = false)
+    private M baseMapper;
+
+    /**
+     * 获取baseMapper.
+     *
+     * @return 获取baseMapper.
+     */
+    @Override
+    public M getBaseMapper() {
+        return baseMapper;
+    }
 
     @Override
     protected final Class<M> currentMapperClass() {

@@ -56,4 +56,9 @@ public class UmsDept extends BaseEntity implements Serializable {
      * 邮箱.
      */
     private String email;
+
+    /**
+     * 父级列表.
+     */
+    private String parentList;
 }

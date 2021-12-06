@@ -1,5 +1,6 @@
 package com.mall.system.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -10,8 +11,9 @@ import lombok.Data;
  *
  * @author 钟舒艺
  **/
-@ApiModel("用户信息")
 @Data
+@ApiModel("用户信息")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class UserVo {
     private static final long serialVersionUID = 1L;
 
@@ -92,4 +94,10 @@ public class UserVo {
      */
     @ApiModelProperty("最后登录时间")
     private Date loginDate;
+
+    /**
+     * 最后登录地点.
+     */
+    @ApiModelProperty("最后登录地点")
+    private String loginAddress;
 }

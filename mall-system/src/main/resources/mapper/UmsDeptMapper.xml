@@ -10,13 +10,17 @@
                order_no,
                leader,
                phone,
+               parent_list,
                email,
                create_by,
                create_time,
                update_by,
-               update_time
+               update_time,
+               remark,
+               user_id,
+               dept_id
         from ums_dept
-                 left join ums_user_dept uud on ums_dept.id = uud.dept_id
+                 inner join ums_user_dept uud on ums_dept.id = uud.dept_id
         where uud.user_id = #{userId}
     </select>
 </mapper>

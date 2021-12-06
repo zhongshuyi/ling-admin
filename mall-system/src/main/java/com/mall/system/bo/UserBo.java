@@ -1,7 +1,6 @@
 package com.mall.system.bo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mall.common.constant.Regular;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
@@ -25,28 +24,42 @@ public class UserBo {
      * 用户ID.
      */
     @ApiModelProperty(value = "用户ID")
-    @TableId(value = "id", type = IdType.AUTO)
+    @NotNull(message = "用户账号", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private Long id;
+
+
+    /**
+     * 查询时的部门id.
+     */
+    @ApiModelProperty(value = "用户的部门id")
+    @JsonIgnore
+    private Long deptId;
 
     /**
      * 用户账号.
      */
     @ApiModelProperty(value = "用户账号")
-    @NotNull(message = "用户账号", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(
+            message = "用户账号不能为空",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String username;
 
     /**
      * 用户昵称.
      */
     @ApiModelProperty(value = "用户昵称")
-    @NotNull(message = "用户昵称", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(
+            message = "用户昵称不能为空",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String realName;
 
     /**
      * 用户邮箱.
      */
     @ApiModelProperty(value = "用户邮箱")
-    @Email(groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Email(
+            message = "用户邮箱必须是邮箱格式",
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String email;
 
     /**
