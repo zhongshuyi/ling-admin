@@ -14,7 +14,6 @@ import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -163,15 +162,34 @@ public class RoleController extends BaseController {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
         }
-        Set<Long> oldIds = umsMenuService.getRolePerm(id);
-        Set<Long> result = new HashSet<>(oldIds);
-        result.removeAll(newIds);
-        final Boolean isSuccess = umsMenuService.removeRolePerm(id, result);
-        result.clear();
-        result.addAll(newIds);
-        result.removeAll(oldIds);
-        return toAjax(umsMenuService.addRolePerm(id, result) && isSuccess);
+        return toAjax(umsMenuService.setRolePerm(id, newIds));
     }
 
+    /**
+     * 获取角色的自定义数据权限范围.
+     *
+     * @param id 角色id
+     * @return 部门id集合
+     */
+    @ApiOperation("获取角色的自定义数据权限范围")
+    @GetMapping("dataScope/{id}")
+    public CommonResult<Set<Long>> getCustomDataScope(@PathVariable final Long id) {
+        return CommonResult.success(umsRoleService.getDataScope(id));
+    }
 
+    /**
+     * 更改角色的自定义数据权限范围.
+     *
+     * @param id     角色id
+     * @param newIds 新的自定义权限的部门id
+     * @return 是否成功
+     */
+    @ApiOperation("更改角色的自定义数据权限范围")
+    @PutMapping("dataScope/{id}")
+    public CommonResult<Void> setCustomDataScope(
+            @PathVariable final Long id,
+            @RequestBody final Set<Long> newIds
+    ) {
+        return CommonResult.success();
+    }
 }

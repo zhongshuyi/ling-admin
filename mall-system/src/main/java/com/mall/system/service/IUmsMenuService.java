@@ -95,26 +95,16 @@ public interface IUmsMenuService extends IService<UmsMenu>, Serializable {
      * @param id 部门id
      * @return 权限
      */
-    List<UmsMenu> getDeptPerm(Long id);
+    Set<Long> getDeptPerm(Long id);
 
     /**
-     * 增加部门权限.
+     * 修改部门权限.
      *
-     * @param deptId  部门id
-     * @param permIds 权限id
-     * @return 是否成功
+     * @param deptId 部门id
+     * @param newIds 新的权限id列表
+     * @return 是否修改成功
      */
-    Boolean addDeptPerm(Long deptId, Set<Long> permIds);
-
-    /**
-     * 删除部门权限.
-     *
-     * @param deptId  部门id
-     * @param permIds 权限id
-     * @return 是否成功
-     */
-    Boolean removeDeptPerm(Long deptId, Set<Long> permIds);
-
+    Boolean setDeptPerm(Long deptId, Set<Long> newIds);
 
     /**
      * 获取角色权限.
@@ -126,21 +116,11 @@ public interface IUmsMenuService extends IService<UmsMenu>, Serializable {
 
 
     /**
-     * 增加角色权限.
+     * 设置角色权限.
      *
-     * @param roleId  角色id
-     * @param permIds 权限id
+     * @param roleId 角色id
+     * @param newIds 新的权限id集合
      * @return 是否成功
      */
-    Boolean addRolePerm(Long roleId, Set<Long> permIds);
-
-    /**
-     * 删除角色权限.
-     *
-     * @param roleId  部门id
-     * @param permIds 权限id
-     * @return 是否成功
-     */
-    Boolean removeRolePerm(Long roleId, Set<Long> permIds);
-
+    Boolean setRolePerm(Long roleId, Set<Long> newIds);
 }

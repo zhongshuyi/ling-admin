@@ -5,6 +5,7 @@ import com.mall.system.entity.UmsRole;
 import com.mall.system.vo.RoleVo;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色信息表 服务类.
@@ -38,4 +39,23 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializ
      * @return 角色列表
      */
     List<UmsRole> selectRoleListByUserId(Long userId);
+
+
+    /**
+     * 获取角色的自定义数据范围.
+     *
+     * @param roleId 角色id
+     * @return 部门id集合
+     */
+    Set<Long> getDataScope(Long roleId);
+
+
+    /**
+     * 设置角色的自定义数据范围.
+     *
+     * @param roleId 角色id
+     * @param newIds 新的部门id集合
+     * @return 是否修改成功
+     */
+    Boolean setDataScope(Long roleId, Set<Long> newIds);
 }

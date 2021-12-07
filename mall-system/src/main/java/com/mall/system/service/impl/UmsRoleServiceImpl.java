@@ -11,7 +11,9 @@ import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.RoleVo;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,23 @@ public class UmsRoleServiceImpl
     @Override
     public final List<UmsRole> selectRoleListByUserId(final Long userId) {
         return getBaseMapper().selectRoleListByUserId(userId);
+    }
+
+    @Override
+    public final Set<Long> getDataScope(final Long roleId) {
+        return getBaseMapper().getDataScope(roleId);
+    }
+
+    @Override
+    public final Boolean setDataScope(final Long roleId, final Set<Long> newIds) {
+        Set<Long> oldIds = getBaseMapper().getDataScope(roleId);
+        Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().delDataScope(roleId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addDataScope(roleId, result) == result.size());
     }
 
     @Override

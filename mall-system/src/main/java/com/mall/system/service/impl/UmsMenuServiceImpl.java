@@ -9,6 +9,7 @@ import com.mall.system.entity.UmsMenu;
 import com.mall.system.mapper.UmsMenuMapper;
 import com.mall.system.service.IUmsMenuService;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.stereotype.Service;
@@ -103,24 +104,20 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public final List<UmsMenu> getDeptPerm(final Long id) {
+    public final Set<Long> getDeptPerm(final Long id) {
         return getBaseMapper().getDeptPerm(id);
     }
 
     @Override
-    public final Boolean addDeptPerm(final Long deptId, final Set<Long> permIds) {
-        if (permIds.size() == 0) {
-            return true;
-        }
-        return getBaseMapper().addDeptPerm(deptId, permIds) == permIds.size();
-    }
-
-    @Override
-    public final Boolean removeDeptPerm(final Long deptId, final Set<Long> permIds) {
-        if (permIds.size() == 0) {
-            return true;
-        }
-        return getBaseMapper().removeDeptPerm(deptId, permIds) == permIds.size();
+    public final Boolean setDeptPerm(final Long deptId, final Set<Long> newIds) {
+        Set<Long> oldIds = getBaseMapper().getDeptPerm(deptId);
+        Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptPerm(deptId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addDeptPerm(deptId, result) == result.size());
     }
 
     @Override
@@ -129,18 +126,15 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public final Boolean addRolePerm(final Long roleId, final Set<Long> permIds) {
-        if (permIds.size() == 0) {
-            return true;
-        }
-        return getBaseMapper().addRolePerm(roleId, permIds) == permIds.size();
-    }
+    public final Boolean setRolePerm(final Long roleId, final Set<Long> newIds) {
+        Set<Long> oldIds = getBaseMapper().getRolePerm(roleId);
+        Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().delRolePerm(roleId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePerm(roleId, result) == result.size());
 
-    @Override
-    public final Boolean removeRolePerm(final Long roleId, final Set<Long> permIds) {
-        if (permIds.size() == 0) {
-            return true;
-        }
-        return getBaseMapper().removeRolePerm(roleId, permIds) == permIds.size();
     }
 }

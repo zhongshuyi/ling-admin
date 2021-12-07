@@ -4,6 +4,7 @@ import cn.hutool.http.HttpStatus;
 import com.mall.common.enums.BusinessMsgEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自定义业务异常.
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuppressWarnings("unused")
+@Slf4j
 public class BusinessErrorException extends RuntimeException {
     private static final long serialVersionUID = -7480022450501760611L;
 
@@ -60,7 +62,6 @@ public class BusinessErrorException extends RuntimeException {
         this.code = HttpStatus.HTTP_INTERNAL_ERROR;
         this.message = "系统异常";
         this.exception = e;
-        e.printStackTrace();
     }
 
 

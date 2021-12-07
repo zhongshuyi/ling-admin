@@ -11,15 +11,12 @@ import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.system.bo.DeptBo;
 import com.mall.system.entity.UmsDept;
-import com.mall.system.entity.UmsMenu;
 import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -65,17 +62,20 @@ public class DeptController extends BaseController {
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("orderNo");
         treeNodeConfig.setNameKey("deptName");
-        return CommonResult.success(TreeUtil.build(
-                umsDeptService.list(
-                        Wrappers.<UmsDept>lambdaQuery().orderByAsc(UmsDept::getOrderNo)),
-                0L,
-                treeNodeConfig, (treeNode, tree) -> {
-                    tree.setId(treeNode.getId());
-                    tree.setParentId(treeNode.getParentId());
-                    tree.setName(treeNode.getDeptName());
-                    tree.setWeight(treeNode.getOrderNo());
-                    tree.putExtra("parentList", treeNode.getParentList());
-                }));
+        return CommonResult.success(
+                TreeUtil.build(
+                        umsDeptService.list(
+                                Wrappers.<UmsDept>lambdaQuery().orderByAsc(UmsDept::getOrderNo)),
+                        0L,
+                        treeNodeConfig, (treeNode, tree) -> {
+                            tree.setId(treeNode.getId());
+                            tree.setParentId(treeNode.getParentId());
+                            tree.setName(treeNode.getDeptName());
+                            tree.setWeight(treeNode.getOrderNo());
+                            tree.putExtra("parentList", treeNode.getParentList());
+                        }
+                )
+        );
     }
 
     /**
@@ -157,12 +157,7 @@ public class DeptController extends BaseController {
     @ApiOperation("获取部门权限")
     @GetMapping("DeptPerm/{id}")
     public CommonResult<Set<Long>> getDeptPerm(@PathVariable final Long id) {
-        return CommonResult.success(
-                umsMenuService
-                        .getDeptPerm(id)
-                        .stream()
-                        .map(UmsMenu::getId)
-                        .collect(Collectors.toSet()));
+        return CommonResult.success(umsMenuService.getDeptPerm(id));
     }
 
     /**
@@ -177,17 +172,6 @@ public class DeptController extends BaseController {
     public CommonResult<Void> setDeptPerm(
             @PathVariable final Long deptId,
             @RequestBody final Set<Long> newIds) {
-        Set<Long> oldIds = umsMenuService
-                .getDeptPerm(deptId)
-                .stream()
-                .map(UmsMenu::getId)
-                .collect(Collectors.toSet());
-        Set<Long> result = new HashSet<>(oldIds);
-        result.removeAll(newIds);
-        final Boolean isSuccess = umsMenuService.removeDeptPerm(deptId, result);
-        result.clear();
-        result.addAll(newIds);
-        result.removeAll(oldIds);
-        return toAjax(umsMenuService.addDeptPerm(deptId, result) && isSuccess);
+        return toAjax(umsMenuService.setDeptPerm(deptId, newIds));
     }
 }
