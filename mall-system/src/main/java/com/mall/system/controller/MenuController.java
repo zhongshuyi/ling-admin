@@ -8,7 +8,7 @@ import com.mall.common.annotation.RepeatSubmit;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.validate.ValidationGroups;
-import com.mall.common.enums.BusinessMsgEnum;
+import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
@@ -65,7 +65,7 @@ public class MenuController extends BaseController {
         AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
-            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_NOT_LOGIN);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");

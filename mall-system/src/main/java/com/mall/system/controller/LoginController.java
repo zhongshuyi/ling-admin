@@ -2,7 +2,7 @@ package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.mall.common.core.domain.CommonResult;
-import com.mall.common.enums.BusinessMsgEnum;
+import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
@@ -77,7 +77,7 @@ public class LoginController {
         AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
-            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_NOT_LOGIN);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         assert adminUserDetails.getUmsAdmin() != null;
         Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
@@ -98,7 +98,7 @@ public class LoginController {
         AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
-            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_NOT_LOGIN);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         assert adminUserDetails.getPermissionCodeSet() != null;
         return CommonResult.success(adminUserDetails.getPermissionCodeSet());
@@ -115,7 +115,7 @@ public class LoginController {
         AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
-            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_NOT_LOGIN);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         assert adminUserDetails.getUmsAdmin() != null;
         if (adminUserDetails.getUmsAdmin().getIsAdmin()) {

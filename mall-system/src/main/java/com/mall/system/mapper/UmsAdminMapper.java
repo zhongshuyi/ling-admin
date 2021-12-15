@@ -33,4 +33,13 @@ public interface UmsAdminMapper extends BaseMapperPlus<UmsAdmin> {
      * @return 分页后结果及总行数
      */
     List<UmsAdmin> queryUserList(UserBo bo);
+
+
+    /**
+     * 根据用户名获取用户信息.
+     *
+     * @param userName 用户名
+     * @return 用户信息
+     */
+    UmsAdmin getUmsAdminByUserName(String userName);
 }

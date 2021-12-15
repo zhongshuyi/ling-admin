@@ -10,27 +10,24 @@
     </resultMap>
 
     <select id="getUserListByRoleId" resultType="com.mall.system.entity.UmsAdmin">
-        select id,
+        select u.id,
                username,
                real_name,
                email,
                tel,
                sex,
-               avatar,
-               password,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
                status,
                del_flag,
                login_ip,
                depart_ids,
                user_identity,
                login_date,
-               remark,
-               create_by,
-               create_time,
-               update_by,
-               update_time
+               u.remark
         from ums_admin u
                  join ums_user_role uur on u.id = uur.user_id
+                 left join ums_file uf on u.avatar_file_id = uf.id
         where uur.role_id = #{roleId}
     </select>
     <select id="queryUserList" resultType="com.mall.system.entity.UmsAdmin">
@@ -40,8 +37,8 @@
         u.email,
         tel,
         sex,
-        avatar,
-        password,
+        concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+        avatar_file_id,
         status,
         del_flag,
         login_ip,
@@ -53,6 +50,7 @@
         FROM ums_admin u
         join ums_user_dept uud on u.id = uud.user_id
         join ums_dept ud on uud.dept_id = ud.id
+        left join ums_file uf on u.avatar_file_id = uf.id
         <where>
             <if test="deptId!=null">
                 ud.parent_list like CONCAT((select parent_list from ums_dept where id = #{deptId}),'%')
@@ -65,6 +63,28 @@
             </if>
         </where>
         order by u.id
+    </select>
+    <select id="getUmsAdminByUserName" resultType="com.mall.system.entity.UmsAdmin">
+        select u.id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
+               password,
+               status,
+               del_flag,
+               login_ip,
+               depart_ids,
+               user_identity,
+               login_date,
+               login_address,
+               u.remark
+        from ums_admin u
+                 left join ums_file uf on u.avatar_file_id = uf.id
+        where u.username = #{username};
     </select>
 
 

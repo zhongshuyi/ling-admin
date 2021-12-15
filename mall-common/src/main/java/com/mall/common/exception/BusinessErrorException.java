@@ -1,7 +1,7 @@
 package com.mall.common.exception;
 
 import cn.hutool.http.HttpStatus;
-import com.mall.common.enums.BusinessMsgEnum;
+import com.mall.common.enums.BusinessExceptionMsgEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +36,11 @@ public class BusinessErrorException extends RuntimeException {
     /**
      * 自定义业务异常.
      *
-     * @param businessMsgEnum 异常枚举
+     * @param businessExceptionMsgEnum 异常枚举
      */
-    public BusinessErrorException(final BusinessMsgEnum businessMsgEnum) {
-        this.code = businessMsgEnum.getCode();
-        this.message = businessMsgEnum.getMsg();
+    public BusinessErrorException(final BusinessExceptionMsgEnum businessExceptionMsgEnum) {
+        this.code = businessExceptionMsgEnum.getCode();
+        this.message = businessExceptionMsgEnum.getMsg();
     }
 
     /**

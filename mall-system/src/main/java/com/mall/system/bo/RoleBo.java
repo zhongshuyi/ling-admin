@@ -88,12 +88,12 @@ public class RoleBo {
             message = "角色状态不能为空",
             groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @Max(
-            value = 2,
-            message = "角色状态,只能为1,2",
+            value = 1,
+            message = "角色状态,只能为0,1",
             groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @Min(
-            value = 1,
-            message = "角色状态,只能为1,2",
+            value = 0,
+            message = "角色状态,只能为0,1",
             groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @ApiModelProperty(value = "角色状态")
     private Integer status;

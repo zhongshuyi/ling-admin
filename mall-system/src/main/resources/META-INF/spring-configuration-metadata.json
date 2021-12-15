@@ -32,6 +32,26 @@
       "name": "mybatis-plus.mapperPackage",
       "type": "java.lang.String",
       "description": "扫描包路径 for mybatis-plus.mapperPackage."
+    },
+    {
+      "name": "minio.url",
+      "type": "java.lang.String",
+      "description": "minio服务器地址 for minio.url."
+    },
+    {
+      "name": "minio.accessKey",
+      "type": "java.lang.String",
+      "description": "minio账号 for minio.accessKey."
+    },
+    {
+      "name": "minio.secretKey",
+      "type": "java.lang.String",
+      "description": "minio密码 for minio.secretKey."
+    },
+    {
+      "name": "minio.bucketName",
+      "type": "java.lang.String",
+      "description": "桶名称 for minio.bucketName."
     }
   ]
 }

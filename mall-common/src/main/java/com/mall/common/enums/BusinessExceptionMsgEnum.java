@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author 钟舒艺
  **/
 @Getter
-public enum BusinessMsgEnum {
+public enum BusinessExceptionMsgEnum {
 
     /**
      * 用户未登录.
@@ -49,7 +49,7 @@ public enum BusinessMsgEnum {
      */
     private final String msg;
 
-    BusinessMsgEnum(final int code, final String msg) {
+    BusinessExceptionMsgEnum(final int code, final String msg) {
         this.code = code;
         this.msg = msg;
     }

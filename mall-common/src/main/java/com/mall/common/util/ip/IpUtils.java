@@ -50,6 +50,6 @@ public final class IpUtils {
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return NetUtil.isInnerIP(ip) ? "本地" : new HTMLFilter().filter(ip);
+        return "0:0:0:0:0:0:0:1".equals(ip) || NetUtil.isInnerIP(ip) ? "本地" : new HTMLFilter().filter(ip);
     }
 }

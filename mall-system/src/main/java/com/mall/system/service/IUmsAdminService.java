@@ -14,6 +14,16 @@ import java.util.List;
  * @since 2021-07-06
  */
 public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
+
+
+    /**
+     * 根据用户名查询用户.
+     *
+     * @param userName 用户名.
+     * @return 用户信息(含密码)
+     */
+    UmsAdmin getUmsAdminByUserName(String userName);
+
     /**
      * 根据角色id获取用户列表.
      *

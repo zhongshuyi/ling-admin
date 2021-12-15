@@ -1,8 +1,7 @@
 package com.mall.framework.security.service;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.constant.GlobalConstants;
-import com.mall.common.enums.BusinessMsgEnum;
+import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.enums.Status;
 import com.mall.common.exception.BusinessErrorException;
 import com.mall.framework.model.AdminUserDetails;
@@ -55,24 +54,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             final String username
     ) throws UsernameNotFoundException {
         log.info(username + "尝试登录");
-        UmsAdmin umsAdmin = umsAdminService.getOne(
-                Wrappers.<UmsAdmin>lambdaQuery()
-                        .eq(UmsAdmin::getUsername, username).last("limit 1"));
+        UmsAdmin umsAdmin = umsAdminService.getUmsAdminByUserName(username);
         if (umsAdmin == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
         } else if (Status.DELETED.getCode().equals(umsAdmin.getDelFlag())) {
             log.info("登录用户：{} 已被删除.", username);
-            throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DELETED);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.ACCOUNT_DELETED);
         } else if (Status.DISABLE.getCode().equals(umsAdmin.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
-            throw new BusinessErrorException(BusinessMsgEnum.ACCOUNT_DISABLE);
+            throw new BusinessErrorException(BusinessExceptionMsgEnum.ACCOUNT_DISABLE);
         }
         List<UmsRole> roles = umsRoleService.selectRoleListByUserId(umsAdmin.getId());
         roles.forEach((r) -> {
             if (r.getStatus().equals(Status.DISABLE.getCode())) {
                 log.info("登录用户：{} 角色{}已被停用.", username, r.getRoleName());
-                throw new BusinessErrorException(BusinessMsgEnum.ROLE_DISABLE);
+                throw new BusinessErrorException(BusinessExceptionMsgEnum.ROLE_DISABLE);
             }
             if (r.getId().equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
                 umsAdmin.setIsAdmin(true);

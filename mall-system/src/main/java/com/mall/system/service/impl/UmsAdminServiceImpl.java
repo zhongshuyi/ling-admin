@@ -8,13 +8,17 @@ import com.github.pagehelper.PageInfo;
 import com.mall.common.core.mybatisplus.core.PagePlus;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.framework.oss.MinioService;
 import com.mall.system.bo.UserBo;
 import com.mall.system.entity.UmsAdmin;
 import com.mall.system.mapper.UmsAdminMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.vo.UserVo;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,17 +27,37 @@ import org.springframework.stereotype.Service;
  * @author 钟舒艺
  * @since 2021-07-06
  */
+
 @Service
 @Slf4j
+@DependsOn("minioService")
+@RequiredArgsConstructor
 public class UmsAdminServiceImpl
         extends ServicePlusImpl<UmsAdminMapper, UmsAdmin, UserVo>
         implements IUmsAdminService {
 
     private static final long serialVersionUID = -6767396404407827925L;
 
+    /**
+     * minIo服务,用于获取url.
+     */
+    @Getter
+    private final transient MinioService minIoService;
+
+
+    @Override
+    public final UmsAdmin getUmsAdminByUserName(final String userName) {
+        log.error(getMinIoService().toString());
+        UmsAdmin umsAdmin = getBaseMapper().getUmsAdminByUserName(userName);
+        umsAdmin.setAvatar(minIoService.getMinioUrl() + "/" + umsAdmin.getAvatar());
+        return umsAdmin;
+    }
+
     @Override
     public final List<UmsAdmin> getUserListByRoleId(final Long roleId) {
-        return getBaseMapper().getUserListByRoleId(roleId);
+        List<UmsAdmin> list = getBaseMapper().getUserListByRoleId(roleId);
+        list.forEach(u -> u.setAvatar(minIoService.getMinioUrl() + "/" + u.getAvatar()));
+        return list;
     }
 
     @Override
@@ -43,6 +67,7 @@ public class UmsAdminServiceImpl
         PageHelper.startPage((int) pagePlus.getCurrent(), (int) pagePlus.getSize());
         List<UmsAdmin> list = getBaseMapper().queryUserList(bo);
         PageInfo<UmsAdmin> pageInfo = new PageInfo<>(list);
+        pageInfo.getList().forEach(u -> u.setAvatar(minIoService.getMinioUrl() + "/" + u.getAvatar()));
         pagePlus.setRecords(pageInfo.getList());
         pagePlus.setRecordsVo(BeanUtil.copyToList(pageInfo.getList(), UserVo.class));
         pagePlus.setTotal(pageInfo.getTotal());

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.mall.common.core.domain.BaseEntity;
-import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -16,7 +15,6 @@ import lombok.experimental.Accessors;
  * 用户信息表.
  *
  * @author 钟舒艺
- * @since 2021-07-06
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -58,8 +56,14 @@ public class UmsAdmin extends BaseEntity implements Serializable {
     private Integer sex;
 
     /**
+     * 头像文件的id.
+     */
+    private Long avatarFileId;
+
+    /**
      * 头像地址.
      */
+    @TableField(exist = false)
     private String avatar;
 
     /**
@@ -107,6 +111,5 @@ public class UmsAdmin extends BaseEntity implements Serializable {
     /**
      * 最后登录地点.
      */
-    @ApiModelProperty("最后登录地点")
     private String loginAddress;
 }
