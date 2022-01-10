@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
-public class PermissionService {
+class PermissionService {
 
     /**
      * 菜单服务.
@@ -37,12 +37,12 @@ public class PermissionService {
      * @param umsAdmin 用户信息
      * @return 权限列表
      */
-    public List<UmsMenu> getPermissionList(final UmsAdmin umsAdmin) {
+    List<UmsMenu> getPermissionList(final UmsAdmin umsAdmin) {
 
-        List<UmsMenu> perms = new ArrayList<>();
+        final List<UmsMenu> perms = new ArrayList<>();
 
-        if (!umsAdmin.getIsAdmin()) {
-            Set<Long> p = umsMenuMapper.selectUserPermsIdsById(umsAdmin.getId());
+        if (Boolean.FALSE.equals(umsAdmin.getIsAdmin())) {
+            final Set<Long> p = umsMenuMapper.selectUserPermsIdsById(umsAdmin.getId());
             p.addAll(umsMenuMapper.selectDeptPermsId(umsAdmin.getId()));
             perms.addAll(umsMenuMapper.selectBatchIds(p));
         }

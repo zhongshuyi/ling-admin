@@ -26,7 +26,7 @@ public class TestController {
     /**
      * 服务层.
      */
-    private final transient TestDomeService testDomeService;
+    private final TestDomeService testDomeService;
 
     /**
      * 测试接口.

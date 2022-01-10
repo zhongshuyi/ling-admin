@@ -31,7 +31,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
      * jwt工具类.
      */
-    private final transient JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected final void doFilterInternal(
@@ -41,13 +41,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // 从token中获取用户信息
-        AdminUserDetails user = jwtTokenUtil.getAdminUserDetails(request);
+        final AdminUserDetails user = jwtTokenUtil.getAdminUserDetails(request);
         if (user != null
                 && SecurityUtils.getAuthentication() == null) {
             log.info("使用用户信息与用户权限构建 认证用户");
             jwtTokenUtil.refreshToken(user);
             // 使用用户信息与用户权限构建 认证用户
-            UsernamePasswordAuthenticationToken authentication =
+            final UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             log.info("jwt验证成功 user:{}", user.getUsername());

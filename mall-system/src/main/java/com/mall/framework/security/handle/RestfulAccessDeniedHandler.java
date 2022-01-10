@@ -1,6 +1,6 @@
 package com.mall.framework.security.handle;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.util.ServletUtils;
@@ -31,7 +31,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler, Serializ
             final HttpServletResponse response,
             final AccessDeniedException e)
             throws IOException {
-        String msg = StrUtil.format("请求访问：{},认证失败,你没有权限", request.getRequestURI());
+        final String msg = CharSequenceUtil.format("请求访问：{},认证失败,你没有权限", request.getRequestURI());
         ServletUtils.renderString(response,
                 new ObjectMapper().writeValueAsString(CommonResult.forbidden(msg)));
         log.warn("没有权限 : "

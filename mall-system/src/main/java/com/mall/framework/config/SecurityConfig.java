@@ -33,22 +33,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 登录用户服务类.
      */
-    private final transient UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     /**
      * 认证失败处理类 返回未授权.
      */
-    private final transient RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
     /**
      * 当未登录或者token失效访问接口时，自定义的返回结果.
      */
-    private final transient RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     /**
      * token认证过滤器.
      */
-    private final transient JwtAuthenticationTokenFilter authenticationTokenFilter;
+    private final JwtAuthenticationTokenFilter authenticationTokenFilter;
 
 
     /**
@@ -110,8 +110,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/favicon.ico"
                 ).permitAll()
                 .antMatchers("/profile/**").anonymous()
-                .antMatchers("/common/download**").anonymous()
-                .antMatchers("/common/download/resource**").anonymous()
                 .antMatchers("/swagger-ui/**").anonymous()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").anonymous()

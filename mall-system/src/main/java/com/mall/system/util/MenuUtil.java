@@ -8,6 +8,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.vo.RouterMeta;
 import com.mall.system.vo.RouterVo;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public final class MenuUtil {
      * @return 处理后菜单树
      */
     public static List<Tree<Long>> getMenuList(final List<UmsMenu> menus) {
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
         treeNodeConfig.setNameKey("title");
         return TreeUtil.build(menus, 0L, treeNodeConfig, (treeNode, tree) -> {
@@ -59,7 +60,7 @@ public final class MenuUtil {
      * @return 树结构
      */
     public static List<Tree<Long>> buildPermTree(final List<UmsMenu> menus) {
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
         return TreeUtil.build(menus, 0L, treeNodeConfig, (treeNode, tree) -> {
             tree.setId(treeNode.getId());
@@ -79,24 +80,22 @@ public final class MenuUtil {
      */
     private static List<RouterVo> buildRouters(final List<UmsMenu> menus, final Long parentId) {
 
-        LinkedList<RouterVo> routers = new LinkedList<>();
+        final LinkedList<RouterVo> routers = new LinkedList<>();
 
         if (menus == null || menus.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
-        for (UmsMenu menu : menus) {
+        for (final UmsMenu menu : menus) {
             if (!menu.getParentId().equals(parentId)) {
                 continue;
             }
-            RouterVo router = BeanUtil.toBean(menu, RouterVo.class);
-            router.setName(
-                    router.getPath().substring(0, 1).toUpperCase()
-                            + router.getPath().substring(1));
+            final RouterVo router = BeanUtil.toBean(menu, RouterVo.class);
+            router.setName(router.getPath().substring(0, 1).toUpperCase() + router.getPath().substring(1));
             if (menu.getParentId().equals(0L)) {
                 router.setPath("/" + router.getPath());
             }
-            RouterMeta meta = BeanUtil.toBean(menu, RouterMeta.class);
+            final RouterMeta meta = BeanUtil.toBean(menu, RouterMeta.class);
 
             meta.setIgnoreKeepAlive(menu.getIgnoreKeepAlive().equals(0));
             meta.setAffix(menu.getAffix().equals(0));
@@ -122,8 +121,8 @@ public final class MenuUtil {
      * @return 设置好后的路由
      */
     private static List<RouterVo> setRedirect(final List<RouterVo> routers) {
-        for (RouterVo router : routers) {
-            StringBuilder redirect = new StringBuilder(router.getPath());
+        for (final RouterVo router : routers) {
+            final StringBuilder redirect = new StringBuilder(router.getPath());
             RouterVo i = router;
             while (CollUtil.isNotEmpty(i.getChildren())) {
                 i = i.getChildren().get(0);

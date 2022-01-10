@@ -63,7 +63,7 @@ public class MybatisPlusRedisCache implements Cache {
             if (o != null) {
                 return RedisUtils.getCacheObject(o.toString());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("缓存出错", e);
         }
         return null;
@@ -80,7 +80,7 @@ public class MybatisPlusRedisCache implements Cache {
     @Override
     public final void clear() {
         log.debug("清空缓存");
-        Collection<String> keys = RedisUtils.keys("*:" + this.id + "*");
+        final Collection<String> keys = RedisUtils.keys("*:" + this.id + "*");
         if (!CollectionUtils.isEmpty(keys)) {
             RedisUtils.deleteObject(keys);
         }
@@ -88,8 +88,8 @@ public class MybatisPlusRedisCache implements Cache {
 
     @Override
     public final int getSize() {
-        RedisTemplate<String, Object> redisTemplate = SpringUtil.getBean("redisTemplate");
-        Long size = redisTemplate.execute(RedisServerCommands::dbSize);
+        final RedisTemplate<String, Object> redisTemplate = SpringUtil.getBean("redisTemplate");
+        final Long size = redisTemplate.execute(RedisServerCommands::dbSize);
         assert size != null;
         return size.intValue();
     }

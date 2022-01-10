@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * IServicePlus 实现类.
@@ -30,41 +29,12 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
         implements IServicePlus<T, V> {
 
     private static final long serialVersionUID = -2447762079455049677L;
-    /**
-     * mapper 的class信息.
-     */
-    @Getter
-    private final Class<M> mapperClass = currentMapperClass();
+
     /**
      * 视图对象的class信息.
      */
     @Getter
     private final Class<V> voClass = currentVoClass();
-    /**
-     * 注入mybatisPlus的mapper层操作对象.
-     */
-    @Autowired(required = false)
-    private M baseMapper;
-
-    /**
-     * 获取baseMapper.
-     *
-     * @return 获取baseMapper.
-     */
-    @Override
-    public M getBaseMapper() {
-        return baseMapper;
-    }
-
-    @Override
-    protected final Class<M> currentMapperClass() {
-        return Convert.convert(new TypeReference<Class<M>>() {
-        }, ReflectionKit
-                .getSuperClassGenericType(
-                        this.getClass(),
-                        ServicePlusImpl.class,
-                        0));
-    }
 
     @Override
     protected final Class<T> currentModelClass() {
@@ -81,7 +51,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      *
      * @return Vo类的class
      */
-    protected final Class<V> currentVoClass() {
+    private Class<V> currentVoClass() {
         return Convert.convert(new TypeReference<Class<V>>() {
         }, ReflectionKit
                 .getSuperClassGenericType(
@@ -137,7 +107,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
             final Wrapper<T> queryWrapper,
             final CopyOptions copyOptions
     ) {
-        PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
+        final PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
         result.setRecordsVo(
                 BeanUtil.copyToList(
                         result.getRecords(),
@@ -174,11 +144,11 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      */
     @Override
     public void validEntityBeforeSave(final T t) {
-
+        // 如果插入前需要验证,则重写此方法
     }
 
     @Override
     public void validEntityBeforeDel(final Long id) {
-
+        // 如果保存前需要验证或者做其他操作,则重新此方法
     }
 }

@@ -30,12 +30,12 @@ public class PagePlus<T, V> implements IPage<T> {
     /**
      * domain实体列表.
      */
-    private List<T> records = Collections.emptyList();
+    private transient List<T> records = Collections.emptyList();
 
     /**
      * vo实体列表.
      */
-    private List<V> recordsVo = Collections.emptyList();
+    private transient List<V> recordsVo = Collections.emptyList();
 
     /**
      * 总数.
@@ -99,7 +99,7 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param size    每页数量
      * @param total   总条数
      */
-    public PagePlus(final long current, final long size, final long total) {
+    private PagePlus(final long current, final long size, final long total) {
         this(current, size, total, true);
     }
 
@@ -122,7 +122,7 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param total         总条数
      * @param isSearchCount 是否进行count查询
      */
-    public PagePlus(
+    private PagePlus(
             final Long current, final long size, final long total, final boolean isSearchCount
     ) {
         if (current > 1L) {

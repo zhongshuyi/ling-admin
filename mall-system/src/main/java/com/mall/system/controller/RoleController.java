@@ -43,12 +43,12 @@ public class RoleController extends BaseController {
     /**
      * 角色服务.
      */
-    private final transient IUmsRoleService umsRoleService;
+    private final IUmsRoleService umsRoleService;
 
     /**
      * 权限菜单服务.
      */
-    private final transient IUmsMenuService umsMenuService;
+    private final IUmsMenuService umsMenuService;
 
     /**
      * 分页获取角色列表.
@@ -95,7 +95,7 @@ public class RoleController extends BaseController {
             @RequestBody final RoleBo role
     ) {
         if (role.getId().equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能修改超级管理员");
         }
         return toAjax(umsRoleService.updateByBo(role));
     }
@@ -114,7 +114,7 @@ public class RoleController extends BaseController {
             @PathVariable final Integer state
     ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能修改超级管理员状态");
         }
         return toAjax(umsRoleService.stateChanges(id, state));
     }
@@ -129,9 +129,9 @@ public class RoleController extends BaseController {
     @DeleteMapping("/{id}")
     public CommonResult<Void> del(@PathVariable final Long id) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能删除超级管理员");
         }
-        return toAjax(umsRoleService.removeById(id));
+        return toAjax(umsRoleService.deleteWithValidById(id));
     }
 
     /**
@@ -160,7 +160,7 @@ public class RoleController extends BaseController {
             @RequestBody final Set<Long> newIds
     ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
-            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "超级管理员角色不能操作");
+            throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能改变超级管理员权限");
         }
         return toAjax(umsMenuService.setRolePerm(id, newIds));
     }

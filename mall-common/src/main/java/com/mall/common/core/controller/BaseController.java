@@ -1,6 +1,6 @@
 package com.mall.common.core.controller;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.mall.common.core.domain.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +19,7 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected CommonResult<Void> toAjax(final int rows) {
+    protected CommonResult<Void> toAjax(final Integer rows) {
         return rows > 0 ? success() : error();
     }
 
@@ -29,8 +29,8 @@ public class BaseController {
      * @param result 结果
      * @return 操作结果
      */
-    protected CommonResult<Void> toAjax(final boolean result) {
-        return result ? success() : error();
+    protected CommonResult<Void> toAjax(final Boolean result) {
+        return Boolean.TRUE.equals(result) ? success() : error();
     }
 
     /**
@@ -38,7 +38,7 @@ public class BaseController {
      *
      * @return 信息
      */
-    public CommonResult<Void> success() {
+    private CommonResult<Void> success() {
         return CommonResult.success();
     }
 
@@ -57,7 +57,7 @@ public class BaseController {
      *
      * @return 信息
      */
-    public CommonResult<Void> error() {
+    private CommonResult<Void> error() {
         return CommonResult.failed();
     }
 
@@ -68,7 +68,7 @@ public class BaseController {
      * @param message 信息
      * @return 信息
      */
-    public CommonResult<Void> error(final String message) {
+    protected CommonResult<Void> error(final String message) {
         return CommonResult.failed(message);
     }
 
@@ -78,7 +78,7 @@ public class BaseController {
      * @param url 充定向的url
      * @return 重定向信息
      */
-    public String redirect(final String url) {
-        return StrUtil.format("redirect:{}", url);
+    protected String redirect(final String url) {
+        return CharSequenceUtil.format("redirect:{}", url);
     }
 }

@@ -21,17 +21,17 @@ public class BusinessErrorException extends RuntimeException {
     /**
      * 异常码.
      */
-    private int code;
+    private final int code;
 
     /**
      * 异常提示信息.
      */
-    private String message;
+    private final String message;
 
     /**
      * 异常信息.
      */
-    private Exception exception;
+    private final Exception exception;
 
     /**
      * 自定义业务异常.
@@ -41,6 +41,7 @@ public class BusinessErrorException extends RuntimeException {
     public BusinessErrorException(final BusinessExceptionMsgEnum businessExceptionMsgEnum) {
         this.code = businessExceptionMsgEnum.getCode();
         this.message = businessExceptionMsgEnum.getMsg();
+        this.exception = null;
     }
 
     /**
@@ -51,6 +52,7 @@ public class BusinessErrorException extends RuntimeException {
     public BusinessErrorException(final String message) {
         this.message = message;
         this.code = HttpStatus.HTTP_INTERNAL_ERROR;
+        this.exception = null;
     }
 
     /**
@@ -61,6 +63,18 @@ public class BusinessErrorException extends RuntimeException {
     public BusinessErrorException(final Exception e) {
         this.code = HttpStatus.HTTP_INTERNAL_ERROR;
         this.message = "系统异常";
+        this.exception = e;
+    }
+
+    /**
+     * 传入本身异常信息,自定义提示.
+     *
+     * @param message 提示信息
+     * @param e       异常
+     */
+    public BusinessErrorException(final String message, final Exception e) {
+        this.code = HttpStatus.HTTP_INTERNAL_ERROR;
+        this.message = message;
         this.exception = e;
     }
 
@@ -88,5 +102,6 @@ public class BusinessErrorException extends RuntimeException {
     public BusinessErrorException(final int code, final String message) {
         this.message = message;
         this.code = code;
+        this.exception = null;
     }
 }

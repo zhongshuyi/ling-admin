@@ -47,12 +47,12 @@ public class MenuController extends BaseController {
     /**
      * 权限服务.
      */
-    private final transient IUmsMenuService umsMenuService;
+    private final IUmsMenuService umsMenuService;
 
     /**
      * jwt工具类.
      */
-    private final transient JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * 获取所有菜单.
@@ -62,15 +62,15 @@ public class MenuController extends BaseController {
     @GetMapping
     @ApiOperation("获取所有菜单")
     public CommonResult<List<Tree<Long>>> getMenuList() {
-        AdminUserDetails adminUserDetails =
+        final AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
 
-        if (adminUserDetails.getUmsAdmin().getIsAdmin()) {
+        if (Boolean.TRUE.equals(adminUserDetails.getUmsAdmin().getIsAdmin())) {
             return CommonResult.success(MenuUtil.getMenuList(umsMenuService.selectMenuListAll()));
         } else {
             return CommonResult.success(MenuUtil.getMenuList(umsMenuService.list()));
@@ -89,7 +89,7 @@ public class MenuController extends BaseController {
             @Validated(ValidationGroups.Add.class)
             @RequestBody final MenuBo addBo
     ) {
-        if (umsMenuService.checkMenuUnique(BeanUtil.toBean(addBo, UmsMenu.class))) {
+        if (Boolean.TRUE.equals(umsMenuService.checkMenuUnique(BeanUtil.toBean(addBo, UmsMenu.class)))) {
             return CommonResult.failed("菜单" + addBo.getTitle() + "已存在");
         }
         return toAjax(umsMenuService.addByAddBo(addBo));
@@ -122,7 +122,7 @@ public class MenuController extends BaseController {
             @RequestBody final MenuBo bo) {
         if (bo.getId().equals(bo.getParentId())) {
             return CommonResult.failed("上级菜单不能为自己");
-        } else if (umsMenuService.checkMenuUnique(BeanUtil.toBean(bo, UmsMenu.class))) {
+        } else if (Boolean.TRUE.equals(umsMenuService.checkMenuUnique(BeanUtil.toBean(bo, UmsMenu.class)))) {
             return CommonResult.failed("菜单" + bo.getTitle() + "已存在");
         }
         return toAjax(umsMenuService.updateById(BeanUtil.toBean(bo, UmsMenu.class)));

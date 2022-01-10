@@ -2,7 +2,14 @@ spring:
   application:
     name: mall-admin
   profiles:
+    # 区分配置,这里使用开发时配置(application-dev.yml)
     active: dev
+  servlet:
+    multipart:
+      # 开启文件上传
+      enabled: true
+      # 单个上传文件最大值
+      max-file-size: 200MB
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

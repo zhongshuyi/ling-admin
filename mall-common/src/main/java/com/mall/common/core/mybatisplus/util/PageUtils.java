@@ -1,12 +1,11 @@
 package com.mall.common.core.mybatisplus.util;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.mybatisplus.core.PagePlus;
 import com.mall.common.util.ServletUtils;
-import java.util.regex.Pattern;
 
 /**
  * 分页工具类.
@@ -18,40 +17,35 @@ public final class PageUtils {
     /**
      * 当前记录起始索引.
      */
-    public static final String PAGE_NUM = "pageNum";
+    private static final String PAGE_NUM = "pageNum";
     /**
      * 每页显示记录数.
      */
-    public static final String PAGE_SIZE = "pageSize";
+    private static final String PAGE_SIZE = "pageSize";
     /**
      * 排序列.
      */
-    public static final String ORDER_BY_COLUMN = "orderByColumn";
+    private static final String ORDER_BY_COLUMN = "orderByColumn";
     /**
      * 排序的方向 "desc" 或者 "asc".
      */
-    public static final String IS_ASC = "isAsc";
+    private static final String IS_ASC = "isAsc";
     /**
      * 前端传递的排序方向字符串 desc.
      */
-    public static final String DESC = "desc";
+    private static final String DESC = "desc";
     /**
      * 前端传递的排序方向字符串 asc.
      */
-    public static final String ASC = "asc";
+    private static final String ASC = "asc";
     /**
      * 当前记录起始索引 默认值.
      */
-    public static final int DEFAULT_PAGE_NUM = 1;
+    private static final int DEFAULT_PAGE_NUM = 1;
     /**
      * 每页显示记录数 默认值 默认查全部.
      */
-    public static final int DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
-    /**
-     * 列名校验正则 首位可以是字母以及下划线.首位之后可以是字母,数字以及下划线.下划线后不能接下划线.
-     */
-    public static final String COLUMN_NAME_REG =
-            "/(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/";
+    private static final int DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
 
     private PageUtils() {
     }
@@ -65,14 +59,14 @@ public final class PageUtils {
      */
     public static <T, K> PagePlus<T, K> buildPagePlus() {
         Integer pageNum = ServletUtils.getParameterToInt(PAGE_NUM, DEFAULT_PAGE_NUM);
-        Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
-        String orderByColumn = ServletUtils.getParameter(ORDER_BY_COLUMN);
-        String isAsc = ServletUtils.getParameter(IS_ASC);
+        final Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
+        final String orderByColumn = ServletUtils.getParameter(ORDER_BY_COLUMN);
+        final String isAsc = ServletUtils.getParameter(IS_ASC);
         if (pageNum <= 0) {
             pageNum = DEFAULT_PAGE_NUM;
         }
-        PagePlus<T, K> page = new PagePlus<>(pageNum, pageSize);
-        OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
+        final PagePlus<T, K> page = new PagePlus<>(pageNum, pageSize);
+        final OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
         if (orderItem != null) {
             page.addOrder(orderItem);
         }
@@ -86,7 +80,7 @@ public final class PageUtils {
      * @return 分页对象
      */
     public static <T> Page<T> buildPage() {
-        return buildPage(null, null);
+        return buildPage(null, "null");
     }
 
 
@@ -98,18 +92,18 @@ public final class PageUtils {
      * @param <T>                  实体
      * @return 分页对象
      */
-    public static <T> Page<T> buildPage(
+    private static <T> Page<T> buildPage(
             final String defaultOrderByColumn, final String defaultIsAsc
     ) {
         Integer pageNum = ServletUtils.getParameterToInt(PAGE_NUM, DEFAULT_PAGE_NUM);
-        Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
-        String orderByColumn = ServletUtils.getParameter(ORDER_BY_COLUMN, defaultOrderByColumn);
-        String isAsc = ServletUtils.getParameter(IS_ASC, defaultIsAsc);
+        final Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
+        final String orderByColumn = ServletUtils.getParameter(ORDER_BY_COLUMN, defaultOrderByColumn);
+        final String isAsc = ServletUtils.getParameter(IS_ASC, defaultIsAsc);
         if (pageNum <= 0) {
             pageNum = DEFAULT_PAGE_NUM;
         }
-        Page<T> page = new Page<>(pageNum, pageSize);
-        OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
+        final Page<T> page = new Page<>(pageNum, pageSize);
+        final OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
         if (orderItem != null) {
             page.addOrder(orderItem);
         }
@@ -124,10 +118,8 @@ public final class PageUtils {
      * @return 排序对象
      */
     private static OrderItem buildOrderItem(final String orderByColumn, final String isAsc) {
-        if (StrUtil.isNotBlank(orderByColumn)) {
-            String newOrderByColumn = StrUtil.toUnderlineCase(orderByColumn);
-            newOrderByColumn =
-                    Pattern.matches(COLUMN_NAME_REG, newOrderByColumn) ? newOrderByColumn : "";
+        if (CharSequenceUtil.isNotBlank(orderByColumn)) {
+            final String newOrderByColumn = CharSequenceUtil.toUnderlineCase(orderByColumn);
             if (ASC.equals(isAsc)) {
                 return OrderItem.asc(newOrderByColumn);
             } else if (DESC.equals(isAsc)) {

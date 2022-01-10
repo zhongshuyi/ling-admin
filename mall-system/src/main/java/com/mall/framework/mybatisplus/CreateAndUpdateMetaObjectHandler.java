@@ -53,7 +53,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
             if (metaObject.hasGetter(CREATE_BY_STR)) {
                 this.setFieldValByName(CREATE_BY_STR, getLoginUsername(), metaObject);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new BusinessErrorException(
                     HttpStatus.HTTP_INTERNAL_ERROR,
                     "自动注入异常 => " + e.getMessage(),
@@ -71,7 +71,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
             if (metaObject.hasGetter(UPDATE_TIME)) {
                 this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new BusinessErrorException(
                     HttpStatus.HTTP_INTERNAL_ERROR,
                     "自动注入异常 => " + e.getMessage(),
@@ -85,10 +85,10 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
      * @return 登录用户名
      */
     private String getLoginUsername() {
-        AdminUserDetails loginUser;
+        final AdminUserDetails loginUser;
         try {
             loginUser = SecurityUtils.getLoginUser();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("自动注入警告 => 用户未登录");
             return null;
         }

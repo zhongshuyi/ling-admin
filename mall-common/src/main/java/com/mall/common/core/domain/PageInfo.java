@@ -29,5 +29,5 @@ public class PageInfo<T> implements Serializable {
      * 列表数据.
      */
     @ApiModelProperty("列表数据")
-    private List<T> items;
+    private transient List<T> items;
 }

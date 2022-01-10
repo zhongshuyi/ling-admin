@@ -39,17 +39,17 @@ public class LoginController {
     /**
      * 登录服务.
      */
-    private final transient LoginService loginService;
+    private final LoginService loginService;
 
     /**
      * jwt工具类.
      */
-    private final transient JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * 权限服务.
      */
-    private final transient IUmsMenuService umsMenuService;
+    private final IUmsMenuService umsMenuService;
 
     /**
      * 登录接口.
@@ -59,9 +59,9 @@ public class LoginController {
      */
     @PostMapping("/login")
     @ApiOperation("登录接口")
-    public CommonResult<? extends Map<String, String>> login(@RequestBody final LoginBody user) {
-        String token = loginService.login(user.getUsername(), user.getPassword());
-        Map<String, String> map = new HashMap<>(1);
+    public CommonResult<Map<String, String>> login(@RequestBody final LoginBody user) {
+        final String token = loginService.login(user.getUsername(), user.getPassword());
+        final Map<String, String> map = new HashMap<>(1);
         map.put("token", token);
         return CommonResult.success(map);
     }
@@ -74,13 +74,13 @@ public class LoginController {
     @GetMapping("/getUserInfo")
     @ApiOperation("获取用户信息")
     public CommonResult<Map<String, Object>> getInfo() {
-        AdminUserDetails adminUserDetails =
+        final AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         assert adminUserDetails.getUmsAdmin() != null;
-        Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
+        final Map<String, Object> map = BeanUtil.beanToMap(adminUserDetails.getUmsAdmin());
         map.put("password", "");
         map.put("roles", adminUserDetails.getRoleKey());
         map.put("depts", adminUserDetails.getDepts());
@@ -95,7 +95,7 @@ public class LoginController {
     @GetMapping("/getPermCode")
     @ApiOperation("获取权限列表")
     public CommonResult<Set<String>> getPermCode() {
-        AdminUserDetails adminUserDetails =
+        final AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
@@ -112,13 +112,13 @@ public class LoginController {
     @GetMapping("/getRouterList")
     @ApiOperation("获取路由")
     public CommonResult<List<RouterVo>> getMenuList() {
-        AdminUserDetails adminUserDetails =
+        final AdminUserDetails adminUserDetails =
                 jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
         assert adminUserDetails.getUmsAdmin() != null;
-        if (adminUserDetails.getUmsAdmin().getIsAdmin()) {
+        if (Boolean.TRUE.equals(adminUserDetails.getUmsAdmin().getIsAdmin())) {
             return CommonResult.success(MenuUtil.getRouter(umsMenuService.selectRouterListAll()));
         } else {
             return CommonResult.success(

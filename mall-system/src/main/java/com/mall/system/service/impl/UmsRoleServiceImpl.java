@@ -14,6 +14,7 @@ import com.mall.system.vo.RoleVo;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Getter
 public class UmsRoleServiceImpl
         extends ServicePlusImpl<UmsRoleMapper, UmsRole, RoleVo>
         implements IUmsRoleService {
@@ -49,7 +51,7 @@ public class UmsRoleServiceImpl
 
     @Override
     public final void checkRoleKeyUnique(final UmsRole roleBo) {
-        UmsRole umsRole =
+        final UmsRole umsRole =
                 getOne(Wrappers.<UmsRole>lambdaQuery()
                         .eq(UmsRole::getRoleKey, roleBo.getRoleKey()).last("limit 1"));
         if (umsRole != null && !umsRole.getId().equals(roleBo.getId())) {
@@ -75,8 +77,8 @@ public class UmsRoleServiceImpl
 
     @Override
     public final Boolean setDataScope(final Long roleId, final Set<Long> newIds) {
-        Set<Long> oldIds = getBaseMapper().getDataScope(roleId);
-        Set<Long> result = new HashSet<>(oldIds);
+        final Set<Long> oldIds = getBaseMapper().getDataScope(roleId);
+        final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delDataScope(roleId, result) == result.size();
         result.clear();
@@ -87,8 +89,8 @@ public class UmsRoleServiceImpl
 
     @Override
     public final void validEntityBeforeDel(final Long id) {
-        if (CollUtil.isNotEmpty(umsMenuService.getRolePerm(id))
-                || CollUtil.isNotEmpty(umsAdminService.getUserListByRoleId(id))) {
+        if (CollUtil.isNotEmpty(getUmsMenuService().getRolePerm(id))
+                || CollUtil.isNotEmpty(getUmsAdminService().getUserListByRoleId(id))) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "此角色还有关联用户或菜单");
         }
     }

@@ -35,15 +35,15 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     /**
      * 防重提交 redis key.
      */
-    public static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
+    private static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
     /**
      * 参数列表的键.
      */
-    public static final String REPEAT_PARAMS = "repeatParams";
+    private static final String REPEAT_PARAMS = "repeatParams";
     /**
      * 提交时间.
      */
-    public static final String REPEAT_TIME = "repeatTime";
+    private static final String REPEAT_TIME = "repeatTime";
     private static final long serialVersionUID = 3670730997054064652L;
     /**
      * 令牌自定义标识.
@@ -80,7 +80,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
     ) throws JsonProcessingException {
         String nowParams = "";
         if (request instanceof RepeatedlyRequestWrapper) {
-            RepeatedlyRequestWrapper repeatedlyRequest = (RepeatedlyRequestWrapper) request;
+            final RepeatedlyRequestWrapper repeatedlyRequest = (RepeatedlyRequestWrapper) request;
             nowParams = IoUtil.readUtf8(repeatedlyRequest.getInputStream());
         }
 
@@ -88,12 +88,12 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
         if (Validator.isEmpty(nowParams)) {
             nowParams = new ObjectMapper().writeValueAsString(request.getParameterMap());
         }
-        Map<String, Object> nowDataMap = new HashMap<>(2);
+        final Map<String, Object> nowDataMap = new HashMap<>(2);
         nowDataMap.put(REPEAT_PARAMS, nowParams);
         nowDataMap.put(REPEAT_TIME, System.currentTimeMillis());
 
         // 请求地址（作为存放cache的key值）
-        String url = request.getRequestURI();
+        final String url = request.getRequestURI();
 
         // 唯一值（没有消息头则使用请求地址）
         String submitKey = request.getHeader(header);
@@ -102,20 +102,18 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
         }
 
         // 唯一标识（指定key + 消息头）
-        String cacheRepeatKey = REPEAT_SUBMIT_KEY + submitKey;
+        final String cacheRepeatKey = REPEAT_SUBMIT_KEY + submitKey;
 
-        Map<String, Object> session = RedisUtils.getCacheObject(cacheRepeatKey);
-        if (session != null) {
-            if (session.containsKey(url)) {
-                Map<String, Object> preDataMap =
-                        Convert.convert(new TypeReference<Map<String, Object>>() {
-                        }, session.get(url));
-                if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap)) {
-                    return true;
-                }
+        final Map<String, Object> session = RedisUtils.getCacheObject(cacheRepeatKey);
+        if (session != null && session.containsKey(url)) {
+            final Map<String, Object> preDataMap =
+                    Convert.convert(new TypeReference<Map<String, Object>>() {
+                    }, session.get(url));
+            if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap)) {
+                return true;
             }
         }
-        Map<String, Object> cacheMap = new HashMap<>(2);
+        final Map<String, Object> cacheMap = new HashMap<>(2);
         cacheMap.put(url, nowDataMap);
         RedisUtils.setCacheObject(cacheRepeatKey, cacheMap, intervalTime, TimeUnit.SECONDS);
         return false;
@@ -128,8 +126,8 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
             final Map<String, Object> nowMap,
             final Map<String, Object> preMap
     ) {
-        String nowParams = (String) nowMap.get(REPEAT_PARAMS);
-        String preParams = (String) preMap.get(REPEAT_PARAMS);
+        final String nowParams = (String) nowMap.get(REPEAT_PARAMS);
+        final String preParams = (String) preMap.get(REPEAT_PARAMS);
         if (nowParams == null || preParams == null) {
             return false;
         }
@@ -143,8 +141,8 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
             final Map<String, Object> nowMap,
             final Map<String, Object> preMap
     ) {
-        Long time1 = (Long) nowMap.get(REPEAT_TIME);
-        Long time2 = (Long) preMap.get(REPEAT_TIME);
+        final Long time1 = (Long) nowMap.get(REPEAT_TIME);
+        final Long time2 = (Long) preMap.get(REPEAT_TIME);
         if (time1 == null || time2 == null) {
             return false;
         }

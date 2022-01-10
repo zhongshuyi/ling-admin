@@ -42,7 +42,7 @@ public final class SecurityUtils {
      * @return 加密字符串
      */
     public static String encryptPassword(final String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
 
@@ -54,7 +54,7 @@ public final class SecurityUtils {
      * @return 结果
      */
     public static boolean matchesPassword(final String rawPassword, final String encodedPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 

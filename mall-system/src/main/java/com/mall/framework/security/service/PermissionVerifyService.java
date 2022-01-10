@@ -1,7 +1,7 @@
 package com.mall.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
@@ -42,7 +42,7 @@ public class PermissionVerifyService {
     /**
      * jwt工具类.
      */
-    private final transient JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
 
     /**
@@ -51,11 +51,11 @@ public class PermissionVerifyService {
      * @param permission 权限字符串
      * @return 是否有权限
      */
-    public boolean hasPermi(final String permission) {
-        if (StrUtil.isEmpty(permission)) {
+    private boolean hasPermi(final String permission) {
+        if (CharSequenceUtil.isEmpty(permission)) {
             return false;
         }
-        AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
 
         if (userDetails == null || CollUtil.isEmpty(userDetails.getPermissionList())) {
             return false;
@@ -80,15 +80,15 @@ public class PermissionVerifyService {
      * @return 用户是否具有以下任意一个权限
      */
     public boolean hasAnyPermi(final String permissions) {
-        if (StrUtil.isEmpty(permissions)) {
+        if (CharSequenceUtil.isEmpty(permissions)) {
             return false;
         }
-        AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (userDetails == null || CollUtil.isEmpty(userDetails.getPermissionList())) {
             return false;
         }
-        Set<String> authorities = userDetails.getPermissionCodeSet();
-        for (String permission : permissions.split(PERMISSION_DELIMETER)) {
+        final Set<String> authorities = userDetails.getPermissionCodeSet();
+        for (final String permission : permissions.split(PERMISSION_DELIMETER)) {
             if (permission != null && hasPermissions(authorities, permission)) {
                 return true;
             }
@@ -102,17 +102,17 @@ public class PermissionVerifyService {
      * @param role 角色键名
      * @return 是否属于该角色
      */
-    public boolean hasRole(final String role) {
-        if (StrUtil.isEmpty(role)) {
+    private boolean hasRole(final String role) {
+        if (CharSequenceUtil.isEmpty(role)) {
             return false;
         }
-        AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (userDetails == null || CollUtil.isEmpty(userDetails.getRoles())) {
             return false;
         }
-        for (UmsRole umsRole : userDetails.getRoles()) {
-            String roleKey = umsRole.getRoleKey();
-            if (SUPER_ADMIN.equals(roleKey) || roleKey.equals(StrUtil.trim(role))) {
+        for (final UmsRole umsRole : userDetails.getRoles()) {
+            final String roleKey = umsRole.getRoleKey();
+            if (SUPER_ADMIN.equals(roleKey) || roleKey.equals(CharSequenceUtil.trim(role))) {
                 return true;
             }
         }
@@ -137,14 +137,14 @@ public class PermissionVerifyService {
      * @return 用户是否具有以下任意一个角色
      */
     public boolean hasAnyRoles(final String roles) {
-        if (StrUtil.isEmpty(roles)) {
+        if (CharSequenceUtil.isEmpty(roles)) {
             return false;
         }
-        AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails userDetails = jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
         if (userDetails == null || CollUtil.isEmpty(userDetails.getRoles())) {
             return false;
         }
-        for (String role : roles.split(ROLE_DELIMETER)) {
+        for (final String role : roles.split(ROLE_DELIMETER)) {
             if (hasRole(role)) {
                 return true;
             }
@@ -162,7 +162,7 @@ public class PermissionVerifyService {
      */
     private boolean hasPermissions(final Set<String> permissions, final String permission) {
         return permissions.contains(ALL_PERMISSION)
-                || permissions.contains(StrUtil.trim(permission));
+                || permissions.contains(CharSequenceUtil.trim(permission));
     }
 
 

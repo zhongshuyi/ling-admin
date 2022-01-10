@@ -18,7 +18,7 @@ public class MallAdminApplication {
      *
      * @param args 参数
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(MallAdminApplication.class, args);
         log.info("(♥◠‿◠)ﾉﾞ  启动成功   ლ(´ڡ`ლ)ﾞ");
     }

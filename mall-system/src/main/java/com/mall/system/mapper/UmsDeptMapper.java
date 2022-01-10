@@ -15,7 +15,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
 @CacheNamespace(
         implementation = MybatisPlusRedisCache.class,
         eviction = MybatisPlusRedisCache.class)
-public interface  UmsDeptMapper extends BaseMapper<UmsDept> {
+public interface UmsDeptMapper extends BaseMapper<UmsDept> {
 
     /**
      * 根据用户id获取部门列表.

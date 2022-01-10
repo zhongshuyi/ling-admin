@@ -30,6 +30,10 @@ public final class RedisUtils {
     private static final RedissonClient CLIENT = SpringUtil.getBean(RedissonClient.class);
 
 
+    private RedisUtils() {
+    }
+
+
     /**
      * 发布通道消息.
      *
@@ -41,7 +45,7 @@ public final class RedisUtils {
     public static <T> void publish(
             final String channelKey, final T msg, final Consumer<T> consumer
     ) {
-        RTopic topic = CLIENT.getTopic(channelKey);
+        final RTopic topic = CLIENT.getTopic(channelKey);
         topic.publish(msg);
         consumer.accept(msg);
     }
@@ -54,7 +58,7 @@ public final class RedisUtils {
      * @param <T>        实体
      */
     public static <T> void publish(final String channelKey, final T msg) {
-        RTopic topic = CLIENT.getTopic(channelKey);
+        final RTopic topic = CLIENT.getTopic(channelKey);
         topic.publish(msg);
     }
 
@@ -69,7 +73,7 @@ public final class RedisUtils {
     public static <T> void subscribe(
             final String channelKey, final Class<T> clazz, final Consumer<T> consumer
     ) {
-        RTopic topic = CLIENT.getTopic(channelKey);
+        final RTopic topic = CLIENT.getTopic(channelKey);
         topic.addListener(clazz, (channel, msg) -> consumer.accept(msg));
     }
 
@@ -95,7 +99,7 @@ public final class RedisUtils {
      */
     public static <T> void setCacheObject(
             final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
-        RBucket<T> result = CLIENT.getBucket(key);
+        final RBucket<T> result = CLIENT.getBucket(key);
         result.set(value);
         result.expire(timeout, timeUnit);
     }
@@ -119,8 +123,8 @@ public final class RedisUtils {
      * @param unit    时间单位
      * @return true=设置成功；false=设置失败
      */
-    public static boolean expire(final String key, final long timeout, final TimeUnit unit) {
-        RBucket<Object> rbucket = CLIENT.getBucket(key);
+    private static boolean expire(final String key, final long timeout, final TimeUnit unit) {
+        final RBucket<Object> rbucket = CLIENT.getBucket(key);
         return rbucket.expire(timeout, unit);
     }
 
@@ -132,7 +136,7 @@ public final class RedisUtils {
      * @return 缓存键值对应的数据
      */
     public static <T> T getCacheObject(final String key) {
-        RBucket<T> rbucket = CLIENT.getBucket(key);
+        final RBucket<T> rbucket = CLIENT.getBucket(key);
         return rbucket.get();
     }
 
@@ -154,7 +158,7 @@ public final class RedisUtils {
      * @param <T>        集合类型
      */
     public static <T> void deleteObject(final Collection<T> collection) {
-        RBatch batch = CLIENT.createBatch();
+        final RBatch batch = CLIENT.createBatch();
         collection.forEach(t -> batch.getBucket(t.toString()).deleteAsync());
         batch.execute();
     }
@@ -168,7 +172,7 @@ public final class RedisUtils {
      * @return 缓存的对象
      */
     public static <T> boolean setCacheList(final String key, final List<T> dataList) {
-        RList<T> list = CLIENT.getList(key);
+        final RList<T> list = CLIENT.getList(key);
         return list.addAll(dataList);
     }
 
@@ -180,7 +184,7 @@ public final class RedisUtils {
      * @return 缓存键值对应的数据
      */
     public static <T> List<T> getCacheList(final String key) {
-        RList<T> list = CLIENT.getList(key);
+        final RList<T> list = CLIENT.getList(key);
         return list.readAll();
     }
 
@@ -193,7 +197,7 @@ public final class RedisUtils {
      * @return 缓存数据的对象
      */
     public static <T> boolean setCacheSet(final String key, final Set<T> dataSet) {
-        RSet<T> set = CLIENT.getSet(key);
+        final RSet<T> set = CLIENT.getSet(key);
         return set.addAll(dataSet);
     }
 
@@ -205,7 +209,7 @@ public final class RedisUtils {
      * @return 值-Set集合
      */
     public static <T> Set<T> getCacheSet(final String key) {
-        RSet<T> set = CLIENT.getSet(key);
+        final RSet<T> set = CLIENT.getSet(key);
         return set.readAll();
     }
 
@@ -218,7 +222,7 @@ public final class RedisUtils {
      */
     public static <T> void setCacheMap(final String key, final Map<String, T> dataMap) {
         if (dataMap != null) {
-            RMap<String, T> map = CLIENT.getMap(key);
+            final RMap<String, T> map = CLIENT.getMap(key);
             map.putAll(dataMap);
         }
     }
@@ -231,7 +235,7 @@ public final class RedisUtils {
      * @return map对象
      */
     public static <T> Map<String, T> getCacheMap(final String key) {
-        RMap<String, T> map = CLIENT.getMap(key);
+        final RMap<String, T> map = CLIENT.getMap(key);
         return map.getAll(map.keySet());
     }
 
@@ -244,7 +248,7 @@ public final class RedisUtils {
      * @param value   值
      */
     public static <T> void setCacheMapValue(final String key, final String hashKey, final T value) {
-        RMap<String, T> map = CLIENT.getMap(key);
+        final RMap<String, T> map = CLIENT.getMap(key);
         map.put(hashKey, value);
     }
 
@@ -257,7 +261,7 @@ public final class RedisUtils {
      * @return Hash中的对象
      */
     public static <T> T getCacheMapValue(final String key, final String hashKey) {
-        RMap<String, T> map = CLIENT.getMap(key);
+        final RMap<String, T> map = CLIENT.getMap(key);
         return map.get(hashKey);
     }
 
@@ -272,7 +276,7 @@ public final class RedisUtils {
      */
     public static <K, V> Map<K, V> getMultiCacheMapValue(
             final String key, final Set<K> hashKeys) {
-        RMap<K, V> map = CLIENT.getMap(key);
+        final RMap<K, V> map = CLIENT.getMap(key);
         return map.getAll(hashKeys);
     }
 
@@ -283,7 +287,7 @@ public final class RedisUtils {
      * @return 对象列表
      */
     public static Collection<String> keys(final String pattern) {
-        Iterable<String> iterable = CLIENT.getKeys().getKeysByPattern(pattern);
+        final Iterable<String> iterable = CLIENT.getKeys().getKeysByPattern(pattern);
         return CollUtil.newArrayList(iterable);
     }
 }

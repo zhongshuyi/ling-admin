@@ -32,29 +32,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /**
      * 用户服务.
      */
-    private final transient IUmsAdminService umsAdminService;
+    private final IUmsAdminService umsAdminService;
 
     /**
      * 部门服务.
      */
-    private final transient IUmsDeptService umsDeptService;
+    private final IUmsDeptService umsDeptService;
 
     /**
      * 权限服务.
      */
-    private final transient PermissionService permissionService;
+    private final PermissionService permissionService;
 
     /**
      * 角色服务.
      */
-    private final transient IUmsRoleService umsRoleService;
+    private final IUmsRoleService umsRoleService;
 
     @Override
     public final UserDetails loadUserByUsername(
             final String username
     ) throws UsernameNotFoundException {
         log.info(username + "尝试登录");
-        UmsAdmin umsAdmin = umsAdminService.getUmsAdminByUserName(username);
+        final UmsAdmin umsAdmin = umsAdminService.getUmsAdminByUserName(username);
         if (umsAdmin == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
@@ -65,8 +65,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessErrorException(BusinessExceptionMsgEnum.ACCOUNT_DISABLE);
         }
-        List<UmsRole> roles = umsRoleService.selectRoleListByUserId(umsAdmin.getId());
-        roles.forEach((r) -> {
+        final List<UmsRole> roles = umsRoleService.selectRoleListByUserId(umsAdmin.getId());
+        roles.forEach(r -> {
             if (r.getStatus().equals(Status.DISABLE.getCode())) {
                 log.info("登录用户：{} 角色{}已被停用.", username, r.getRoleName());
                 throw new BusinessErrorException(BusinessExceptionMsgEnum.ROLE_DISABLE);

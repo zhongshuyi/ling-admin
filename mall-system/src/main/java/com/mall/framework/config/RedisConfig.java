@@ -39,9 +39,9 @@ public class RedisConfig {
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisson() throws IOException {
-        Config config = Config.fromYAML(
+        final Config config = Config.fromYAML(
                 Thread.currentThread().getContextClassLoader().getResource("redisson-config.yml"));
-        RedissonClient redissonClient = Redisson.create(config);
+        final RedissonClient redissonClient = Redisson.create(config);
         log.info("初始化 redis 配置");
         return redissonClient;
     }
@@ -54,7 +54,7 @@ public class RedisConfig {
      */
     @Bean
     public CacheManager cacheManager(final RedissonClient redissonClient) {
-        Map<String, CacheConfig> config = new HashMap<>(16);
+        final Map<String, CacheConfig> config = new HashMap<>(16);
         return new RedissonSpringCacheManager(redissonClient, config, JsonJacksonCodec.INSTANCE);
     }
 }

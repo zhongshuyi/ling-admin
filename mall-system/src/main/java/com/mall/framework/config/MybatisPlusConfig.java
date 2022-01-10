@@ -35,7 +35,7 @@ public class MybatisPlusConfig {
     /**
      * 数据权限拦截器.
      */
-    private final transient DataScopeInterceptor dataScopeInterceptor;
+    private final DataScopeInterceptor dataScopeInterceptor;
 
     /**
      * 插件配置.
@@ -45,7 +45,7 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         log.info("mybatisPlus 插件加载");
-        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        final MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         // 数据权限
         interceptor.addInnerInterceptor(dataScopeInterceptor);
         // 分页插件
@@ -63,8 +63,8 @@ public class MybatisPlusConfig {
      *
      * @return 分页插件配置
      */
-    public PaginationInnerInterceptor paginationInnerInterceptor() {
-        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
+    private PaginationInnerInterceptor paginationInnerInterceptor() {
+        final PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         // 设置最大单页限制数量，默认 500 条，-1 不受限制
         paginationInnerInterceptor.setMaxLimit(-1L);
         // 分页合理化
@@ -78,7 +78,7 @@ public class MybatisPlusConfig {
      *
      * @return 乐观锁插件配置
      */
-    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+    private OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
         return new OptimisticLockerInnerInterceptor();
     }
 
@@ -88,7 +88,7 @@ public class MybatisPlusConfig {
      *
      * @return 全表操作拦截器
      */
-    public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
+    private BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
         return new BlockAttackInnerInterceptor();
     }
 
@@ -118,7 +118,7 @@ public class MybatisPlusConfig {
                     final Class<?> mapperClass,
                     final TableInfo tableInfo
             ) {
-                List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
+                final List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
                 methodList.add(new InsertAll());
                 return methodList;
             }

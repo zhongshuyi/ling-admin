@@ -18,7 +18,7 @@ public class ResourcesConfig implements WebMvcConfigurer {
     /**
      * 重复提交拦截器.
      */
-    private final transient BaseRepeatSubmitInterceptor repeatSubmitInterceptor;
+    private final BaseRepeatSubmitInterceptor repeatSubmitInterceptor;
 
     /**
      * 自定义拦截规则.

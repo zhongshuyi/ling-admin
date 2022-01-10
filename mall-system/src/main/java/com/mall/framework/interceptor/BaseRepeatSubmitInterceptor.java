@@ -27,16 +27,14 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
             @NonNull final HttpServletResponse response,
             @NonNull final Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
-            RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
-            if (annotation != null) {
-                if (this.isRepeatSubmit(request)) {
-                    CommonResult<Void> ajaxResult = CommonResult.failed("不允许重复提交，请稍后再试");
-                    ServletUtils.renderString(
-                            response, new ObjectMapper().writeValueAsString(ajaxResult));
-                    return false;
-                }
+            final HandlerMethod handlerMethod = (HandlerMethod) handler;
+            final Method method = handlerMethod.getMethod();
+            final RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
+            if (annotation != null && this.isRepeatSubmit(request)) {
+                final CommonResult<Void> ajaxResult = CommonResult.failed("不允许重复提交，请稍后再试");
+                ServletUtils.renderString(
+                        response, new ObjectMapper().writeValueAsString(ajaxResult));
+                return false;
             }
             return true;
         } else {

@@ -44,12 +44,12 @@ public class DeptController extends BaseController {
     /**
      * 部门操作服务.
      */
-    private final transient IUmsDeptService umsDeptService;
+    private final IUmsDeptService umsDeptService;
 
     /**
      * 菜单权限操作服务.
      */
-    private final transient IUmsMenuService umsMenuService;
+    private final IUmsMenuService umsMenuService;
 
     /**
      * 获取部门树.
@@ -59,7 +59,7 @@ public class DeptController extends BaseController {
     @GetMapping
     @ApiOperation(value = "获取部门列表")
     public CommonResult<List<Tree<Long>>> getDeptVoList() {
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("orderNo");
         treeNodeConfig.setNameKey("deptName");
         return CommonResult.success(
@@ -89,7 +89,7 @@ public class DeptController extends BaseController {
     public CommonResult<Void> addDept(
             @Validated(ValidationGroups.Add.class)
             @RequestBody final DeptBo addBo) {
-        if (umsDeptService.checkDeptUnique(addBo)) {
+        if (Boolean.TRUE.equals(umsDeptService.checkDeptUnique(addBo))) {
             return CommonResult.failed("部门'" + addBo.getDeptName() + "' 已存在");
         } else {
             return toAjax(umsDeptService.addDept(addBo));
@@ -117,7 +117,7 @@ public class DeptController extends BaseController {
     @PutMapping
     @ApiOperation(value = "更改部门")
     public CommonResult<Void> editDept(@RequestBody final DeptBo dept) {
-        if (umsDeptService.checkDeptUnique(dept)) {
+        if (Boolean.TRUE.equals(umsDeptService.checkDeptUnique(dept))) {
             return CommonResult.failed("部门'" + dept.getDeptName() + "' 已存在");
         } else {
             return toAjax(umsDeptService.updateById(BeanUtil.toBean(dept, UmsDept.class)));

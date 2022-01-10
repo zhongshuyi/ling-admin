@@ -23,7 +23,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
     /**
      * 储存request信息.
      */
-    private final transient byte[] body;
+    private final byte[] body;
 
     /**
      * 获取信息并储存.
@@ -72,7 +72,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
 
             @Override
             public void setReadListener(final ReadListener readListener) {
-
+                // 不设置监听器
             }
         };
     }

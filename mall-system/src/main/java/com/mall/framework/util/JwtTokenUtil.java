@@ -2,7 +2,7 @@ package com.mall.framework.util;
 
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.mall.common.util.RedisUtils;
@@ -83,7 +83,7 @@ public class JwtTokenUtil implements Serializable {
      */
     public String generateToken(final AdminUserDetails user) {
         // 生成存储到redis中的键名
-        String uuid = UUID.fastUUID().toString();
+        final String uuid = UUID.fastUUID().toString();
         user.setUuid(uuid);
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(expiration * MILLIS_MINUTE);
@@ -91,7 +91,7 @@ public class JwtTokenUtil implements Serializable {
         log.info("过期时间:" + expiration);
         RedisUtils.setCacheObject(
                 getTokenKey(uuid), user, expiration, TimeUnit.MINUTES);
-        Map<String, Object> claims = new HashMap<>(1);
+        final Map<String, Object> claims = new HashMap<>(1);
         claims.put(userKey, uuid);
         return generateToken(claims);
     }
@@ -102,7 +102,7 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return 是否有效
      */
-    public boolean validationToken(final String token) {
+    private boolean validationToken(final String token) {
         return JWTUtil.verify(token, secret.getBytes());
     }
 
@@ -115,7 +115,7 @@ public class JwtTokenUtil implements Serializable {
      */
     private String getToken(final HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
-        if (StrUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
+        if (CharSequenceUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
             token = token.replace(tokenPrefix, "");
         }
         return token;
@@ -129,12 +129,12 @@ public class JwtTokenUtil implements Serializable {
      */
     public AdminUserDetails getAdminUserDetails(
             final HttpServletRequest request) {
-        String token = getToken(request);
+        final String token = getToken(request);
         // 检查token是否被篡改
-        if (StrUtil.isNotEmpty(token) && validationToken(token)) {
+        if (CharSequenceUtil.isNotEmpty(token) && validationToken(token)) {
             // 解析token获取存的负载对象
             final JWT jwt = JWTUtil.parseToken(token);
-            String uuid = jwt.getPayload(userKey).toString();
+            final String uuid = jwt.getPayload(userKey).toString();
             return RedisUtils.getCacheObject(getTokenKey(uuid));
         }
         return null;
@@ -147,8 +147,8 @@ public class JwtTokenUtil implements Serializable {
      * @param user 用户信息 包含uuid
      */
     public void refreshToken(final AdminUserDetails user) {
-        long expireTime = user.getExpireTime();
-        long currentTime = System.currentTimeMillis();
+        final long expireTime = user.getExpireTime();
+        final long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
             user.setLoginTime(System.currentTimeMillis());
             user.setExpireTime(
@@ -166,7 +166,7 @@ public class JwtTokenUtil implements Serializable {
      * @return 是否删除成功
      */
     public boolean delUser(final String uuid) {
-        if (StrUtil.isNotEmpty(uuid)) {
+        if (CharSequenceUtil.isNotEmpty(uuid)) {
             return RedisUtils.deleteObject(getTokenKey(uuid));
         }
         return false;
@@ -178,7 +178,7 @@ public class JwtTokenUtil implements Serializable {
      * @param user 用户信息
      */
     public void setUser(final AdminUserDetails user) {
-        if (user != null && StrUtil.isNotEmpty(user.getUuid())) {
+        if (user != null && CharSequenceUtil.isNotEmpty(user.getUuid())) {
             refreshToken(user);
         }
     }

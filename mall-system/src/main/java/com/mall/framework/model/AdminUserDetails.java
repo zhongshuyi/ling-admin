@@ -10,6 +10,7 @@ import com.mall.system.entity.UmsRole;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -92,7 +93,7 @@ public class AdminUserDetails implements UserDetails, Serializable {
         this.permissionList = permissionList;
         this.roles = umsRoles;
         this.depts = depts;
-        if (umsAdmin.getIsAdmin()) {
+        if (Boolean.TRUE.equals(umsAdmin.getIsAdmin())) {
             this.permissionCodeSet = new HashSet<>(1);
             this.permissionCodeSet.add("*:*:*");
         } else {
@@ -109,11 +110,11 @@ public class AdminUserDetails implements UserDetails, Serializable {
     @JsonIgnore
     public List<Map<String, String>> getRoleKey() {
         if (CollUtil.isEmpty(roles)) {
-            return null;
+            return Collections.emptyList();
         }
-        List<Map<String, String>> list = new ArrayList<>();
-        for (UmsRole role : roles) {
-            Map<String, String> map = new HashMap<>(2);
+        final List<Map<String, String>> list = new ArrayList<>();
+        for (final UmsRole role : roles) {
+            final Map<String, String> map = new HashMap<>(2);
             map.put("roleName", role.getRoleName());
             map.put("value", role.getRoleKey());
             list.add(map);
@@ -124,7 +125,7 @@ public class AdminUserDetails implements UserDetails, Serializable {
     @Override
     public final Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

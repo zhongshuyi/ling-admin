@@ -1,6 +1,6 @@
 package com.mall.common.core.mybatisplus.methods;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
@@ -35,11 +35,11 @@ public class InsertAll extends AbstractMethod {
         final String fieldSql = prepareFieldSql(tableInfo);
         final String valueSql = prepareValuesSqlForMysqlBatch(tableInfo);
         KeyGenerator keyGenerator = new NoKeyGenerator();
-        String sqlMethod = "insertAll";
+        final String sqlMethod = "insertAll";
         String keyProperty = null;
         String keyColumn = null;
         // 表包含主键处理逻辑,如果不包含主键当普通字段处理
-        if (StrUtil.isNotBlank(tableInfo.getKeyProperty())) {
+        if (CharSequenceUtil.isNotBlank(tableInfo.getKeyProperty())) {
             if (tableInfo.getIdType() == IdType.AUTO) {
                 // 自增主键
                 keyGenerator = new Jdbc3KeyGenerator();
@@ -55,7 +55,7 @@ public class InsertAll extends AbstractMethod {
             }
         }
         final String sqlResult = String.format(sql, tableInfo.getTableName(), fieldSql, valueSql);
-        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
+        final SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
         return this.addInsertMappedStatement(
                 mapperClass, modelClass, sqlMethod,
                 sqlSource, keyGenerator, keyProperty, keyColumn);
@@ -69,8 +69,8 @@ public class InsertAll extends AbstractMethod {
      * @return 列名
      */
     private String prepareFieldSql(final TableInfo tableInfo) {
-        StringBuilder fieldSql = new StringBuilder();
-        if (StrUtil.isNotBlank(tableInfo.getKeyColumn())) {
+        final StringBuilder fieldSql = new StringBuilder();
+        if (CharSequenceUtil.isNotBlank(tableInfo.getKeyColumn())) {
             fieldSql.append(tableInfo.getKeyColumn()).append(",");
         }
         tableInfo.getFieldList().forEach(x -> fieldSql.append(x.getColumn()).append(","));
@@ -90,14 +90,14 @@ public class InsertAll extends AbstractMethod {
         final StringBuilder valueSql = new StringBuilder();
         valueSql.append("<foreach collection=\"list\" item=\"item\" index=\"index\""
                 + " open=\"(\" separator=\"),(\" close=\")\">");
-        if (StrUtil.isNotBlank(tableInfo.getKeyColumn())) {
+        if (CharSequenceUtil.isNotBlank(tableInfo.getKeyColumn())) {
             valueSql.append("\n#{item.").append(tableInfo.getKeyProperty()).append("},\n");
         }
-        List<TableFieldInfo> fieldList = tableInfo.getFieldList();
-        int last = fieldList.size() - 1;
+        final List<TableFieldInfo> fieldList = tableInfo.getFieldList();
+        final int last = fieldList.size() - 1;
         for (int i = 0; i < fieldList.size(); i++) {
-            String property = fieldList.get(i).getProperty();
-            if (!StrUtil.equalsAny(property, FILL_PROPERTY)) {
+            final String property = fieldList.get(i).getProperty();
+            if (!CharSequenceUtil.equalsAny(property, FILL_PROPERTY)) {
                 valueSql.append("<if test=\"item.").append(property).append(" != null\">");
                 valueSql.append("#{item.").append(property).append("}");
                 if (i != last) {

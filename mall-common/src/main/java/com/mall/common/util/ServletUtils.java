@@ -28,8 +28,8 @@ public final class ServletUtils {
      *
      * @return RequestAttributes
      */
-    public static ServletRequestAttributes getRequestAttributes() {
-        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+    private static ServletRequestAttributes getRequestAttributes() {
+        final RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }
 
@@ -72,7 +72,7 @@ public final class ServletUtils {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.error("错误", e);
         }
     }

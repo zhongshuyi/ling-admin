@@ -1,6 +1,6 @@
 package com.mall.framework.security.handle;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.util.ServletUtils;
@@ -31,7 +31,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint, S
             final HttpServletResponse response,
             final AuthenticationException e)
             throws IOException {
-        String msg = StrUtil.format("请求访问：{},未登录或token已过期", request.getRequestURI());
+        final String msg = CharSequenceUtil.format("请求访问：{},未登录或token已过期", request.getRequestURI());
         ServletUtils.renderString(response,
                 new ObjectMapper().writeValueAsString(CommonResult.unauthorized(msg)));
         log.warn("未登录或已过期 : " + "ip: "

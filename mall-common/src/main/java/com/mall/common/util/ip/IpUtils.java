@@ -18,7 +18,7 @@ public final class IpUtils {
     /**
      * 未知地址.
      */
-    public static final String UNKNOWN = "unknown";
+    private static final String UNKNOWN = "unknown";
 
     private IpUtils() {
     }
@@ -31,7 +31,7 @@ public final class IpUtils {
      */
     public static String getIpAdder(final HttpServletRequest request) {
         if (request == null) {
-            return "unknown";
+            return UNKNOWN;
         }
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {

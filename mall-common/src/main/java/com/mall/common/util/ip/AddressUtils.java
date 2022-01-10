@@ -1,8 +1,8 @@
 package com.mall.common.util.ip;
 
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,12 +20,12 @@ public final class AddressUtils {
     /**
      * IP地址查询网站.
      */
-    public static final String IP_URL = "https://whois.pconline.com.cn/ipJson.jsp";
+    private static final String IP_URL = "https://whois.pconline.com.cn/ipJson.jsp";
 
     /**
      * 未知地址.
      */
-    public static final String UNKNOWN = "XX XX";
+    private static final String UNKNOWN = "XX XX";
 
 
     private AddressUtils() {
@@ -43,18 +43,18 @@ public final class AddressUtils {
             return "内网IP";
         }
         try {
-            String rspStr = HttpUtil.get(
+            final String rspStr = HttpUtil.get(
                     IP_URL + "?ip=" + ip + "&json=true", CharsetUtil.CHARSET_GBK);
-            if (StrUtil.isEmpty(rspStr)) {
+            if (CharSequenceUtil.isEmpty(rspStr)) {
                 log.error("获取地理位置异常 {}", ip);
                 return UNKNOWN;
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode root = objectMapper.readTree(rspStr);
-            String region = root.get("pro").asText();
-            String city = root.get("city").asText();
+            final ObjectMapper objectMapper = new ObjectMapper();
+            final JsonNode root = objectMapper.readTree(rspStr);
+            final String region = root.get("pro").asText();
+            final String city = root.get("city").asText();
             return String.format("%s %s", region, city);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("获取地理位置异常 {}", ip);
         }
         return UNKNOWN;

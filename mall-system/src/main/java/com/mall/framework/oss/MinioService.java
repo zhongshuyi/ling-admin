@@ -10,7 +10,7 @@ import io.minio.RemoveObjectArgs;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import javax.servlet.http.HttpServletResponse;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
  **/
 
 @Slf4j
-@Data
+@Getter
 @Service
 @RequiredArgsConstructor
 public class MinioService {
@@ -33,7 +33,7 @@ public class MinioService {
     /**
      * minio操作对象.
      */
-    private final transient MinioClient minioClient;
+    private final MinioClient minioClient;
 
     /**
      * minio地址.
@@ -54,7 +54,7 @@ public class MinioService {
      */
     @SneakyThrows(Exception.class)
     public void createBucket(final String bucketName) {
-        boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+        final boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         if (!isExist) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         }
@@ -64,19 +64,13 @@ public class MinioService {
     /**
      * 文件上传.
      *
-     * @param fileName 文件名
-     * @param stream   文件流
-     * @return 下载地址
+     * @param fileName    文件名
+     * @param stream      文件流
+     * @param contentType 请求头
      */
     @SneakyThrows(Exception.class)
-    public String upload(final String fileName, final InputStream stream) {
-        minioClient.putObject(
-                PutObjectArgs.builder()
-                        .object(fileName)
-                        .bucket(bucketName)
-                        .stream(stream, stream.available(), -1)
-                        .build());
-        return  bucketName + "/" + fileName;
+    public void upload(final String fileName, final InputStream stream, final String contentType) {
+        minioClient.putObject(PutObjectArgs.builder().object(fileName).bucket(bucketName).contentType(contentType).stream(stream, stream.available(), -1).build());
     }
 
 
@@ -87,11 +81,7 @@ public class MinioService {
      */
     @SneakyThrows(Exception.class)
     public void deleteFile(final String fileName) {
-        minioClient.removeObject(
-                RemoveObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(fileName)
-                        .build());
+        minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(fileName).build());
     }
 
     /**
@@ -105,12 +95,7 @@ public class MinioService {
         response.setContentType("application/force-download");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-        GetObjectResponse getOutputStream = minioClient.getObject(
-                GetObjectArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .object(fileName)
-                        .build());
+        final GetObjectResponse getOutputStream = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
         IOUtils.copy(getOutputStream, response.getOutputStream());
         getOutputStream.close();
     }

@@ -6,6 +6,7 @@ import com.mall.system.bo.UserBo;
 import com.mall.system.entity.UmsAdmin;
 import com.mall.system.vo.UserVo;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户信息表 服务类.
@@ -43,4 +44,14 @@ public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
     PagePlus<UmsAdmin, UserVo> getUserListPage(
             PagePlus<UmsAdmin, UserVo> pagePlus, UserBo bo
     );
+
+    /**
+     * 上传头像.
+     *
+     * @param id         用户id
+     * @param file       头像文件
+     * @param uploadById 上传人id
+     * @return 是否成功
+     */
+    Boolean uploadAvatar(Long id, MultipartFile file, final Long uploadById);
 }

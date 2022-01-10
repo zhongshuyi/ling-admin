@@ -71,15 +71,15 @@ public class UmsMenuServiceImpl
 
     @Override
     public final Boolean addByAddBo(final MenuBo menuBo) {
-        UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
+        final UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
         return save(menu);
     }
 
     @Override
     public final Boolean deleteById(final Long id) {
-        List<UmsMenu> list = getMenuChildren(id);
+        final List<UmsMenu> list = getMenuChildren(id);
         if (CollUtil.isNotEmpty(list)) {
-            for (UmsMenu menu : list) {
+            for (final UmsMenu menu : list) {
                 deleteById(menu.getId());
             }
         }
@@ -110,8 +110,8 @@ public class UmsMenuServiceImpl
 
     @Override
     public final Boolean setDeptPerm(final Long deptId, final Set<Long> newIds) {
-        Set<Long> oldIds = getBaseMapper().getDeptPerm(deptId);
-        Set<Long> result = new HashSet<>(oldIds);
+        final Set<Long> oldIds = getBaseMapper().getDeptPerm(deptId);
+        final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptPerm(deptId, result) == result.size();
         result.clear();
@@ -127,8 +127,8 @@ public class UmsMenuServiceImpl
 
     @Override
     public final Boolean setRolePerm(final Long roleId, final Set<Long> newIds) {
-        Set<Long> oldIds = getBaseMapper().getRolePerm(roleId);
-        Set<Long> result = new HashSet<>(oldIds);
+        final Set<Long> oldIds = getBaseMapper().getRolePerm(roleId);
+        final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delRolePerm(roleId, result) == result.size();
         result.clear();

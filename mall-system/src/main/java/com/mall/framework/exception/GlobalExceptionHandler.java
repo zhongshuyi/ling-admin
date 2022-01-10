@@ -51,10 +51,10 @@ public class GlobalExceptionHandler {
             final MethodArgumentNotValidException ex
     ) {
         log.error(ex.getMessage(), ex);
-        BindingResult result = ex.getBindingResult();
-        StringBuilder errorMsg = new StringBuilder();
+        final BindingResult result = ex.getBindingResult();
+        final StringBuilder errorMsg = new StringBuilder();
         if (result.hasErrors()) {
-            List<FieldError> fieldErrors = result.getFieldErrors();
+            final List<FieldError> fieldErrors = result.getFieldErrors();
             fieldErrors.forEach(error -> errorMsg.append(error.getDefaultMessage()).append("!"));
         }
         log.error("参数验证异常,{}", ex.getMessage());

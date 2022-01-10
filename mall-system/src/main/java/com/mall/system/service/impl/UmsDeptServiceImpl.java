@@ -34,15 +34,15 @@ public class UmsDeptServiceImpl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addDept(final DeptBo addBo) {
-        UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
-        UmsDept parent = getBaseMapper()
+        final UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
+        final UmsDept parent = getBaseMapper()
                 .selectOne(Wrappers.<UmsDept>lambdaQuery()
                         .eq(UmsDept::getId, dept.getParentId())
                         .select(UmsDept::getId, UmsDept::getParentList));
         dept.setParentList(parent.getParentList() + parent.getId() + ",");
-        Boolean isSave = save(dept);
+        final Boolean isSave = save(dept);
         dept.setParentList(dept.getParentList() + dept.getId() + ",");
-        Boolean isUpdate = updateById(dept);
+        final Boolean isUpdate = updateById(dept);
         return isSave && isUpdate;
     }
 
@@ -72,10 +72,10 @@ public class UmsDeptServiceImpl
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteById(final Long id) {
         boolean isDeleted = true;
-        List<UmsDept> list = getDeptChildren(id);
+        final List<UmsDept> list = getDeptChildren(id);
         if (CollUtil.isNotEmpty(list)) {
-            for (UmsDept dept : list) {
-                if (!deleteById(dept.getId())) {
+            for (final UmsDept dept : list) {
+                if (Boolean.FALSE.equals(deleteById(dept.getId()))) {
                     isDeleted = false;
                 }
             }

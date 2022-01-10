@@ -23,13 +23,13 @@ public class LoginService {
     /**
      * jwt工具类.
      */
-    private final transient JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * 认证管理器.
      */
     @Resource
-    private transient AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     /**
      * 登录验证.
@@ -41,18 +41,18 @@ public class LoginService {
     public String login(final String username, final String password) {
 
         // 用户验证
-        Authentication authentication;
+        final Authentication authentication;
 
         try {
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (BadCredentialsException e) {
+        } catch (final BadCredentialsException e) {
             throw new BusinessErrorException(HttpStatus.HTTP_FORBIDDEN, "用户名或密码错误", e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new BusinessErrorException(e);
         }
-        AdminUserDetails adminUserDetails = (AdminUserDetails) authentication.getPrincipal();
+        final AdminUserDetails adminUserDetails = (AdminUserDetails) authentication.getPrincipal();
 
         return jwtTokenUtil.generateToken(adminUserDetails);
     }

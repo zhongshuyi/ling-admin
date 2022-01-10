@@ -15,4 +15,9 @@ import org.springframework.stereotype.Service;
 public class UmsFileServiceImpl
         extends ServiceImpl<UmsFileMapper, UmsFile>
         implements IUmsFileService {
+
+    @Override
+    public final UmsFile getUserAvatar(final Long userId) {
+        return getBaseMapper().getUserAvatar(userId);
+    }
 }
