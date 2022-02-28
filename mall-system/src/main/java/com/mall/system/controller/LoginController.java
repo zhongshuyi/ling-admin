@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,13 +55,17 @@ public class LoginController {
     /**
      * 登录接口.
      *
-     * @param user 登录用户接收类
+     * @param user    登录用户接收类
+     * @param request 请求信息
      * @return token
      */
     @PostMapping("/login")
     @ApiOperation("登录接口")
-    public CommonResult<Map<String, String>> login(@RequestBody final LoginBody user) {
-        final String token = loginService.login(user.getUsername(), user.getPassword());
+    public CommonResult<Map<String, String>> login(
+            @RequestBody final LoginBody user,
+            final HttpServletRequest request
+    ) {
+        final String token = loginService.login(user.getUsername(), user.getPassword(), request);
         final Map<String, String> map = new HashMap<>(1);
         map.put("token", token);
         return CommonResult.success(map);

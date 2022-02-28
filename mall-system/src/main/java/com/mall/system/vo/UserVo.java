@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -82,6 +83,18 @@ public class UserVo {
      */
     @ApiModelProperty("负责的部门")
     private String departIds;
+
+    /**
+     * 角色id集合.
+     */
+    @ApiModelProperty("角色id集合")
+    private List<Long> roleIds;
+
+    /**
+     * 部门id集合.
+     */
+    @ApiModelProperty("部门id集合")
+    private List<Long> deptIds;
 
     /**
      * 最后登录IP.

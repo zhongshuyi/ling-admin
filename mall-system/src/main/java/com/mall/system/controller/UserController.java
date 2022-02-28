@@ -7,10 +7,15 @@ import com.mall.common.core.mybatisplus.util.PageUtils;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.system.bo.UserBo;
+import com.mall.system.entity.UmsDept;
+import com.mall.system.entity.UmsRole;
 import com.mall.system.service.IUmsAdminService;
+import com.mall.system.service.IUmsDeptService;
+import com.mall.system.service.IUmsRoleService;
 import com.mall.system.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +48,16 @@ public class UserController extends BaseController {
     private final IUmsAdminService umsAdminService;
 
     /**
+     * 部门服务.
+     */
+    private final IUmsDeptService umsDeptService;
+
+    /**
+     * 角色服务.
+     */
+    private final IUmsRoleService umsRoleService;
+
+    /**
      * jwt工具类.
      */
     private final JwtTokenUtil jwtTokenUtil;
@@ -56,7 +71,10 @@ public class UserController extends BaseController {
     @GetMapping
     @ApiOperation(value = "分页获取用户列表")
     public CommonResult<PageInfo<UserVo>> getUserList(@Validated(ValidationGroups.Query.class) final UserBo user) {
-        return CommonResult.success(PageUtils.buildPageInfo(umsAdminService.getUserListPage(PageUtils.buildPagePlus(), user)));
+        return CommonResult.success(
+                PageUtils.buildPageInfo(
+                        umsAdminService.getUserListPage(
+                                PageUtils.buildPagePlus(), user)));
     }
 
     /**
@@ -67,11 +85,23 @@ public class UserController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation("获取用户详细信息")
-    public CommonResult<UserVo> getUser(@PathVariable final Long id) {
-        return null;
+    public CommonResult<UserVo> getUserById(@PathVariable final Long id) {
+        final UserVo userVo = umsAdminService.getVoById(id);
+        userVo.setRoleIds(
+                umsRoleService
+                        .selectRoleListByUserId(id)
+                        .stream()
+                        .map(UmsRole::getId)
+                        .collect(Collectors.toList()));
+        userVo.setDeptIds(
+                umsDeptService
+                        .getDeptListByUserId(id)
+                        .stream()
+                        .map(UmsDept::getId)
+                        .collect(Collectors.toList()));
+        return CommonResult.success(userVo);
     }
-
-
+    
     /**
      * 增加用户接口.
      *

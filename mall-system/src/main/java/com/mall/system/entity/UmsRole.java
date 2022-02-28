@@ -2,6 +2,7 @@ package com.mall.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mall.common.core.domain.BaseEntity;
 import java.io.Serializable;
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UmsRole extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

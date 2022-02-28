@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.16.4</version>
+            <version>3.16.8</version>
         </dependency>
 
         <!--SpringBoot web 提供Web开发场景所需的底层所有依赖 -->
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.3.4</version>
+            <version>8.3.5</version>
         </dependency>
 
         <dependency>

@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
      * @return 通用返回
      */
     @ExceptionHandler(BusinessErrorException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.OK)
     public CommonResult<Void> handleBusinessError(final BusinessErrorException ex) {
         log.error(ex.getMessage(), ex.getException());
         return CommonResult.failed(ex.getCode(), ex.getMessage());

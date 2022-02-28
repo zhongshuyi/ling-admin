@@ -15,6 +15,7 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializable {
+    
 
     /**
      * 检查角色的标识是否唯一.

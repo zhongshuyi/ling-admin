@@ -55,7 +55,6 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      */
     private static final String AVATAR_PATH = "img/avatar";
 
-
     /**
      * minIo服务.
      */
@@ -66,13 +65,19 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      * 文件表服务.
      */
     @Getter
-    private final transient IUmsFileService fileService;
+    private final IUmsFileService fileService;
 
     @Override
     public final UmsAdmin getUmsAdminByUserName(final String userName) {
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminByUserName(userName);
         if (umsAdmin != null && umsAdmin.getAvatar() != null) {
-            umsAdmin.setAvatar(getMinIoService().getMinioUrl() + "/" + getMinIoService().getBucketName() + "/" + umsAdmin.getAvatar());
+            umsAdmin.setAvatar(
+                    getMinIoService()
+                            .getMinioUrl()
+                            + "/"
+                            + getMinIoService().getBucketName()
+                            + "/"
+                            + umsAdmin.getAvatar());
         }
         return umsAdmin;
     }
@@ -80,21 +85,38 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     @Override
     public final List<UmsAdmin> getUserListByRoleId(final Long roleId) {
         final List<UmsAdmin> list = getBaseMapper().getUserListByRoleId(roleId);
-        list.forEach(u -> u.setAvatar(getMinIoService().getMinioUrl() + "/" + getMinIoService().getBucketName() + "/" + u.getAvatar()));
+        list.forEach(
+                u -> u.setAvatar(
+                        getMinIoService().getMinioUrl()
+                                + "/"
+                                + getMinIoService().getBucketName()
+                                + "/"
+                                + u.getAvatar()));
         return list;
     }
 
     @Override
-    public final PagePlus<UmsAdmin, UserVo> getUserListPage(final PagePlus<UmsAdmin, UserVo> pagePlus, final UserBo bo) {
+    public final PagePlus<UmsAdmin, UserVo> getUserListPage(
+            final PagePlus<UmsAdmin, UserVo> pagePlus,
+            final UserBo bo
+    ) {
         PageMethod.startPage((int) pagePlus.getCurrent(), (int) pagePlus.getSize());
         final List<UmsAdmin> list = getBaseMapper().queryUserList(bo);
         final PageInfo<UmsAdmin> pageInfo = new PageInfo<>(list);
-        pageInfo.getList().forEach(u -> u.setAvatar(getMinIoService().getMinioUrl() + "/" + getMinIoService().getBucketName() + "/" + u.getAvatar()));
+        pageInfo.getList()
+                .forEach(u -> u.setAvatar(
+                        getMinIoService()
+                                .getMinioUrl()
+                                + "/"
+                                + getMinIoService().getBucketName()
+                                + "/"
+                                + u.getAvatar()));
         pagePlus.setRecords(pageInfo.getList());
         pagePlus.setRecordsVo(BeanUtil.copyToList(pageInfo.getList(), UserVo.class));
         pagePlus.setTotal(pageInfo.getTotal());
         return pagePlus;
     }
+
 
     /**
      * 上传头像.
@@ -170,7 +192,10 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      * @return true就是唯一的
      */
     private Boolean checkUserNameUnique(final UmsAdmin umsAdmin) {
-        final UmsAdmin user = getOne(Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, umsAdmin.getUsername()).last("limit 1"));
+        final UmsAdmin user = getOne(
+                Wrappers.<UmsAdmin>lambdaQuery()
+                        .eq(UmsAdmin::getUsername, umsAdmin.getUsername())
+                        .last("limit 1"));
         return user != null && !umsAdmin.getId().equals(user.getId());
     }
 }

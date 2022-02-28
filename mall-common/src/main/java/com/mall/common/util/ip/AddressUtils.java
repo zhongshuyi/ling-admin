@@ -27,6 +27,11 @@ public final class AddressUtils {
      */
     private static final String UNKNOWN = "XX XX";
 
+    /**
+     * ipv6A内网ip.
+     */
+    private static final String INTRANET = "0:0:0:0:0:0:0:1";
+
 
     private AddressUtils() {
     }
@@ -39,7 +44,7 @@ public final class AddressUtils {
      */
     public static String getAddressByIp(final String ip) {
         // 内网不查询
-        if (NetUtil.isInnerIP(ip)) {
+        if (INTRANET.equals(ip) || NetUtil.isInnerIP(ip)) {
             return "内网IP";
         }
         try {

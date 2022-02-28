@@ -20,10 +20,8 @@
                avatar_file_id,
                status,
                del_flag,
-               login_ip,
                depart_ids,
                user_identity,
-               login_date,
                u.remark
         from ums_admin u
                  join ums_user_role uur on u.id = uur.user_id
@@ -41,12 +39,9 @@
         avatar_file_id,
         status,
         del_flag,
-        login_ip,
         depart_ids,
         user_identity,
-        login_date,
         u.remark,
-        login_address
         FROM ums_admin u
         join ums_user_dept uud on u.id = uud.user_id
         join ums_dept ud on uud.dept_id = ud.id
@@ -76,11 +71,8 @@
                password,
                status,
                del_flag,
-               login_ip,
                depart_ids,
                user_identity,
-               login_date,
-               login_address,
                u.remark
         from ums_admin u
                  left join ums_file uf on u.avatar_file_id = uf.id

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.mall.common.core.domain.BaseEntity;
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -93,23 +92,8 @@ public class UmsAdmin extends BaseEntity implements Serializable {
     private String departIds;
 
     /**
-     * 最后登录IP.
-     */
-    private Integer loginIp;
-
-    /**
-     * 最后登录时间.
-     */
-    private Date loginDate;
-
-    /**
      * 是否是超级管理员.
      */
     @TableField(exist = false)
     private Boolean isAdmin;
-
-    /**
-     * 最后登录地点.
-     */
-    private String loginAddress;
 }
