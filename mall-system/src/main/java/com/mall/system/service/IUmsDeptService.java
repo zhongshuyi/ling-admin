@@ -5,6 +5,7 @@ import com.mall.system.bo.DeptBo;
 import com.mall.system.entity.UmsDept;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 部门表 服务类.
@@ -52,5 +53,22 @@ public interface IUmsDeptService extends IService<UmsDept>, Serializable {
      * @param userId 用户id
      * @return 部门列表
      */
-    List<UmsDept> getDeptListByUserId(Long userId);
+    List<UmsDept> selectDeptListByUserId(Long userId);
+
+    /**
+     * 根据用户id查询部门id.
+     *
+     * @param userId 用户id
+     * @return 部门id
+     */
+    Set<Long> selectDeptIdsByUserId(Long userId);
+
+    /**
+     * 设置用户的部门.
+     *
+     * @param userId  用户id.
+     * @param deptIds 部门id
+     * @return 是否成功
+     */
+    Boolean setUserDept(Long userId, Set<Long> deptIds);
 }

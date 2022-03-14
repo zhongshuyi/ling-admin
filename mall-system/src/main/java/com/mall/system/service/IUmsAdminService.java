@@ -26,6 +26,14 @@ public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
     UmsAdmin getUmsAdminByUserName(String userName);
 
     /**
+     * 根据id获取用户信息.
+     *
+     * @param id 用户id
+     * @return 用户信息
+     */
+    UmsAdmin getUmsAdminById(Long id);
+
+    /**
      * 根据角色id获取用户列表.
      *
      * @param roleId 角色id
@@ -54,4 +62,20 @@ public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
      * @return 是否成功
      */
     Boolean uploadAvatar(Long id, MultipartFile file, final Long uploadById);
+
+    /**
+     * 获取用户头像地址.
+     *
+     * @param id 用户id
+     * @return 头像地址
+     */
+    String getUserAvatar(Long id);
+
+    /**
+     * 检查用户名是否重复.
+     *
+     * @param umsAdmin 用户信息
+     * @return 是否重复
+     */
+    Boolean checkUsernameUnique(UmsAdmin umsAdmin);
 }

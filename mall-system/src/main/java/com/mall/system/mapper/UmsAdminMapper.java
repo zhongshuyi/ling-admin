@@ -42,4 +42,20 @@ public interface UmsAdminMapper extends BaseMapperPlus<UmsAdmin> {
      * @return 用户信息
      */
     UmsAdmin getUmsAdminByUserName(String userName);
+
+    /**
+     * 根据id查询用户.
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     */
+    UmsAdmin getUmsAdminById(Long userId);
+
+    /**
+     * 获取用户头像地址.
+     *
+     * @param userId 用户id
+     * @return 原始头像地址
+     */
+    String getUserAvatar(Long userId);
 }

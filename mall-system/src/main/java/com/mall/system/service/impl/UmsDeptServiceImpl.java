@@ -8,7 +8,9 @@ import com.mall.system.bo.DeptBo;
 import com.mall.system.entity.UmsDept;
 import com.mall.system.mapper.UmsDeptMapper;
 import com.mall.system.service.IUmsDeptService;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2021-10-08
  */
 @Service
-public class UmsDeptServiceImpl
-        extends ServiceImpl<UmsDeptMapper, UmsDept>
-        implements IUmsDeptService {
+public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> implements IUmsDeptService {
 
     private static final long serialVersionUID = 8302483662294489594L;
 
@@ -35,8 +35,8 @@ public class UmsDeptServiceImpl
     @Transactional(rollbackFor = Exception.class)
     public Boolean addDept(final DeptBo addBo) {
         final UmsDept dept = BeanUtil.toBean(addBo, UmsDept.class);
-        final UmsDept parent = getBaseMapper()
-                .selectOne(Wrappers.<UmsDept>lambdaQuery()
+        final UmsDept parent = getBaseMapper().selectOne(
+                Wrappers.<UmsDept>lambdaQuery()
                         .eq(UmsDept::getId, dept.getParentId())
                         .select(UmsDept::getId, UmsDept::getParentList));
         dept.setParentList(parent.getParentList() + parent.getId() + ",");
@@ -49,12 +49,12 @@ public class UmsDeptServiceImpl
 
     @Override
     public final Boolean checkDeptUnique(final DeptBo addBo) {
-        return
-                getOne(
-                        Wrappers.<UmsDept>lambdaQuery()
-                                .eq(UmsDept::getParentId, addBo.getParentId())
-                                .eq(UmsDept::getDeptName, addBo.getDeptName())
-                ) != null;
+        return getOne(
+                Wrappers.<UmsDept>lambdaQuery()
+                        .eq(UmsDept::getParentId, addBo.getParentId())
+                        .eq(UmsDept::getDeptName, addBo.getDeptName())
+        )
+                != null;
     }
 
     @Override
@@ -84,8 +84,25 @@ public class UmsDeptServiceImpl
     }
 
     @Override
-    public final List<UmsDept> getDeptListByUserId(final Long userId) {
-        return getBaseMapper().getDeptListByUserId(userId);
+    public final List<UmsDept> selectDeptListByUserId(final Long userId) {
+        return getBaseMapper().selectDeptListByUserId(userId);
+    }
+
+    @Override
+    public final Set<Long> selectDeptIdsByUserId(final Long userId) {
+        return getBaseMapper().selectDeptIdsByUserId(userId);
+    }
+
+    @Override
+    public final Boolean setUserDept(final Long userId, final Set<Long> newIds) {
+        final Set<Long> oldIds = getBaseMapper().selectDeptIdsByUserId(userId);
+        final Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().delUserDept(userId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addUserDept(userId, result) == result.size());
     }
 
 }

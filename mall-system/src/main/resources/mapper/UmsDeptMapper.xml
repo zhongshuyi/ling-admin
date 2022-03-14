@@ -2,9 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mall.system.mapper.UmsDeptMapper">
+    <insert id="addUserDept">
+        insert into ums_user_dept values
+        <foreach collection="deptIds" item="id" separator=",">
+            (null,#{userId},#{id})
+        </foreach>
+    </insert>
+    <delete id="delUserDept">
+        delete from ums_user_dept where user_id = #{userId} and dept_id in
+        <foreach collection="deptIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
-    <select id="getDeptListByUserId" resultType="com.mall.system.entity.UmsDept">
-        select id,
+    <select id="selectDeptListByUserId" resultType="com.mall.system.entity.UmsDept">
+        select ums_dept.id,
                parent_id,
                dept_name,
                order_no,
@@ -23,4 +35,12 @@
                  inner join ums_user_dept uud on ums_dept.id = uud.dept_id
         where uud.user_id = #{userId}
     </select>
+    <select id="selectDeptIdsByUserId" resultType="java.lang.Long">
+        select ums_dept.id
+        from ums_dept
+                 inner join ums_user_dept uud on ums_dept.id = uud.dept_id
+        where uud.user_id = #{userId}
+    </select>
+
+
 </mapper>

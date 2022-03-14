@@ -3,12 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mall.system.mapper.UmsAdminMapper">
 
-    <resultMap id="user" type="com.mall.system.entity.UmsAdmin" autoMapping="true"/>
-
-    <resultMap id="count" type="java.lang.Long">
-        <result column="count"/>
-    </resultMap>
-
     <select id="getUserListByRoleId" resultType="com.mall.system.entity.UmsAdmin">
         select u.id,
                username,
@@ -28,6 +22,7 @@
                  left join ums_file uf on u.avatar_file_id = uf.id
         where uur.role_id = #{roleId}
     </select>
+
     <select id="queryUserList" resultType="com.mall.system.entity.UmsAdmin">
         SELECT u.id,
         username,
@@ -41,20 +36,21 @@
         del_flag,
         depart_ids,
         user_identity,
-        u.remark,
+        u.remark
         FROM ums_admin u
         join ums_user_dept uud on u.id = uud.user_id
         join ums_dept ud on uud.dept_id = ud.id
         left join ums_file uf on u.avatar_file_id = uf.id
         <where>
+            u.del_flag = 0
             <if test="deptId!=null">
-                ud.parent_list like CONCAT((select parent_list from ums_dept where id = #{deptId}),'%')
+                and ud.parent_list like CONCAT((select parent_list from ums_dept where id = #{deptId}),'%')
             </if>
             <if test="username!=null and username != ''">
-                username like CONCAT(#{username},'%')
+                and username like CONCAT(#{username},'%')
             </if>
             <if test="realName!=null and realName != ''">
-                real_name like CONCAT(#{realName},'%')
+                and real_name like CONCAT(#{realName},'%')
             </if>
         </where>
         order by u.id
@@ -77,6 +73,32 @@
         from ums_admin u
                  left join ums_file uf on u.avatar_file_id = uf.id
         where u.username = #{username};
+    </select>
+    <select id="getUmsAdminById" resultType="com.mall.system.entity.UmsAdmin">
+        select u.id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
+               password,
+               status,
+               del_flag,
+               depart_ids,
+               user_identity,
+               u.remark
+        from ums_admin u
+                 left join ums_file uf on u.avatar_file_id = uf.id
+        where u.id = #{userId}
+    </select>
+
+    <select id="getUserAvatar" resultType="java.lang.String">
+        select concat(uf.path, '/', uf.name, uf.postfix) as avatar
+        from ums_admin u
+                 left join ums_file uf on u.avatar_file_id = uf.id
+        where u.id = #{userId}
     </select>
 
 

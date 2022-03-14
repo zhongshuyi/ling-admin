@@ -105,12 +105,12 @@ public class UmsMenuServiceImpl
 
     @Override
     public final Set<Long> getDeptPerm(final Long id) {
-        return getBaseMapper().getDeptPerm(id);
+        return getBaseMapper().selectDeptPerm(id);
     }
 
     @Override
     public final Boolean setDeptPerm(final Long deptId, final Set<Long> newIds) {
-        final Set<Long> oldIds = getBaseMapper().getDeptPerm(deptId);
+        final Set<Long> oldIds = getBaseMapper().selectDeptPerm(deptId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptPerm(deptId, result) == result.size();
@@ -122,12 +122,12 @@ public class UmsMenuServiceImpl
 
     @Override
     public final Set<Long> getRolePerm(final Long id) {
-        return getBaseMapper().getRolePerm(id);
+        return getBaseMapper().selectRolePerm(id);
     }
 
     @Override
     public final Boolean setRolePerm(final Long roleId, final Set<Long> newIds) {
-        final Set<Long> oldIds = getBaseMapper().getRolePerm(roleId);
+        final Set<Long> oldIds = getBaseMapper().selectRolePerm(roleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delRolePerm(roleId, result) == result.size();

@@ -41,7 +41,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param id 部门id
      * @return 权限
      */
-    Set<Long> getDeptPerm(Long id);
+    Set<Long> selectDeptPerm(Long id);
 
     /**
      * 增加部门权限.
@@ -86,5 +86,5 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param id 角色id
      * @return 权限
      */
-    Set<Long> getRolePerm(Long id);
+    Set<Long> selectRolePerm(Long id);
 }

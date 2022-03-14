@@ -5,12 +5,27 @@
     <insert id="addDataScope">
         insert into ums_role_dept values
         <foreach collection="permIds" item="id" separator=",">
-            (null,#{roleId},#{deptIds})
+            (null,#{roleId},#{id})
         </foreach>
     </insert>
+
     <delete id="delDataScope">
         delete from ums_role_dept where role_id = #{roleId} and dept_id in
         <foreach collection="deptIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="addUserRole">
+        insert into ums_user_role values
+        <foreach collection="roleIds" item="id" separator=",">
+            (null,#{userId},#{id})
+        </foreach>
+    </insert>
+
+    <delete id="delUserRole">
+        delete from ums_user_role where user_id = #{userId} and role_id in
+        <foreach collection="roleIds" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
@@ -29,9 +44,15 @@
                  inner join ums_user_role ur on r.id = ur.role_id
         WHERE ur.user_id = #{userId}
     </select>
-    <select id="getDataScope" resultType="java.lang.Long">
+    <select id="selectDataScope" resultType="java.lang.Long">
         select distinct dept_id
         from ums_role_dept
         where role_id = #{roleId}
+    </select>
+    <select id="selectRoleIdsByUserId" resultType="java.lang.Long" parameterType="long">
+        select distinct r.id
+        from ums_role r
+                 inner join ums_user_role ur on r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
     </select>
 </mapper>

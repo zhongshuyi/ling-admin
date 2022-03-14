@@ -1,3 +1,7 @@
+app:
+  default-roleId: 2
+  default-deptId: 6
+
 spring:
   application:
     name: mall-admin

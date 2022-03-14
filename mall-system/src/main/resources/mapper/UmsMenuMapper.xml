@@ -11,7 +11,7 @@
     <insert id="addRolePerm">
         insert into ums_role_menu values
         <foreach collection="permIds" item="id" separator=",">
-            (#{roleId},#{id})
+            (null,#{roleId},#{id})
         </foreach>
     </insert>
 
@@ -52,14 +52,14 @@
         order by m.parent_id, m.order_no;
     </select>
 
-    <select id="getDeptPerm" resultType="java.lang.Long">
+    <select id="selectDeptPerm" resultType="java.lang.Long">
         select ums_menu.id
         from ums_menu
                  inner join ums_dept_permission udp on ums_menu.id = udp.permission_id
         where udp.dept_id = #{id}
     </select>
 
-    <select id="getRolePerm" resultType="java.lang.Long">
+    <select id="selectRolePerm" resultType="java.lang.Long">
         select m.id
         from ums_menu m
                  inner join ums_role_menu rm on m.id = rm.menu_id

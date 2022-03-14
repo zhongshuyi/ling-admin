@@ -72,12 +72,26 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminByUserName(userName);
         if (umsAdmin != null && umsAdmin.getAvatar() != null) {
             umsAdmin.setAvatar(
-                    getMinIoService()
-                            .getMinioUrl()
+                    getMinIoService().getMinioUrl()
+                            + "/"
+                            + getMinIoService().getBucketName()
+                            + "/" + umsAdmin.getAvatar()
+            );
+        }
+        return umsAdmin;
+    }
+
+    @Override
+    public final UmsAdmin getUmsAdminById(final Long id) {
+        final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminById(id);
+        if (CharSequenceUtil.isNotEmpty(umsAdmin.getAvatar())) {
+            umsAdmin.setAvatar(
+                    getMinIoService().getMinioUrl()
                             + "/"
                             + getMinIoService().getBucketName()
                             + "/"
-                            + umsAdmin.getAvatar());
+                            + umsAdmin.getAvatar()
+            );
         }
         return umsAdmin;
     }
@@ -86,12 +100,18 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     public final List<UmsAdmin> getUserListByRoleId(final Long roleId) {
         final List<UmsAdmin> list = getBaseMapper().getUserListByRoleId(roleId);
         list.forEach(
-                u -> u.setAvatar(
-                        getMinIoService().getMinioUrl()
-                                + "/"
-                                + getMinIoService().getBucketName()
-                                + "/"
-                                + u.getAvatar()));
+                u -> {
+                    if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
+                        u.setAvatar(
+                                getMinIoService().getMinioUrl()
+                                        + "/"
+                                        + getMinIoService().getBucketName()
+                                        + "/"
+                                        + u.getAvatar()
+                        );
+                    }
+                }
+        );
         return list;
     }
 
@@ -103,20 +123,23 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         PageMethod.startPage((int) pagePlus.getCurrent(), (int) pagePlus.getSize());
         final List<UmsAdmin> list = getBaseMapper().queryUserList(bo);
         final PageInfo<UmsAdmin> pageInfo = new PageInfo<>(list);
-        pageInfo.getList()
-                .forEach(u -> u.setAvatar(
-                        getMinIoService()
-                                .getMinioUrl()
-                                + "/"
-                                + getMinIoService().getBucketName()
-                                + "/"
-                                + u.getAvatar()));
+        pageInfo.getList().forEach(
+                u -> {
+                    if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
+                        u.setAvatar(
+                                getMinIoService().getMinioUrl()
+                                        + "/"
+                                        + getMinIoService().getBucketName()
+                                        + "/"
+                                        + u.getAvatar());
+                    }
+                }
+        );
         pagePlus.setRecords(pageInfo.getList());
         pagePlus.setRecordsVo(BeanUtil.copyToList(pageInfo.getList(), UserVo.class));
         pagePlus.setTotal(pageInfo.getTotal());
         return pagePlus;
     }
-
 
     /**
      * 上传头像.
@@ -178,9 +201,18 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     }
 
     @Override
+    public final String getUserAvatar(final Long id) {
+        final String path = getBaseMapper().getUserAvatar(id);
+        if (CharSequenceUtil.isEmpty(path)) {
+            return null;
+        }
+        return getMinIoService().getMinioUrl() + "/" + getMinIoService().getBucketName() + "/" + path;
+    }
+
+    @Override
     public final void validEntityBeforeSave(final UmsAdmin umsAdmin) {
         super.validEntityBeforeSave(umsAdmin);
-        if (Boolean.FALSE.equals(checkUserNameUnique(umsAdmin))) {
+        if (Boolean.FALSE.equals(checkUsernameUnique(umsAdmin))) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "用户名已存在");
         }
     }
@@ -191,11 +223,16 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      * @param umsAdmin 用户信息
      * @return true就是唯一的
      */
-    private Boolean checkUserNameUnique(final UmsAdmin umsAdmin) {
+    @Override
+    public Boolean checkUsernameUnique(final UmsAdmin umsAdmin) {
         final UmsAdmin user = getOne(
                 Wrappers.<UmsAdmin>lambdaQuery()
                         .eq(UmsAdmin::getUsername, umsAdmin.getUsername())
                         .last("limit 1"));
-        return user != null && !umsAdmin.getId().equals(user.getId());
+        if (umsAdmin.getId() != null) {
+            return user != null && user.getId().equals(umsAdmin.getId());
+        } else {
+            return user == null;
+        }
     }
 }

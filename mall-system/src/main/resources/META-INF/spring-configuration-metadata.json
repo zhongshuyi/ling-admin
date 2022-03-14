@@ -1,6 +1,16 @@
 {
   "properties": [
     {
+      "name": "app.default-roleId",
+      "type": "java.lang.Long",
+      "description": "默认的角色id  app.default-role."
+    },
+    {
+      "name": "app.default-deptId",
+      "type": "java.lang.Long",
+      "description": "默认的部门id  app.default-role."
+    },
+    {
       "name": "token.tokenHeader",
       "type": "java.lang.String",
       "description": "token存储的请求头 token.tokenHeader.",

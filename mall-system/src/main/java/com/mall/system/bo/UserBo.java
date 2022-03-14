@@ -1,11 +1,12 @@
 package com.mall.system.bo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mall.common.constant.Regular;
 import com.mall.common.core.validate.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Set;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
@@ -24,42 +25,48 @@ public class UserBo {
      * 用户ID.
      */
     @ApiModelProperty(value = "用户ID")
-    @NotNull(message = "用户账号", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(message = "主键不能为空", groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
     private Long id;
 
 
     /**
      * 查询时的部门id.
      */
-    @ApiModelProperty(value = "用户的部门id")
-    @JsonIgnore
+    @ApiModelProperty(value = "查询时的用户的部门id")
     private Long deptId;
+
+    /**
+     * 新增时的部门id.
+     */
+    @ApiModelProperty(value = "新增时用户的部门id集合")
+    private Set<Long> deptIds;
+
+    /**
+     * 新增时用户的角色id集合.
+     */
+    @ApiModelProperty(value = "新增时用户的角色id集合")
+    private Set<Long> roleIds;
 
     /**
      * 用户账号.
      */
     @ApiModelProperty(value = "用户账号")
-    @NotNull(
-            message = "用户账号不能为空",
-            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(message = "用户账号不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String username;
 
     /**
      * 用户昵称.
      */
     @ApiModelProperty(value = "用户昵称")
-    @NotNull(
-            message = "用户昵称不能为空",
-            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @NotNull(message = "用户昵称不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String realName;
 
     /**
      * 用户邮箱.
      */
     @ApiModelProperty(value = "用户邮箱")
-    @Email(
-            message = "用户邮箱必须是邮箱格式",
-            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
+    @Email(message = "用户邮箱必须是邮箱格式", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String email;
 
     /**
@@ -69,7 +76,8 @@ public class UserBo {
     @Pattern(
             message = "必须是中国大陆电话号码",
             regexp = Regular.CHINA_TEL_NO,
-            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class}
+    )
     private String tel;
 
     /**
@@ -79,16 +87,16 @@ public class UserBo {
     private Integer sex;
 
     /**
-     * 头像地址.
-     */
-    @ApiModelProperty(value = "头像地址")
-    private String avatar;
-
-    /**
      * password.
      */
     @ApiModelProperty(value = "用户密码")
     private String password;
+
+    /**
+     * 确认密码.
+     */
+    @ApiModelProperty(value = "确认密码")
+    private String passwordRepeat;
 
 
     /**

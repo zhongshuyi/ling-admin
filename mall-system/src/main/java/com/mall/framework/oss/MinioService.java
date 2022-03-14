@@ -9,6 +9,7 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +71,15 @@ public class MinioService {
      */
     @SneakyThrows(Exception.class)
     public void upload(final String fileName, final InputStream stream, final String contentType) {
-        minioClient.putObject(PutObjectArgs.builder().object(fileName).bucket(bucketName).contentType(contentType).stream(stream, stream.available(), -1).build());
+        minioClient.putObject(
+                PutObjectArgs
+                        .builder()
+                        .object(fileName)
+                        .bucket(bucketName)
+                        .contentType(contentType)
+                        .stream(stream, stream.available(), -1)
+                        .build()
+        );
     }
 
 
@@ -94,8 +103,19 @@ public class MinioService {
     public void download(final String fileName, final HttpServletResponse response) {
         response.setContentType("application/force-download");
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-        final GetObjectResponse getOutputStream = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
+        response.setHeader(
+                "Content-Disposition",
+                "attachment;filename="
+                        + URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+        );
+        final GetObjectResponse getOutputStream =
+                minioClient.getObject(
+                        GetObjectArgs
+                                .builder()
+                                .bucket(bucketName)
+                                .object(fileName)
+                                .build()
+                );
         IOUtils.copy(getOutputStream, response.getOutputStream());
         getOutputStream.close();
     }

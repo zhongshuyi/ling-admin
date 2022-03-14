@@ -81,6 +81,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new AdminUserDetails(
                 umsAdmin,
                 permissionService.getPermissionList(umsAdmin),
-                roles, umsDeptService.getDeptListByUserId(umsAdmin.getId()));
+                roles, umsDeptService.selectDeptListByUserId(umsAdmin.getId()));
     }
 }

@@ -72,12 +72,12 @@ public class UmsRoleServiceImpl
 
     @Override
     public final Set<Long> getDataScope(final Long roleId) {
-        return getBaseMapper().getDataScope(roleId);
+        return getBaseMapper().selectDataScope(roleId);
     }
 
     @Override
     public final Boolean setDataScope(final Long roleId, final Set<Long> newIds) {
-        final Set<Long> oldIds = getBaseMapper().getDataScope(roleId);
+        final Set<Long> oldIds = getBaseMapper().selectDataScope(roleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
         final boolean isSuccess = result.isEmpty() || getBaseMapper().delDataScope(roleId, result) == result.size();
@@ -85,6 +85,23 @@ public class UmsRoleServiceImpl
         result.addAll(newIds);
         result.removeAll(oldIds);
         return isSuccess && (result.isEmpty() || getBaseMapper().addDataScope(roleId, result) == result.size());
+    }
+
+    @Override
+    public final Boolean setUserRole(final Long userId, final Set<Long> newIds) {
+        final Set<Long> oldIds = getBaseMapper().selectRoleIdsByUserId(userId);
+        final Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().delUserRole(userId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addUserRole(userId, result) == result.size());
+    }
+
+    @Override
+    public final Set<Long> selectRoleIdsByUserId(final Long userId) {
+        return getBaseMapper().selectRoleIdsByUserId(userId);
     }
 
     @Override

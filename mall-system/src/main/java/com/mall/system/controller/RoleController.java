@@ -80,7 +80,7 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 添加角色列表.
+     * 添加角色.
      *
      * @param role 角色信息
      * @return 是否添加成功

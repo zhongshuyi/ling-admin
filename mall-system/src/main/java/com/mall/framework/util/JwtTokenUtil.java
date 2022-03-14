@@ -179,7 +179,9 @@ public class JwtTokenUtil implements Serializable {
      */
     public void setUser(final AdminUserDetails user) {
         if (user != null && CharSequenceUtil.isNotEmpty(user.getUuid())) {
-            refreshToken(user);
+            RedisUtils.setCacheObject(
+                    getTokenKey(user.getUuid()),
+                    user, expiration, TimeUnit.MINUTES);
         }
     }
 
