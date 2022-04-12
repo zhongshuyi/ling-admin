@@ -39,7 +39,10 @@ public interface UmsDeptMapper extends BaseMapper<UmsDept> {
      * @param deptIds 部门id集合
      * @return 受影响行数
      */
-    Integer addUserDept(Long userId, Set<Long> deptIds);
+    Integer addUserDept(
+            Long userId,
+            Set<Long> deptIds
+    );
 
     /**
      * 删除用户的部门.
@@ -48,5 +51,8 @@ public interface UmsDeptMapper extends BaseMapper<UmsDept> {
      * @param deptIds 要删除的部门id
      * @return 受影响行数
      */
-    Integer delUserDept(Long userId, Set<Long> deptIds);
+    Integer delUserDept(
+            Long userId,
+            Set<Long> deptIds
+    );
 }

@@ -70,5 +70,8 @@ public interface IUmsDeptService extends IService<UmsDept>, Serializable {
      * @param deptIds 部门id
      * @return 是否成功
      */
-    Boolean setUserDept(Long userId, Set<Long> deptIds);
+    Boolean setUserDept(
+            Long userId,
+            Set<Long> deptIds
+    );
 }

@@ -72,7 +72,10 @@ public class BusinessErrorException extends RuntimeException {
      * @param message 提示信息
      * @param e       异常
      */
-    public BusinessErrorException(final String message, final Exception e) {
+    public BusinessErrorException(
+            final String message,
+            final Exception e
+    ) {
         this.code = HttpStatus.HTTP_INTERNAL_ERROR;
         this.message = message;
         this.exception = e;
@@ -86,7 +89,11 @@ public class BusinessErrorException extends RuntimeException {
      * @param message 提示信息
      * @param e       异常
      */
-    public BusinessErrorException(final int code, final String message, final Exception e) {
+    public BusinessErrorException(
+            final int code,
+            final String message,
+            final Exception e
+    ) {
         this.code = code;
         this.message = message;
         this.exception = e;
@@ -99,7 +106,10 @@ public class BusinessErrorException extends RuntimeException {
      * @param code    状态码.
      * @param message 异常信息.
      */
-    public BusinessErrorException(final int code, final String message) {
+    public BusinessErrorException(
+            final int code,
+            final String message
+    ) {
         this.message = message;
         this.code = code;
         this.exception = null;

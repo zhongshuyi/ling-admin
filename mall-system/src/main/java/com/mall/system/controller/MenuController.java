@@ -4,17 +4,20 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.annotation.RepeatSubmit;
 import com.mall.common.core.controller.BaseController;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
-import com.mall.common.util.ServletUtils;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.model.AdminUserDetails;
-import com.mall.framework.util.JwtTokenUtil;
+import com.mall.framework.util.SecurityUtils;
 import com.mall.system.bo.MenuBo;
 import com.mall.system.entity.UmsMenu;
+import com.mall.system.entity.UmsPermissionUrl;
+import com.mall.system.mapper.UmsPermissionUrlMapper;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
 import io.swagger.annotations.Api;
@@ -50,9 +53,15 @@ public class MenuController extends BaseController {
     private final IUmsMenuService umsMenuService;
 
     /**
-     * jwt工具类.
+     * 配置信息.
      */
-    private final JwtTokenUtil jwtTokenUtil;
+    private final CustomConfig config;
+
+    /**
+     * 权限url mapper.
+     */
+    private final UmsPermissionUrlMapper umsPermissionUrlMapper;
+
 
     /**
      * 获取所有菜单.
@@ -62,8 +71,7 @@ public class MenuController extends BaseController {
     @GetMapping
     @ApiOperation("获取所有菜单")
     public CommonResult<List<Tree<Long>>> getMenuList() {
-        final AdminUserDetails adminUserDetails =
-                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
@@ -78,6 +86,30 @@ public class MenuController extends BaseController {
     }
 
     /**
+     * 获取所有接口路径和方式.
+     *
+     * @return 所有接口路径和方式
+     */
+    @GetMapping("/getAllPermissionUrl")
+    @ApiOperation("获取所有接口路径和方式")
+    public CommonResult<List<UmsPermissionUrl>> getAllPermissionUrl() {
+        return CommonResult.success(config.getAllUrl());
+    }
+
+    /**
+     * 获取所有接口路径和方式.
+     *
+     * @param id 权限的id
+     * @return 所有接口路径和方式
+     */
+    @GetMapping("/getPermissionUrlList/{id}")
+    @ApiOperation("获取所有接口路径和方式")
+    public CommonResult<List<UmsPermissionUrl>> getPermissionUrl(@PathVariable final Long id) {
+        return CommonResult.success(umsPermissionUrlMapper.selectList(
+                Wrappers.<UmsPermissionUrl>lambdaQuery().eq(UmsPermissionUrl::getMenuId, id)));
+    }
+
+    /**
      * 增加菜单.
      *
      * @param addBo 菜单对象
@@ -86,8 +118,7 @@ public class MenuController extends BaseController {
     @PostMapping
     @ApiOperation("增加菜单")
     public CommonResult<Void> addMenu(
-            @Validated(ValidationGroups.Add.class)
-            @RequestBody final MenuBo addBo
+            @Validated(ValidationGroups.Add.class) @RequestBody final MenuBo addBo
     ) {
         if (Boolean.TRUE.equals(umsMenuService.checkMenuUnique(BeanUtil.toBean(addBo, UmsMenu.class)))) {
             return CommonResult.failed("菜单" + addBo.getTitle() + "已存在");
@@ -118,13 +149,22 @@ public class MenuController extends BaseController {
     @PutMapping
     @RepeatSubmit
     public CommonResult<Void> editMenu(
-            @Validated(ValidationGroups.Edit.class)
-            @RequestBody final MenuBo bo) {
+            @Validated(ValidationGroups.Edit.class) @RequestBody final MenuBo bo
+    ) {
         if (bo.getId().equals(bo.getParentId())) {
             return CommonResult.failed("上级菜单不能为自己");
         } else if (Boolean.TRUE.equals(umsMenuService.checkMenuUnique(BeanUtil.toBean(bo, UmsMenu.class)))) {
             return CommonResult.failed("菜单" + bo.getTitle() + "已存在");
         }
+        // 删除这个菜单有关的权限url
+        umsPermissionUrlMapper.delete(
+                Wrappers.<UmsPermissionUrl>lambdaQuery().eq(UmsPermissionUrl::getMenuId, bo.getId()));
+
+        for (final UmsPermissionUrl url : bo.getPermissionUrl()) {
+            url.setMenuId(bo.getId());
+        }
+        // 重新插入提交过来的
+        umsPermissionUrlMapper.insertAll(bo.getPermissionUrl());
         return toAjax(umsMenuService.updateById(BeanUtil.toBean(bo, UmsMenu.class)));
     }
 

@@ -50,7 +50,8 @@ public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
      * @return 分页后信息
      */
     PagePlus<UmsAdmin, UserVo> getUserListPage(
-            PagePlus<UmsAdmin, UserVo> pagePlus, UserBo bo
+            PagePlus<UmsAdmin, UserVo> pagePlus,
+            UserBo bo
     );
 
     /**
@@ -61,7 +62,11 @@ public interface IUmsAdminService extends IServicePlus<UmsAdmin, UserVo> {
      * @param uploadById 上传人id
      * @return 是否成功
      */
-    Boolean uploadAvatar(Long id, MultipartFile file, final Long uploadById);
+    Boolean uploadAvatar(
+            Long id,
+            MultipartFile file,
+            final Long uploadById
+    );
 
     /**
      * 获取用户头像地址.

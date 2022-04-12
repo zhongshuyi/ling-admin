@@ -3,6 +3,7 @@ package com.mall.framework.config;
 import com.mall.framework.security.filter.JwtAuthenticationTokenFilter;
 import com.mall.framework.security.handle.RestAuthenticationEntryPoint;
 import com.mall.framework.security.handle.RestfulAccessDeniedHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,9 +29,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  **/
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * 配置信息.
+     */
+    private final CustomConfig customConfig;
+    
     /**
      * 登录用户服务类.
      */
@@ -49,26 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * token认证过滤器.
      */
     private final JwtAuthenticationTokenFilter authenticationTokenFilter;
-
-
-    /**
-     * 构造方法.
-     *
-     * @param restfulAccessDeniedHandler   认证失败处理类
-     * @param restAuthenticationEntryPoint 当未登录或者token失效访问接口时，自定义的返回
-     * @param userDetailsService           登录用户服务类
-     * @param authenticationTokenFilter    token认证过滤器
-     */
-    public SecurityConfig(
-            final RestfulAccessDeniedHandler restfulAccessDeniedHandler,
-            final RestAuthenticationEntryPoint restAuthenticationEntryPoint,
-            final UserDetailsService userDetailsService,
-            final JwtAuthenticationTokenFilter authenticationTokenFilter) {
-        this.restfulAccessDeniedHandler = restfulAccessDeniedHandler;
-        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
-        this.userDetailsService = userDetailsService;
-        this.authenticationTokenFilter = authenticationTokenFilter;
-    }
 
 
     /**
@@ -93,39 +81,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         // CSRF禁用，因为不使用session
-        httpSecurity
-                .csrf().disable()
-                // 基于token，所以不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 过滤请求
+        httpSecurity.cors()
+                // 关闭 CSRF
+                .and().csrf().disable()
+                // 登录行为由自己实现
+                .formLogin().disable()
+                .httpBasic().disable()
+
+                // 认证请求
                 .authorizeRequests()
-                // 对于登录login  允许匿名访问
-                .antMatchers("/login").anonymous()
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/*.html",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/favicon.ico"
-                ).permitAll()
-                .antMatchers("/profile/**").anonymous()
-                .antMatchers("/swagger-ui/**").anonymous()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").permitAll()
-                .antMatchers("/test").permitAll()
-                .antMatchers("/druid/**").anonymous()
-                .antMatchers("/ws/**").permitAll()
-                // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated()
-                .and()
+                // RBAC 动态 url 认证
+                .anyRequest().access("@rbacAuthorityService.hasPermission(request,authentication)")
+                // 登出行为由自己实现
+                .and().logout().disable()
+                // 基于token，所以不需要session
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // 将安全标头添加到响应
-                .headers()
+                .and().headers()
                 // 允许 x-frame-options deny iframe调用
                 .frameOptions().disable()
                 // 禁用缓存
-                .cacheControl();
+                .cacheControl()
+        ;
 
         // 添加JWT过滤器
         httpSecurity.addFilterBefore(
@@ -142,6 +119,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected final void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(cryptPasswordEncoder());
+    }
+
+    @Override
+    public final void configure(final WebSecurity web) throws Exception {
+        final WebSecurity and = web.ignoring().and();
+
+        // 忽略 GET
+        customConfig.getIgnores().getGet().forEach(url -> and.ignoring().antMatchers(HttpMethod.GET, url));
+
+        // 忽略 POST
+        customConfig.getIgnores().getPost().forEach(url -> and.ignoring().antMatchers(HttpMethod.POST, url));
+
+        // 忽略 DELETE
+        customConfig.getIgnores().getDelete().forEach(url -> and.ignoring().antMatchers(HttpMethod.DELETE, url));
+
+        // 忽略 PUT
+        customConfig.getIgnores().getPut().forEach(url -> and.ignoring().antMatchers(HttpMethod.PUT, url));
+
+        // 忽略 HEAD
+        customConfig.getIgnores().getHead().forEach(url -> and.ignoring().antMatchers(HttpMethod.HEAD, url));
+
+        // 忽略 PATCH
+        customConfig.getIgnores().getPatch().forEach(url -> and.ignoring().antMatchers(HttpMethod.PATCH, url));
+
+        // 忽略 OPTIONS
+        customConfig.getIgnores().getOptions().forEach(url -> and.ignoring().antMatchers(HttpMethod.OPTIONS, url));
+
+        // 忽略 TRACE
+        customConfig.getIgnores().getTrace().forEach(url -> and.ignoring().antMatchers(HttpMethod.TRACE, url));
+
+        // 按照请求格式忽略
+        customConfig.getIgnores().getPattern().forEach(url -> and.ignoring().antMatchers(url));
     }
 
     /**
@@ -166,4 +175,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+
 }

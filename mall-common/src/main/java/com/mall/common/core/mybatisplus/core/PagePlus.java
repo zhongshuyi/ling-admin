@@ -88,7 +88,10 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param current 当前页
      * @param size    每页数量
      */
-    public PagePlus(final long current, final long size) {
+    public PagePlus(
+            final long current,
+            final long size
+    ) {
         this(current, size, 0L);
     }
 
@@ -99,7 +102,11 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param size    每页数量
      * @param total   总条数
      */
-    private PagePlus(final long current, final long size, final long total) {
+    private PagePlus(
+            final long current,
+            final long size,
+            final long total
+    ) {
         this(current, size, total, true);
     }
 
@@ -110,7 +117,11 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param size          每页数量
      * @param isSearchCount 是否进行 count 查询.
      */
-    public PagePlus(final long current, final long size, final boolean isSearchCount) {
+    public PagePlus(
+            final long current,
+            final long size,
+            final boolean isSearchCount
+    ) {
         this(current, size, 0L, isSearchCount);
     }
 
@@ -123,7 +134,10 @@ public class PagePlus<T, V> implements IPage<T> {
      * @param isSearchCount 是否进行count查询
      */
     private PagePlus(
-            final Long current, final long size, final long total, final boolean isSearchCount
+            final Long current,
+            final long size,
+            final long total,
+            final boolean isSearchCount
     ) {
         if (current > 1L) {
             this.current = current;

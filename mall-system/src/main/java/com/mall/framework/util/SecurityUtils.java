@@ -53,7 +53,10 @@ public final class SecurityUtils {
      * @param encodedPassword 加密后字符
      * @return 结果
      */
-    public static boolean matchesPassword(final String rawPassword, final String encodedPassword) {
+    public static boolean matchesPassword(
+            final String rawPassword,
+            final String encodedPassword
+    ) {
         final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }

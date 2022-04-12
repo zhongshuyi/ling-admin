@@ -34,11 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author 钟舒艺
  **/
+@Slf4j
 @RestController
 @Api(tags = "部门操作")
 @RequiredArgsConstructor
 @RequestMapping("/system/dept")
-@Slf4j
 public class DeptController extends BaseController {
 
     /**
@@ -88,7 +88,8 @@ public class DeptController extends BaseController {
     @ApiOperation(value = "增加部门")
     public CommonResult<Void> addDept(
             @Validated(ValidationGroups.Add.class)
-            @RequestBody final DeptBo addBo) {
+            @RequestBody final DeptBo addBo
+    ) {
         if (Boolean.TRUE.equals(umsDeptService.checkDeptUnique(addBo))) {
             return CommonResult.failed("部门'" + addBo.getDeptName() + "' 已存在");
         } else {
@@ -142,8 +143,8 @@ public class DeptController extends BaseController {
      * @param id 部门id
      * @return 部门详细信息
      */
-    @ApiOperation("获取部门详细信息")
     @GetMapping("/{id}")
+    @ApiOperation("获取部门详细信息")
     public CommonResult<UmsDept> getDept(@PathVariable final Long id) {
         return CommonResult.success(umsDeptService.getById(id));
     }
@@ -171,7 +172,8 @@ public class DeptController extends BaseController {
     @PutMapping("DeptPerm/{deptId}")
     public CommonResult<Void> setDeptPerm(
             @PathVariable final Long deptId,
-            @RequestBody final Set<Long> newIds) {
+            @RequestBody final Set<Long> newIds
+    ) {
         return toAjax(umsMenuService.setDeptPerm(deptId, newIds));
     }
 }

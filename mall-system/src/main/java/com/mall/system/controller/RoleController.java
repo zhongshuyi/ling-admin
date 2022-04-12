@@ -115,7 +115,10 @@ public class RoleController extends BaseController {
      */
     @PutMapping("/{id}/{state}")
     @ApiOperation("更改角色状态")
-    public CommonResult<Void> stateChanges(@PathVariable final Long id, @PathVariable final Integer state) {
+    public CommonResult<Void> stateChanges(
+            @PathVariable final Long id,
+            @PathVariable final Integer state
+    ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能修改超级管理员状态");
         }
@@ -158,7 +161,10 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("更改角色权限")
     @PutMapping("perm/{id}")
-    public CommonResult<Void> setPerm(@PathVariable final Long id, @RequestBody final Set<Long> newIds) {
+    public CommonResult<Void> setPerm(
+            @PathVariable final Long id,
+            @RequestBody final Set<Long> newIds
+    ) {
         if (id.equals(GlobalConstants.SUPER_ADMIN_ROLE_ID)) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能改变超级管理员权限");
         }
@@ -186,7 +192,10 @@ public class RoleController extends BaseController {
      */
     @ApiOperation("更改角色的自定义数据权限范围")
     @PutMapping("dataScope/{id}")
-    public CommonResult<Void> setCustomDataScope(@PathVariable final Long id, @RequestBody final Set<Long> newIds) {
+    public CommonResult<Void> setCustomDataScope(
+            @PathVariable final Long id,
+            @RequestBody final Set<Long> newIds
+    ) {
         return CommonResult.success();
     }
 }

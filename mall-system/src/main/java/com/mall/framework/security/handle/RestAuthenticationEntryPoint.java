@@ -29,11 +29,14 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint, S
     public final void commence(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final AuthenticationException e)
+            final AuthenticationException e
+    )
             throws IOException {
         final String msg = CharSequenceUtil.format("请求访问：{},未登录或token已过期", request.getRequestURI());
-        ServletUtils.renderString(response,
-                new ObjectMapper().writeValueAsString(CommonResult.unauthorized(msg)));
+        ServletUtils.renderString(
+                response,
+                new ObjectMapper().writeValueAsString(CommonResult.unauthorized(msg))
+        );
         log.warn("未登录或已过期 : " + "ip: "
                 + IpUtils.getIpAdder(request)
                 + "    请求地址: " + request.getRequestURI());

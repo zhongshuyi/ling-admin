@@ -60,7 +60,10 @@ public class UmsRoleServiceImpl
     }
 
     @Override
-    public final boolean stateChanges(final Long id, final Integer state) {
+    public final boolean stateChanges(
+            final Long id,
+            final Integer state
+    ) {
         return update(Wrappers.<UmsRole>lambdaUpdate()
                 .eq(UmsRole::getId, id).set(UmsRole::getStatus, state));
     }
@@ -76,7 +79,10 @@ public class UmsRoleServiceImpl
     }
 
     @Override
-    public final Boolean setDataScope(final Long roleId, final Set<Long> newIds) {
+    public final Boolean setDataScope(
+            final Long roleId,
+            final Set<Long> newIds
+    ) {
         final Set<Long> oldIds = getBaseMapper().selectDataScope(roleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
@@ -88,7 +94,10 @@ public class UmsRoleServiceImpl
     }
 
     @Override
-    public final Boolean setUserRole(final Long userId, final Set<Long> newIds) {
+    public final Boolean setUserRole(
+            final Long userId,
+            final Set<Long> newIds
+    ) {
         final Set<Long> oldIds = getBaseMapper().selectRoleIdsByUserId(userId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);

@@ -1,14 +1,14 @@
 package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.mall.common.annotation.LoginAuth;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.exception.BusinessErrorException;
-import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.model.LoginBody;
 import com.mall.framework.security.service.LoginService;
-import com.mall.framework.util.JwtTokenUtil;
+import com.mall.framework.util.SecurityUtils;
 import com.mall.system.entity.UmsMenu;
 import com.mall.system.service.IUmsMenuService;
 import com.mall.system.util.MenuUtil;
@@ -18,10 +18,10 @@ import io.swagger.annotations.ApiOperation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author 钟舒艺
  **/
+@LoginAuth
 @RestController
 @Api(tags = "登录注册等")
 @RequiredArgsConstructor
@@ -41,11 +42,6 @@ public class LoginController {
      * 登录服务.
      */
     private final LoginService loginService;
-
-    /**
-     * jwt工具类.
-     */
-    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * 权限服务.
@@ -79,8 +75,7 @@ public class LoginController {
     @GetMapping("/getUserInfo")
     @ApiOperation("获取用户信息")
     public CommonResult<Map<String, Object>> getInfo() {
-        final AdminUserDetails adminUserDetails =
-                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
@@ -99,14 +94,13 @@ public class LoginController {
      */
     @GetMapping("/getPermCode")
     @ApiOperation("获取权限列表")
-    public CommonResult<Set<String>> getPermCode() {
-        final AdminUserDetails adminUserDetails =
-                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+    public CommonResult<List<GrantedAuthority>> getPermCode() {
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }
-        assert adminUserDetails.getPermissionCodeSet() != null;
-        return CommonResult.success(adminUserDetails.getPermissionCodeSet());
+        assert adminUserDetails.getPermissionCodeList() != null;
+        return CommonResult.success(adminUserDetails.getPermissionCodeList());
     }
 
     /**
@@ -117,8 +111,7 @@ public class LoginController {
     @GetMapping("/getRouterList")
     @ApiOperation("获取路由")
     public CommonResult<List<RouterVo>> getMenuList() {
-        final AdminUserDetails adminUserDetails =
-                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         if (adminUserDetails == null) {
             throw new BusinessErrorException(BusinessExceptionMsgEnum.USER_IS_NOT_LOGIN);
         }

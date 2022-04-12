@@ -54,9 +54,10 @@ public class LoginService {
      * @param request  请求信息
      * @return token
      */
-    public String login(final String username,
-                        final String password,
-                        final HttpServletRequest request
+    public String login(
+            final String username,
+            final String password,
+            final HttpServletRequest request
     ) {
 
         // 用户验证

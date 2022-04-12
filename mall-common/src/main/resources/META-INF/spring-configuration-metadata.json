@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "mybatis-plus.mapperPackage",
+      "type": "java.lang.String",
+      "description": "包扫描."
+    }
+  ]
+}

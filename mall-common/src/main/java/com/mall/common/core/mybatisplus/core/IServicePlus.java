@@ -30,7 +30,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param copyOptions copy条件
      * @return Vo对象
      */
-    V getVoById(Serializable id, CopyOptions copyOptions);
+    V getVoById(
+            Serializable id,
+            CopyOptions copyOptions
+    );
 
     /**
      * 无copy条件根据id获取Vo对象.
@@ -49,7 +52,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param convertor 自定义转换器
      * @return Vo对象
      */
-    default V getVoById(final Serializable id, final Function<T, V> convertor) {
+    default V getVoById(
+            final Serializable id,
+            final Function<T, V> convertor
+    ) {
         return convertor.apply(getById(id));
     }
 
@@ -61,7 +67,9 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @return V对象
      */
     List<V> listVoByIds(
-            Collection<? extends Serializable> idList, CopyOptions copyOptions);
+            Collection<? extends Serializable> idList,
+            CopyOptions copyOptions
+    );
 
     /**
      * 无copy条件根据id集合获取Vo集合.
@@ -80,8 +88,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param convertor 自定义转换器
      * @return Vo对象集合
      */
-    default List<V> listVoByIds(final Collection<? extends Serializable> idList,
-                                final Function<Collection<T>, List<V>> convertor) {
+    default List<V> listVoByIds(
+            final Collection<? extends Serializable> idList,
+            final Function<Collection<T>, List<V>> convertor
+    ) {
         final List<T> list = getBaseMapper().selectBatchIds(idList);
         if (list == null) {
             return Collections.emptyList();
@@ -97,7 +107,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param copyOptions  copy条件
      * @return Vo对象
      */
-    List<V> listVo(Wrapper<T> queryWrapper, CopyOptions copyOptions);
+    List<V> listVo(
+            Wrapper<T> queryWrapper,
+            CopyOptions copyOptions
+    );
 
 
     /**
@@ -156,7 +169,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param copyOptions copy条件
      * @return Vo对象
      */
-    List<V> listVoByMap(Map<String, Object> columnMap, CopyOptions copyOptions);
+    List<V> listVoByMap(
+            Map<String, Object> columnMap,
+            CopyOptions copyOptions
+    );
 
     /**
      * 无copy条件根据map进行查询.
@@ -175,8 +191,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param convertor 自定义转换器
      * @return Vo对象
      */
-    default List<V> listVoByMap(final Map<String, Object> columnMap,
-                                final Function<Collection<T>, List<V>> convertor) {
+    default List<V> listVoByMap(
+            final Map<String, Object> columnMap,
+            final Function<Collection<T>, List<V>> convertor
+    ) {
         final List<T> list = getBaseMapper().selectByMap(columnMap);
         if (list == null) {
             return Collections.emptyList();
@@ -196,7 +214,8 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
     PagePlus<T, V> pageVo(
             PagePlus<T, V> page,
             Wrapper<T> queryWrapper,
-            CopyOptions copyOptions);
+            CopyOptions copyOptions
+    );
 
     /**
      * 自定义转换器,分页实体集合转Vo集合.
@@ -207,7 +226,8 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      */
     default PagePlus<T, V> pageVo(
             final PagePlus<T, V> page,
-            final CopyOptions copyOptions) {
+            final CopyOptions copyOptions
+    ) {
         return pageVo(page, Wrappers.emptyWrapper(), copyOptions);
     }
 
@@ -228,7 +248,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param wrapper 查询条件
      * @return 分页对象
      */
-    default PagePlus<T, V> pageVo(final PagePlus<T, V> page, final Wrapper<T> wrapper) {
+    default PagePlus<T, V> pageVo(
+            final PagePlus<T, V> page,
+            final Wrapper<T> wrapper
+    ) {
         return pageVo(page, wrapper, new CopyOptions());
     }
 
@@ -240,7 +263,10 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
      * @param <B>  Bo操作类
      * @return 分页对象
      */
-    <B> PagePlus<T, V> pageVo(PagePlus<T, V> page, B bo);
+    <B> PagePlus<T, V> pageVo(
+            PagePlus<T, V> page,
+            B bo
+    );
 
     /**
      * 有查询条件,自定义转换分页集合.
@@ -254,7 +280,8 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
             final PagePlus<T, V> page,
             final Wrapper<T> queryWrapper,
             final Function<Collection<T>,
-                    List<V>> convertor) {
+                    List<V>> convertor
+    ) {
         final PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
         return result.setRecordsVo(convertor.apply(result.getRecords()));
     }
@@ -269,7 +296,8 @@ public interface IServicePlus<T, V> extends IService<T>, Serializable {
     default PagePlus<T, V> pageVo(
             final PagePlus<T, V> page,
             final Function<Collection<T>,
-                    List<V>> convertor) {
+                    List<V>> convertor
+    ) {
         return pageVo(page, Wrappers.emptyWrapper(), convertor);
     }
 

@@ -66,7 +66,10 @@ public final class ServletUtils {
      * @param response 渲染对象
      * @param string   待渲染的字符串
      */
-    public static void renderString(final HttpServletResponse response, final String string) {
+    public static void renderString(
+            final HttpServletResponse response,
+            final String string
+    ) {
         try {
             response.setStatus(HttpStatus.HTTP_OK);
             response.setContentType("application/json");
@@ -96,7 +99,10 @@ public final class ServletUtils {
      * @param defaultValue 默认值
      * @return 值
      */
-    public static String getParameter(final String name, final String defaultValue) {
+    public static String getParameter(
+            final String name,
+            final String defaultValue
+    ) {
         return Convert.toStr(getRequest().getParameter(name), defaultValue);
     }
 
@@ -119,7 +125,10 @@ public final class ServletUtils {
      * @param defaultValue 默认值
      * @return 值
      */
-    public static Integer getParameterToInt(final String name, final Integer defaultValue) {
+    public static Integer getParameterToInt(
+            final String name,
+            final Integer defaultValue
+    ) {
         return Convert.toInt(getRequest().getParameter(name), defaultValue);
     }
 }

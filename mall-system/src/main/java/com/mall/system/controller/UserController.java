@@ -10,6 +10,7 @@ import com.mall.common.core.domain.PageInfo;
 import com.mall.common.core.mybatisplus.util.PageUtils;
 import com.mall.common.core.validate.ValidationGroups;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
 import com.mall.framework.util.SecurityUtils;
@@ -25,7 +26,6 @@ import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +51,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController extends BaseController {
 
     /**
+     * 配置信息.
+     */
+    private final CustomConfig config;
+
+    /**
      * 用户服务类.
      */
     private final IUmsAdminService umsAdminService;
@@ -71,18 +76,6 @@ public class UserController extends BaseController {
     private final JwtTokenUtil jwtTokenUtil;
 
     /**
-     * 默认角色id.
-     */
-    @Value("${app.default-roleId}")
-    private Long defaultRoleId;
-
-    /**
-     * 默认部门id.
-     */
-    @Value("${app.default-deptId}")
-    private Long defaultDeptId;
-
-    /**
      * 分页获取用户列表.
      *
      * @param user 用户查询条件
@@ -93,9 +86,10 @@ public class UserController extends BaseController {
     public CommonResult<PageInfo<UserVo>> getUserList(@Validated(ValidationGroups.Query.class) final UserBo user) {
         return CommonResult.success(
                 PageUtils.buildPageInfo(
-                        umsAdminService.getUserListPage(PageUtils.buildPagePlus(), user)
-                )
-        );
+                        umsAdminService.getUserListPage(
+                                PageUtils.buildPagePlus(),
+                                user
+                        )));
     }
 
     /**
@@ -165,8 +159,7 @@ public class UserController extends BaseController {
     @PutMapping
     @ApiOperation("更改用户")
     public CommonResult<Void> edit(
-            @Validated({ValidationGroups.Edit.class})
-            @RequestBody final UserBo user,
+            @Validated({ValidationGroups.Edit.class}) @RequestBody final UserBo user,
             final HttpServletRequest request
     ) {
         // 设置默认的角色与部门
@@ -176,7 +169,7 @@ public class UserController extends BaseController {
         // 修改用户部门
         isSuccess = isSuccess && umsDeptService.setUserDept(user.getId(), user.getDeptIds());
         isSuccess = isSuccess && umsAdminService.updateByBo(user);
-        final AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(request);
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         // 如果修改的是本用户则更新信息
         if (isSuccess && adminUserDetails.getUmsAdmin().getId().equals(user.getId())) {
             adminUserDetails.setUmsAdmin(umsAdminService.getUmsAdminById(user.getId()));
@@ -223,17 +216,20 @@ public class UserController extends BaseController {
             @RequestParam("file") final MultipartFile file,
             final HttpServletRequest request
     ) {
-        final Boolean isSuccess =
-                umsAdminService.uploadAvatar(
-                        id,
-                        file,
-                        jwtTokenUtil.getAdminUserDetails(request).getUmsAdmin().getId());
-        final AdminUserDetails adminUserDetails = jwtTokenUtil.getAdminUserDetails(request);
-        if (Boolean.TRUE.equals(isSuccess) && adminUserDetails.getUmsAdmin().getId().equals(id)) {
-            adminUserDetails.getUmsAdmin().setAvatar(umsAdminService.getUserAvatar(id));
-            jwtTokenUtil.setUser(adminUserDetails);
+        final Long currentUserId = SecurityUtils.getLoginUser().getUmsAdmin().getId();
+        // 如果不是修改本人的头像,则需要用户修改权限
+        if (id.equals(currentUserId)) {
+            final Boolean isSuccess = umsAdminService.uploadAvatar(id, file, currentUserId);
+            final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
+            if (Boolean.TRUE.equals(isSuccess) && adminUserDetails.getUmsAdmin().getId().equals(id)) {
+                adminUserDetails.getUmsAdmin().setAvatar(umsAdminService.getUserAvatar(id));
+                jwtTokenUtil.setUser(adminUserDetails);
+            }
+            return toAjax(isSuccess);
+        } else {
+            return CommonResult.forbidden("无权限");
         }
-        return toAjax(isSuccess);
+
     }
 
     /**
@@ -244,12 +240,12 @@ public class UserController extends BaseController {
     private void setDefaultDeptAndRole(final UserBo user) {
         if (CollUtil.isEmpty(user.getRoleIds())) {
             final HashSet<Long> roleIds = new HashSet<>(1);
-            roleIds.add(defaultRoleId);
+            roleIds.add(config.getApp().getDefaultRoleId());
             user.setRoleIds(roleIds);
         }
         if (CollUtil.isEmpty(user.getDeptIds())) {
             final HashSet<Long> deptIds = new HashSet<>(1);
-            deptIds.add(defaultDeptId);
+            deptIds.add(config.getApp().getDefaultDeptId());
             user.setDeptIds(deptIds);
         }
     }

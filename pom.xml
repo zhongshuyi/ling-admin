@@ -13,6 +13,7 @@
         <module>mall-system</module>
         <module>mall-common</module>
         <module>mall-dome</module>
+        <module>mall-socket</module>
     </modules>
 
     <properties>

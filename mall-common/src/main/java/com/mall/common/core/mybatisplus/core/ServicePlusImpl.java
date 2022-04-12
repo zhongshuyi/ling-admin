@@ -43,7 +43,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
                 .getSuperClassGenericType(
                         this.getClass(),
                         ServicePlusImpl.class,
-                        1));
+                        1
+                ));
     }
 
     /**
@@ -57,13 +58,15 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
                 .getSuperClassGenericType(
                         this.getClass(),
                         ServicePlusImpl.class,
-                        2));
+                        2
+                ));
     }
 
     @Override
     public final V getVoById(
             final Serializable id,
-            final CopyOptions copyOptions) {
+            final CopyOptions copyOptions
+    ) {
         return BeanUtil.toBean(
                 getBaseMapper().selectById(id),
                 getVoClass(),
@@ -74,7 +77,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     @Override
     public final List<V> listVoByIds(
             final Collection<? extends Serializable> idList,
-            final CopyOptions copyOptions) {
+            final CopyOptions copyOptions
+    ) {
         return BeanUtil.copyToList(
                 getBaseMapper().selectBatchIds(idList),
                 getVoClass(),
@@ -95,10 +99,14 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     }
 
     @Override
-    public final <B> PagePlus<T, V> pageVo(final PagePlus<T, V> page, final B bo) {
+    public final <B> PagePlus<T, V> pageVo(
+            final PagePlus<T, V> page,
+            final B bo
+    ) {
         return pageVo(
                 page,
-                new QueryWrapper<>(BeanUtil.toBean(bo, getEntityClass())));
+                new QueryWrapper<>(BeanUtil.toBean(bo, getEntityClass()))
+        );
     }
 
     @Override
@@ -112,7 +120,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
                 BeanUtil.copyToList(
                         result.getRecords(),
                         getVoClass(),
-                        copyOptions));
+                        copyOptions
+                ));
         return result;
     }
 

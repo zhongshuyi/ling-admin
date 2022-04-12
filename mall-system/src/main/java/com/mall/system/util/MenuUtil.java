@@ -78,7 +78,10 @@ public final class MenuUtil {
      * @param parentId 父id
      * @return 菜单树
      */
-    private static List<RouterVo> buildRouters(final List<UmsMenu> menus, final Long parentId) {
+    private static List<RouterVo> buildRouters(
+            final List<UmsMenu> menus,
+            final Long parentId
+    ) {
 
         final LinkedList<RouterVo> routers = new LinkedList<>();
 

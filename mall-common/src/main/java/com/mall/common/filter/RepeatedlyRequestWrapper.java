@@ -33,7 +33,9 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
      * @throws IOException Io异常
      */
     public RepeatedlyRequestWrapper(
-            final HttpServletRequest request, final ServletResponse response) throws IOException {
+            final HttpServletRequest request,
+            final ServletResponse response
+    ) throws IOException {
         super(request);
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");

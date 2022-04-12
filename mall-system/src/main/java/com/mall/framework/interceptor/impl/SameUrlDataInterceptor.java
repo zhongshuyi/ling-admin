@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.constant.GlobalConstants;
 import com.mall.common.filter.RepeatedlyRequestWrapper;
 import com.mall.common.util.RedisUtils;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.interceptor.BaseRepeatSubmitInterceptor;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -17,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,6 +33,11 @@ import org.springframework.stereotype.Component;
 public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implements Serializable {
 
     /**
+     * 配置信息.
+     */
+    private final CustomConfig config;
+
+    /**
      * 防重提交 redis key.
      */
     private static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
@@ -44,12 +49,8 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
      * 提交时间.
      */
     private static final String REPEAT_TIME = "repeatTime";
+
     private static final long serialVersionUID = 3670730997054064652L;
-    /**
-     * 令牌自定义标识.
-     */
-    @Value("${token.token-header}")
-    private String header;
     /**
      * 间隔时间，单位:秒 默认10秒.
      * 两次相同参数的请求，如果间隔时间大于该参数，系统不会认定为重复提交的数据.
@@ -96,7 +97,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
         final String url = request.getRequestURI();
 
         // 唯一值（没有消息头则使用请求地址）
-        String submitKey = request.getHeader(header);
+        String submitKey = request.getHeader(config.getToken().getTokenHeader());
         if (Validator.isEmpty(submitKey)) {
             submitKey = url;
         }

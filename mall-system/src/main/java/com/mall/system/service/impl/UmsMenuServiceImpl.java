@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mall.system.bo.MenuBo;
 import com.mall.system.entity.UmsMenu;
+import com.mall.system.entity.UmsPermissionUrl;
 import com.mall.system.mapper.UmsMenuMapper;
+import com.mall.system.mapper.UmsPermissionUrlMapper;
 import com.mall.system.service.IUmsMenuService;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,11 +25,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
+@RequiredArgsConstructor
 public class UmsMenuServiceImpl
         extends ServiceImpl<UmsMenuMapper, UmsMenu>
         implements IUmsMenuService {
 
     private static final long serialVersionUID = -5579437013223054201L;
+
+    /**
+     * 权限与url.
+     */
+    private final transient UmsPermissionUrlMapper umsPermissionUrlMapper;
 
     /**
      * 获取所有菜单列表.
@@ -58,7 +67,6 @@ public class UmsMenuServiceImpl
                         .eq(UmsMenu::getStatus, 0L));
     }
 
-
     @Override
     public final Set<Long> selectRolePermsId(final Long userId) {
         return baseMapper.selectUserPermsIdsById(userId);
@@ -72,7 +80,12 @@ public class UmsMenuServiceImpl
     @Override
     public final Boolean addByAddBo(final MenuBo menuBo) {
         final UmsMenu menu = BeanUtil.toBean(menuBo, UmsMenu.class);
-        return save(menu);
+        save(menu);
+        for (final UmsPermissionUrl url : menuBo.getPermissionUrl()) {
+            url.setMenuId(menu.getId());
+        }
+        umsPermissionUrlMapper.insertAll(menuBo.getPermissionUrl());
+        return true;
     }
 
     @Override
@@ -83,6 +96,9 @@ public class UmsMenuServiceImpl
                 deleteById(menu.getId());
             }
         }
+        getBaseMapper().delDeptPermByPermId(id);
+        getBaseMapper().delRolePermByPermId(id);
+        getBaseMapper().delDeptRolePermByPermId(id);
         return removeById(id);
     }
 
@@ -109,15 +125,19 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public final Boolean setDeptPerm(final Long deptId, final Set<Long> newIds) {
+    public final Boolean setDeptPerm(
+            final Long deptId,
+            final Set<Long> newIds
+    ) {
         final Set<Long> oldIds = getBaseMapper().selectDeptPerm(deptId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptPerm(deptId, result) == result.size();
+        final boolean isSuccess =
+                result.isEmpty() || getBaseMapper().delDeptPermByDeptId(deptId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addDeptPerm(deptId, result) == result.size());
+        return isSuccess && (result.isEmpty() || getBaseMapper().addDeptPermByDeptId(deptId, result) == result.size());
     }
 
     @Override
@@ -126,15 +146,18 @@ public class UmsMenuServiceImpl
     }
 
     @Override
-    public final Boolean setRolePerm(final Long roleId, final Set<Long> newIds) {
+    public final Boolean setRolePerm(
+            final Long roleId,
+            final Set<Long> newIds
+    ) {
         final Set<Long> oldIds = getBaseMapper().selectRolePerm(roleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delRolePerm(roleId, result) == result.size();
+        final boolean isSuccess =
+                result.isEmpty() || getBaseMapper().delRolePermByRoleId(roleId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePerm(roleId, result) == result.size());
-
+        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePermByRoleId(roleId, result) == result.size());
     }
 }

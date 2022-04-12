@@ -42,7 +42,10 @@ public interface UmsRoleMapper extends BaseMapperPlus<UmsRole> {
      * @param roleIds 角色id集合
      * @return 受影响行数
      */
-    Integer addUserRole(@Param("userId") Long userId, @Param("roleIds") Set<Long> roleIds);
+    Integer addUserRole(
+            @Param("userId") Long userId,
+            @Param("roleIds") Set<Long> roleIds
+    );
 
 
     /**
@@ -60,7 +63,10 @@ public interface UmsRoleMapper extends BaseMapperPlus<UmsRole> {
      * @param deptIds 部门id
      * @return 受影响行数
      */
-    Integer addDataScope(@Param("roleId") Long roleId, @Param("deptIds") Set<Long> deptIds);
+    Integer addDataScope(
+            @Param("roleId") Long roleId,
+            @Param("deptIds") Set<Long> deptIds
+    );
 
     /**
      * 删除角色自定义数据范围.
@@ -69,7 +75,10 @@ public interface UmsRoleMapper extends BaseMapperPlus<UmsRole> {
      * @param deptIds 部门id
      * @return 受影响行数
      */
-    Integer delDataScope(@Param("roleId") Long roleId, @Param("deptIds") Set<Long> deptIds);
+    Integer delDataScope(
+            @Param("roleId") Long roleId,
+            @Param("deptIds") Set<Long> deptIds
+    );
 
     /**
      * 增加用户角色.
@@ -78,5 +87,8 @@ public interface UmsRoleMapper extends BaseMapperPlus<UmsRole> {
      * @param roleIds 角色id集合
      * @return 受影响行数
      */
-    Integer delUserRole(@Param("userId") Long userId, @Param("roleIds") Set<Long> roleIds);
+    Integer delUserRole(
+            @Param("userId") Long userId,
+            @Param("roleIds") Set<Long> roleIds
+    );
 }

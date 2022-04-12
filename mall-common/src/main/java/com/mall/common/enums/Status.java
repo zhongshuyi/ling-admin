@@ -33,7 +33,10 @@ public enum Status {
      */
     private final String info;
 
-    Status(final Integer code, final String info) {
+    Status(
+            final Integer code,
+            final String info
+    ) {
         this.code = code;
         this.info = info;
     }

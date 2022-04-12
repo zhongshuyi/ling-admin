@@ -94,7 +94,10 @@ public class UmsDeptServiceImpl extends ServiceImpl<UmsDeptMapper, UmsDept> impl
     }
 
     @Override
-    public final Boolean setUserDept(final Long userId, final Set<Long> newIds) {
+    public final Boolean setUserDept(
+            final Long userId,
+            final Set<Long> newIds
+    ) {
         final Set<Long> oldIds = getBaseMapper().selectDeptIdsByUserId(userId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);

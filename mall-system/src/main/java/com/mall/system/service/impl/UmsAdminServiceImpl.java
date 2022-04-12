@@ -13,6 +13,7 @@ import com.mall.common.core.mybatisplus.core.PagePlus;
 import com.mall.common.core.mybatisplus.core.ServicePlusImpl;
 import com.mall.common.enums.BusinessTypeEnum;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.oss.MinioService;
 import com.mall.system.bo.UserBo;
 import com.mall.system.entity.UmsAdmin;
@@ -46,20 +47,16 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     private static final long serialVersionUID = -6767396404407827925L;
 
     /**
-     * 头像允许的格式.
+     * 配置信息.
      */
-    private static final String AVATAR_POSTFIX = ".png,.jpg";
-
-    /**
-     * 头像储存路径.
-     */
-    private static final String AVATAR_PATH = "img/avatar";
+    @Getter
+    private final CustomConfig config;
 
     /**
      * minIo服务.
      */
     @Getter
-    private final transient MinioService minIoService;
+    private final MinioService minIoService;
 
     /**
      * 文件表服务.
@@ -72,11 +69,7 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminByUserName(userName);
         if (umsAdmin != null && umsAdmin.getAvatar() != null) {
             umsAdmin.setAvatar(
-                    getMinIoService().getMinioUrl()
-                            + "/"
-                            + getMinIoService().getBucketName()
-                            + "/" + umsAdmin.getAvatar()
-            );
+                    getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + umsAdmin.getAvatar());
         }
         return umsAdmin;
     }
@@ -86,12 +79,7 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminById(id);
         if (CharSequenceUtil.isNotEmpty(umsAdmin.getAvatar())) {
             umsAdmin.setAvatar(
-                    getMinIoService().getMinioUrl()
-                            + "/"
-                            + getMinIoService().getBucketName()
-                            + "/"
-                            + umsAdmin.getAvatar()
-            );
+                    getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + umsAdmin.getAvatar());
         }
         return umsAdmin;
     }
@@ -99,19 +87,12 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     @Override
     public final List<UmsAdmin> getUserListByRoleId(final Long roleId) {
         final List<UmsAdmin> list = getBaseMapper().getUserListByRoleId(roleId);
-        list.forEach(
-                u -> {
-                    if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
-                        u.setAvatar(
-                                getMinIoService().getMinioUrl()
-                                        + "/"
-                                        + getMinIoService().getBucketName()
-                                        + "/"
-                                        + u.getAvatar()
-                        );
-                    }
-                }
-        );
+        list.forEach(u -> {
+            if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
+                u.setAvatar(
+                        getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + u.getAvatar());
+            }
+        });
         return list;
     }
 
@@ -123,18 +104,12 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         PageMethod.startPage((int) pagePlus.getCurrent(), (int) pagePlus.getSize());
         final List<UmsAdmin> list = getBaseMapper().queryUserList(bo);
         final PageInfo<UmsAdmin> pageInfo = new PageInfo<>(list);
-        pageInfo.getList().forEach(
-                u -> {
-                    if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
-                        u.setAvatar(
-                                getMinIoService().getMinioUrl()
-                                        + "/"
-                                        + getMinIoService().getBucketName()
-                                        + "/"
-                                        + u.getAvatar());
-                    }
-                }
-        );
+        pageInfo.getList().forEach(u -> {
+            if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
+                u.setAvatar(
+                        getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + u.getAvatar());
+            }
+        });
         pagePlus.setRecords(pageInfo.getList());
         pagePlus.setRecordsVo(BeanUtil.copyToList(pageInfo.getList(), UserVo.class));
         pagePlus.setTotal(pageInfo.getTotal());
@@ -151,13 +126,17 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean uploadAvatar(final Long id, final MultipartFile file, final Long uploadById) {
+    public Boolean uploadAvatar(
+            final Long id,
+            final MultipartFile file,
+            final Long uploadById
+    ) {
         final UmsFile umsFile = new UmsFile();
         final String originalName = file.getOriginalFilename();
         umsFile.setOriginalName(originalName);
         final String postfix = originalName != null ? originalName.substring(originalName.lastIndexOf(".")) : "";
         // 校验后缀名
-        if (!CharSequenceUtil.contains(AVATAR_POSTFIX, postfix)) {
+        if (!CharSequenceUtil.contains(getConfig().getApp().getAvatarPostfix(), postfix)) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "只接受jpg与png格式的图片");
         }
         umsFile.setPostfix(postfix);
@@ -171,14 +150,16 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
             throw new BusinessErrorException("读取文件失败", e);
         }
         // 校验文件头
-        if (!CharSequenceUtil.contains(AVATAR_POSTFIX, fileType)) {
+        if (!CharSequenceUtil.contains(getConfig().getApp().getAvatarPostfix(), fileType)) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "只接受jpg与png格式的图片");
         }
         umsFile.setName(UUID.fastUUID().toString());
         // 储存文件至minio(路径为 头像地址/文件名+后缀名)
-        minIoService.upload(AVATAR_PATH + "/" + umsFile.getName() + postfix, fileInputStream, file.getContentType());
+        minIoService.upload(getConfig().getApp().getAvatarPath() + "/" + umsFile.getName() + postfix, fileInputStream,
+                file.getContentType()
+        );
         // 设置文件路径(桶名/头像储存路径)
-        umsFile.setPath(AVATAR_PATH);
+        umsFile.setPath(getConfig().getApp().getAvatarPath());
         umsFile.setSize(file.getSize());
         umsFile.setUploadById(id);
         umsFile.setBusinessType(BusinessTypeEnum.USER_AVATAR.getCode());
@@ -206,7 +187,7 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         if (CharSequenceUtil.isEmpty(path)) {
             return null;
         }
-        return getMinIoService().getMinioUrl() + "/" + getMinIoService().getBucketName() + "/" + path;
+        return getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + path;
     }
 
     @Override
@@ -226,9 +207,7 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
     @Override
     public Boolean checkUsernameUnique(final UmsAdmin umsAdmin) {
         final UmsAdmin user = getOne(
-                Wrappers.<UmsAdmin>lambdaQuery()
-                        .eq(UmsAdmin::getUsername, umsAdmin.getUsername())
-                        .last("limit 1"));
+                Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, umsAdmin.getUsername()).last("limit 1"));
         if (umsAdmin.getId() != null) {
             return user != null && user.getId().equals(umsAdmin.getId());
         } else {

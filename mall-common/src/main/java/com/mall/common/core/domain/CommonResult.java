@@ -12,8 +12,8 @@ import lombok.Data;
  * @author 钟舒艺
  **/
 @Data
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @SuppressWarnings("unused")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class CommonResult<T> implements Serializable {
 
     private static final long serialVersionUID = -2339115200498941889L;
@@ -44,6 +44,12 @@ public class CommonResult<T> implements Serializable {
      */
     private transient T result;
 
+
+    /**
+     * response timestamp.
+     */
+    private long timestamp;
+
     /**
      * 类型.
      */
@@ -52,11 +58,17 @@ public class CommonResult<T> implements Serializable {
     protected CommonResult() {
     }
 
-    protected CommonResult(final int code, final String message, final T data, final String type) {
+    protected CommonResult(
+            final int code,
+            final String message,
+            final T data,
+            final String type
+    ) {
         this.code = code;
         this.message = message;
         this.result = data;
         this.type = type;
+        this.timestamp = System.currentTimeMillis();
     }
 
     /**
@@ -88,7 +100,10 @@ public class CommonResult<T> implements Serializable {
      * @param <T>     要返回的类型
      * @return 通用返回
      */
-    public static <T> CommonResult<T> success(final T data, final String message) {
+    public static <T> CommonResult<T> success(
+            final T data,
+            final String message
+    ) {
         return new CommonResult<>(HttpStatus.HTTP_OK, message, data, SUCCESS);
     }
 
@@ -130,7 +145,10 @@ public class CommonResult<T> implements Serializable {
      * @param msg  提示信息
      * @return 通用返回类型
      */
-    public static CommonResult<Void> failed(final Integer code, final String msg) {
+    public static CommonResult<Void> failed(
+            final Integer code,
+            final String msg
+    ) {
         return new CommonResult<>(code, msg, null, ERROR);
     }
 
@@ -143,7 +161,11 @@ public class CommonResult<T> implements Serializable {
      * @param <T>  数据类型
      * @return 通用返回类
      */
-    public static <T> CommonResult<T> failed(final Integer code, final String msg, final T data) {
+    public static <T> CommonResult<T> failed(
+            final Integer code,
+            final String msg,
+            final T data
+    ) {
         return new CommonResult<>(code, msg, data, ERROR);
     }
 

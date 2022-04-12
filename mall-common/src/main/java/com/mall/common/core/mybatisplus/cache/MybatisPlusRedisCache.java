@@ -51,7 +51,10 @@ public class MybatisPlusRedisCache implements Cache {
     }
 
     @Override
-    public final void putObject(final Object o, final Object o1) {
+    public final void putObject(
+            final Object o,
+            final Object o1
+    ) {
         if (o1 != null) {
             RedisUtils.setCacheObject(o.toString(), o1);
         }

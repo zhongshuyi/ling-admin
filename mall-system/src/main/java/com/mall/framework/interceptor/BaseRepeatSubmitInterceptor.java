@@ -25,7 +25,8 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
     public final boolean preHandle(
             @NonNull final HttpServletRequest request,
             @NonNull final HttpServletResponse response,
-            @NonNull final Object handler) throws Exception {
+            @NonNull final Object handler
+    ) throws Exception {
         if (handler instanceof HandlerMethod) {
             final HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Method method = handlerMethod.getMethod();

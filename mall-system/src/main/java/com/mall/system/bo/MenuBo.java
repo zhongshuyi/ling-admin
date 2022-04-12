@@ -1,8 +1,10 @@
 package com.mall.system.bo;
 
 import com.mall.common.core.validate.ValidationGroups;
+import com.mall.system.entity.UmsPermissionUrl;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -186,5 +188,11 @@ public class MenuBo implements Serializable {
      */
     @ApiModelProperty(value = "是否是外链 0是,1不是")
     private Integer isFrame = 0;
+
+
+    /**
+     * 权限url列表.
+     */
+    private List<UmsPermissionUrl> permissionUrl;
 
 }

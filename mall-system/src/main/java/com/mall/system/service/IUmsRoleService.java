@@ -31,7 +31,10 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializ
      * @param state 状态
      * @return 是否成功
      */
-    boolean stateChanges(Long id, Integer state);
+    boolean stateChanges(
+            Long id,
+            Integer state
+    );
 
     /**
      * 根据用户id查询角色列表.
@@ -58,7 +61,10 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializ
      * @param newIds 新的部门id集合
      * @return 是否修改成功
      */
-    Boolean setDataScope(Long roleId, Set<Long> newIds);
+    Boolean setDataScope(
+            Long roleId,
+            Set<Long> newIds
+    );
 
     /**
      * 设置用户的角色.
@@ -67,7 +73,10 @@ public interface IUmsRoleService extends IServicePlus<UmsRole, RoleVo>, Serializ
      * @param roleIds 角色id列表
      * @return 是否成功
      */
-    Boolean setUserRole(Long userId, Set<Long> roleIds);
+    Boolean setUserRole(
+            Long userId,
+            Set<Long> roleIds
+    );
 
     /**
      * 根据用户id查询角色id集合.

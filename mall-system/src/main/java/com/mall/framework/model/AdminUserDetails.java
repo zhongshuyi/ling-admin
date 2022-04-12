@@ -1,25 +1,29 @@
 package com.mall.framework.model;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mall.system.entity.UmsAdmin;
 import com.mall.system.entity.UmsDept;
 import com.mall.system.entity.UmsMenu;
+import com.mall.system.entity.UmsPermissionUrl;
 import com.mall.system.entity.UmsRole;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -29,8 +33,10 @@ import org.springframework.security.core.userdetails.UserDetails;
  **/
 @SuppressWarnings("unused")
 @Data
+@Slf4j
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class AdminUserDetails implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,12 +49,22 @@ public class AdminUserDetails implements UserDetails, Serializable {
     /**
      * 权限代码.
      */
-    private Set<String> permissionCodeSet;
+    private List<GrantedAuthority> permissionCodeList;
+
+    /**
+     * 角色代码.
+     */
+    private Set<String> roleNameSet;
 
     /**
      * 权限列表.
      */
     private List<UmsMenu> permissionList;
+
+    /**
+     * 有权限的url列表.
+     */
+    private List<UmsPermissionUrl> urlList;
 
     /**
      * 角色信息.
@@ -81,25 +97,33 @@ public class AdminUserDetails implements UserDetails, Serializable {
      *
      * @param umsAdmin       用户信息
      * @param permissionList 权限集合
+     * @param urlList        可访问的url列表
      * @param umsRoles       用户角色组
      * @param depts          用户部门组
      */
     public AdminUserDetails(
             final UmsAdmin umsAdmin,
             final List<UmsMenu> permissionList,
+            final List<UmsPermissionUrl> urlList,
             final List<UmsRole> umsRoles,
-            final List<UmsDept> depts) {
+            final List<UmsDept> depts
+    ) {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
         this.roles = umsRoles;
+        this.roleNameSet = umsRoles.stream().map(UmsRole::getRoleName).collect(Collectors.toSet());
         this.depts = depts;
-        if (Boolean.TRUE.equals(umsAdmin.getIsAdmin())) {
-            this.permissionCodeSet = new HashSet<>(1);
-            this.permissionCodeSet.add("*:*:*");
-        } else {
-            this.permissionCodeSet =
-                    permissionList.stream().map(UmsMenu::getPerms).collect(Collectors.toSet());
-        }
+        this.urlList = urlList;
+        this.permissionCodeList =
+                permissionList
+                        .stream()
+                        .filter(
+                                p -> CharSequenceUtil.isNotEmpty(p.getPerms())
+                        )
+                        .map(
+                                p -> new SimpleGrantedAuthority(p.getPerms())
+                        )
+                        .collect(Collectors.toList());
     }
 
     /**
@@ -125,7 +149,7 @@ public class AdminUserDetails implements UserDetails, Serializable {
     @Override
     public final Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
-        return Collections.emptyList();
+        return permissionCodeList;
     }
 
     @Override

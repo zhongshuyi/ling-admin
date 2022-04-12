@@ -1,16 +1,24 @@
 package com.mall.framework.security.service;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mall.common.constant.GlobalConstants;
 import com.mall.common.enums.BusinessExceptionMsgEnum;
 import com.mall.common.enums.Status;
 import com.mall.common.exception.BusinessErrorException;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.system.entity.UmsAdmin;
+import com.mall.system.entity.UmsMenu;
+import com.mall.system.entity.UmsPermissionUrl;
 import com.mall.system.entity.UmsRole;
+import com.mall.system.mapper.UmsPermissionUrlMapper;
 import com.mall.system.service.IUmsAdminService;
 import com.mall.system.service.IUmsDeptService;
 import com.mall.system.service.IUmsRoleService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +57,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     private final IUmsRoleService umsRoleService;
 
+    /**
+     * 权限与url关联信息.
+     */
+    private final UmsPermissionUrlMapper urlMapping;
+
+    /**
+     * app配置信息.
+     */
+    private final CustomConfig config;
+
     @Override
     public final UserDetails loadUserByUsername(
             final String username
@@ -78,9 +96,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (umsAdmin.getIsAdmin() == null) {
             umsAdmin.setIsAdmin(false);
         }
+        final List<UmsMenu> permissionList = permissionService.getPermissionList(umsAdmin);
+        final List<Long> permissionIds = permissionList.stream().filter(
+                p -> p.getMenuType() == 2).map(UmsMenu::getId).collect(Collectors.toList());
+        List<UmsPermissionUrl> urlList = config.getLoginHasAuth();
+        log.error(urlList.toString());
+        if (CollUtil.isNotEmpty(permissionIds)) {
+            // 获取url与method 都不为空的权限列表
+            urlList = urlMapping.selectList(
+                            Wrappers.<UmsPermissionUrl>lambdaQuery().in(UmsPermissionUrl::getMenuId, permissionIds))
+                    .stream().filter(u ->
+                            CharSequenceUtil.isNotEmpty(u.getUrl()) && CharSequenceUtil.isNotEmpty(u.getMethod()))
+                    .collect(Collectors.toList());
+        }
         return new AdminUserDetails(
                 umsAdmin,
                 permissionService.getPermissionList(umsAdmin),
-                roles, umsDeptService.selectDeptListByUserId(umsAdmin.getId()));
+                urlList,
+                roles,
+                umsDeptService.selectDeptListByUserId(umsAdmin.getId())
+        );
     }
 }

@@ -57,7 +57,8 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
             throw new BusinessErrorException(
                     HttpStatus.HTTP_INTERNAL_ERROR,
                     "自动注入异常 => " + e.getMessage(),
-                    e);
+                    e
+            );
         }
         updateFill(metaObject);
     }
@@ -75,7 +76,8 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
             throw new BusinessErrorException(
                     HttpStatus.HTTP_INTERNAL_ERROR,
                     "自动注入异常 => " + e.getMessage(),
-                    e);
+                    e
+            );
         }
     }
 

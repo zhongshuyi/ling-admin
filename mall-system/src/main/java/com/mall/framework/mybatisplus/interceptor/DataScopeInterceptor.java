@@ -12,9 +12,9 @@ import cn.hutool.core.util.ClassLoaderUtil;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.mall.common.annotation.DataScope;
 import com.mall.common.exception.BusinessErrorException;
-import com.mall.common.util.ServletUtils;
 import com.mall.framework.model.AdminUserDetails;
 import com.mall.framework.util.JwtTokenUtil;
+import com.mall.framework.util.SecurityUtils;
 import com.mall.system.entity.UmsDept;
 import com.mall.system.entity.UmsRole;
 import java.lang.reflect.Field;
@@ -121,8 +121,7 @@ public class DataScopeInterceptor implements InnerInterceptor {
      * @return sql
      */
     private String logicCondition() {
-        final AdminUserDetails adminUserDetails =
-                jwtTokenUtil.getAdminUserDetails(ServletUtils.getRequest());
+        final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
         // 用户id
         final Long userId = adminUserDetails.getUmsAdmin().getId();
         // 用户角色
@@ -211,7 +210,8 @@ public class DataScopeInterceptor implements InnerInterceptor {
             final Integer dataScope,
             final List<UmsRole> roles,
             final Long userId,
-            final List<Long> deptIds) {
+            final List<Long> deptIds
+    ) {
 
         switch (dataScope) {
             // 自定数据权限

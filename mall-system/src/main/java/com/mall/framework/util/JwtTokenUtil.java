@@ -6,6 +6,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.mall.common.util.RedisUtils;
+import com.mall.framework.config.CustomConfig;
 import com.mall.framework.model.AdminUserDetails;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -13,8 +14,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 
@@ -27,9 +28,11 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @Slf4j
-@ConfigurationProperties(prefix = "token")
 @Data
+@RequiredArgsConstructor
 public class JwtTokenUtil implements Serializable {
+
+    private static final long serialVersionUID = 8404670744997523298L;
 
     /**
      * 一秒.
@@ -39,31 +42,17 @@ public class JwtTokenUtil implements Serializable {
      * 一分钟.
      */
     protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
-    private static final long serialVersionUID = 8404670744997523298L;
+
     /**
      * 刷新时间,距离过期时间小于20分钟.
      */
     private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+
     /**
-     * 令牌秘钥,定义在application.yml中通过@ConfigurationProperties注解映射.
+     * 配置信息.
      */
-    private String secret;
-    /**
-     * 令牌有效期,定义在application.yml中通过@ConfigurationProperties注解映射.
-     */
-    private Long expiration;
-    /**
-     * JWT存储的请求头.
-     */
-    private String tokenHeader;
-    /**
-     * 令牌前缀.
-     */
-    private String tokenPrefix;
-    /**
-     * token中储存的uuid键名.
-     */
-    private String userKey;
+    private final CustomConfig config;
+
 
     /**
      * 根据负载生成JWT的token,不设置过期时间,因为不存重要信息.
@@ -72,7 +61,7 @@ public class JwtTokenUtil implements Serializable {
      * @return token
      */
     private String generateToken(final Map<String, Object> claims) {
-        return JWTUtil.createToken(claims, secret.getBytes());
+        return JWTUtil.createToken(claims, config.getToken().getSecret().getBytes());
     }
 
     /**
@@ -86,13 +75,13 @@ public class JwtTokenUtil implements Serializable {
         final String uuid = UUID.fastUUID().toString();
         user.setUuid(uuid);
         user.setLoginTime(System.currentTimeMillis());
+        final Long expiration = config.getToken().getExpiration();
         user.setExpireTime(expiration * MILLIS_MINUTE);
         // 储存至redis
         log.info("过期时间:" + expiration);
-        RedisUtils.setCacheObject(
-                getTokenKey(uuid), user, expiration, TimeUnit.MINUTES);
+        RedisUtils.setCacheObject(getTokenKey(uuid), user, expiration, TimeUnit.MINUTES);
         final Map<String, Object> claims = new HashMap<>(1);
-        claims.put(userKey, uuid);
+        claims.put(config.getToken().getUserKey(), uuid);
         return generateToken(claims);
     }
 
@@ -103,7 +92,7 @@ public class JwtTokenUtil implements Serializable {
      * @return 是否有效
      */
     private boolean validationToken(final String token) {
-        return JWTUtil.verify(token, secret.getBytes());
+        return JWTUtil.verify(token, config.getToken().getSecret().getBytes());
     }
 
 
@@ -114,9 +103,9 @@ public class JwtTokenUtil implements Serializable {
      * @return token
      */
     private String getToken(final HttpServletRequest request) {
-        String token = request.getHeader(tokenHeader);
-        if (CharSequenceUtil.isNotEmpty(token) && token.startsWith(tokenPrefix)) {
-            token = token.replace(tokenPrefix, "");
+        String token = request.getHeader(config.getToken().getTokenHeader());
+        if (CharSequenceUtil.isNotEmpty(token) && token.startsWith(config.getToken().getTokenPrefix())) {
+            token = token.replace(config.getToken().getTokenPrefix(), "");
         }
         return token;
     }
@@ -127,14 +116,13 @@ public class JwtTokenUtil implements Serializable {
      * @param request 请求
      * @return 用户详细信息
      */
-    public AdminUserDetails getAdminUserDetails(
-            final HttpServletRequest request) {
+    public AdminUserDetails getAdminUserDetails(final HttpServletRequest request) {
         final String token = getToken(request);
         // 检查token是否被篡改
         if (CharSequenceUtil.isNotEmpty(token) && validationToken(token)) {
             // 解析token获取存的负载对象
             final JWT jwt = JWTUtil.parseToken(token);
-            final String uuid = jwt.getPayload(userKey).toString();
+            final String uuid = jwt.getPayload(config.getToken().getUserKey()).toString();
             return RedisUtils.getCacheObject(getTokenKey(uuid));
         }
         return null;
@@ -151,11 +139,13 @@ public class JwtTokenUtil implements Serializable {
         final long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
             user.setLoginTime(System.currentTimeMillis());
-            user.setExpireTime(
-                    user.getLoginTime() + expireTime * MILLIS_MINUTE);
+            user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
             RedisUtils.setCacheObject(
                     getTokenKey(user.getUuid()),
-                    user, expiration, TimeUnit.MINUTES);
+                    user,
+                    config.getToken().getExpiration(),
+                    TimeUnit.MINUTES
+            );
         }
     }
 
@@ -180,8 +170,7 @@ public class JwtTokenUtil implements Serializable {
     public void setUser(final AdminUserDetails user) {
         if (user != null && CharSequenceUtil.isNotEmpty(user.getUuid())) {
             RedisUtils.setCacheObject(
-                    getTokenKey(user.getUuid()),
-                    user, expiration, TimeUnit.MINUTES);
+                    getTokenKey(user.getUuid()), user, config.getToken().getExpiration(), TimeUnit.MINUTES);
         }
     }
 
@@ -192,6 +181,6 @@ public class JwtTokenUtil implements Serializable {
      * @return 拼接后key
      */
     private String getTokenKey(final String uuid) {
-        return userKey + ":" + uuid;
+        return config.getToken().getUserKey() + ":" + uuid;
     }
 }

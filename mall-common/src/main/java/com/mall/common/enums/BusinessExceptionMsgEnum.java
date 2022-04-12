@@ -49,7 +49,10 @@ public enum BusinessExceptionMsgEnum {
      */
     private final String msg;
 
-    BusinessExceptionMsgEnum(final int code, final String msg) {
+    BusinessExceptionMsgEnum(
+            final int code,
+            final String msg
+    ) {
         this.code = code;
         this.msg = msg;
     }

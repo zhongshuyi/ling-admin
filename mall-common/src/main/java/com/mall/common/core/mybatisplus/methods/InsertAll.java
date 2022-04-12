@@ -30,7 +30,10 @@ public class InsertAll extends AbstractMethod {
 
     @Override
     public final MappedStatement injectMappedStatement(
-            final Class<?> mapperClass, final Class<?> modelClass, final TableInfo tableInfo) {
+            final Class<?> mapperClass,
+            final Class<?> modelClass,
+            final TableInfo tableInfo
+    ) {
         final String sql = "<script>insert into %s %s values %s</script>";
         final String fieldSql = prepareFieldSql(tableInfo);
         final String valueSql = prepareValuesSqlForMysqlBatch(tableInfo);
@@ -58,7 +61,8 @@ public class InsertAll extends AbstractMethod {
         final SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
         return this.addInsertMappedStatement(
                 mapperClass, modelClass, sqlMethod,
-                sqlSource, keyGenerator, keyProperty, keyColumn);
+                sqlSource, keyGenerator, keyProperty, keyColumn
+        );
     }
 
 

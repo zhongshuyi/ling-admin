@@ -29,11 +29,14 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler, Serializ
     public final void handle(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final AccessDeniedException e)
+            final AccessDeniedException e
+    )
             throws IOException {
         final String msg = CharSequenceUtil.format("请求访问：{},认证失败,你没有权限", request.getRequestURI());
-        ServletUtils.renderString(response,
-                new ObjectMapper().writeValueAsString(CommonResult.forbidden(msg)));
+        ServletUtils.renderString(
+                response,
+                new ObjectMapper().writeValueAsString(CommonResult.forbidden(msg))
+        );
         log.warn("没有权限 : "
                 + "ip: " + IpUtils.getIpAdder(request)
                 + "   请求地址: " + request.getRequestURI());

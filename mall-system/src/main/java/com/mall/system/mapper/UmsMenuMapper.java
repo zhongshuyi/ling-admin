@@ -50,7 +50,10 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param permIds 权限id
      * @return 改变行数
      */
-    Integer addDeptPerm(@Param("deptId") Long deptId, @Param("permIds") Set<Long> permIds);
+    Integer addDeptPermByDeptId(
+            @Param("deptId") Long deptId,
+            @Param("permIds") Set<Long> permIds
+    );
 
     /**
      * 删除部门权限.
@@ -59,7 +62,18 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param permIds 权限id
      * @return 是否成功
      */
-    Integer delDeptPerm(@Param("deptId") Long deptId, @Param("permIds") Set<Long> permIds);
+    Integer delDeptPermByDeptId(
+            @Param("deptId") Long deptId,
+            @Param("permIds") Set<Long> permIds
+    );
+
+    /**
+     * 根据菜单权限id删除部门权限.
+     *
+     * @param permId 菜单权限id
+     * @return 成功条数
+     */
+    Integer delDeptPermByPermId(Long permId);
 
 
     /**
@@ -69,7 +83,10 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param permIds 权限id
      * @return 改变行数
      */
-    Integer addRolePerm(@Param("roleId") Long roleId, @Param("permIds") Set<Long> permIds);
+    Integer addRolePermByRoleId(
+            @Param("roleId") Long roleId,
+            @Param("permIds") Set<Long> permIds
+    );
 
     /**
      * 删除部门权限.
@@ -78,7 +95,27 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @param permIds 权限id
      * @return 是否成功
      */
-    Integer delRolePerm(@Param("roleId") Long roleId, @Param("permIds") Set<Long> permIds);
+    Integer delRolePermByRoleId(
+            @Param("roleId") Long roleId,
+            @Param("permIds") Set<Long> permIds
+    );
+
+
+    /**
+     * 根据权限id删除角色菜单或权限.
+     *
+     * @param permId 菜单权限id
+     * @return 删除条数
+     */
+    Integer delRolePermByPermId(Long permId);
+
+    /**
+     * 根据权限角色id删除部门角色的权限或菜单.
+     *
+     * @param permId 菜单权限id
+     * @return 删除条数
+     */
+    Integer delDeptRolePermByPermId(Long permId);
 
     /**
      * 获取角色权限.
@@ -87,4 +124,6 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @return 权限
      */
     Set<Long> selectRolePerm(Long id);
+
+
 }

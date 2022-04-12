@@ -104,7 +104,10 @@ public interface IUmsMenuService extends IService<UmsMenu>, Serializable {
      * @param newIds 新的权限id列表
      * @return 是否修改成功
      */
-    Boolean setDeptPerm(Long deptId, Set<Long> newIds);
+    Boolean setDeptPerm(
+            Long deptId,
+            Set<Long> newIds
+    );
 
     /**
      * 获取角色权限.
@@ -122,5 +125,8 @@ public interface IUmsMenuService extends IService<UmsMenu>, Serializable {
      * @param newIds 新的权限id集合
      * @return 是否成功
      */
-    Boolean setRolePerm(Long roleId, Set<Long> newIds);
+    Boolean setRolePerm(
+            Long roleId,
+            Set<Long> newIds
+    );
 }

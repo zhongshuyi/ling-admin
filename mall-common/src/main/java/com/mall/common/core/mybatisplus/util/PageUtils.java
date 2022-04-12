@@ -93,7 +93,8 @@ public final class PageUtils {
      * @return 分页对象
      */
     private static <T> Page<T> buildPage(
-            final String defaultOrderByColumn, final String defaultIsAsc
+            final String defaultOrderByColumn,
+            final String defaultIsAsc
     ) {
         Integer pageNum = ServletUtils.getParameterToInt(PAGE_NUM, DEFAULT_PAGE_NUM);
         final Integer pageSize = ServletUtils.getParameterToInt(PAGE_SIZE, DEFAULT_PAGE_SIZE);
@@ -117,7 +118,10 @@ public final class PageUtils {
      * @param isAsc         排序方向
      * @return 排序对象
      */
-    private static OrderItem buildOrderItem(final String orderByColumn, final String isAsc) {
+    private static OrderItem buildOrderItem(
+            final String orderByColumn,
+            final String isAsc
+    ) {
         if (CharSequenceUtil.isNotBlank(orderByColumn)) {
             final String newOrderByColumn = CharSequenceUtil.toUnderlineCase(orderByColumn);
             if (ASC.equals(isAsc)) {
