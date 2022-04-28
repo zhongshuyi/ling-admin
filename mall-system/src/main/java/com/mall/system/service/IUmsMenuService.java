@@ -129,4 +129,25 @@ public interface IUmsMenuService extends IService<UmsMenu>, Serializable {
             Long roleId,
             Set<Long> newIds
     );
+
+    /**
+     * 获取部门角色的权限.
+     *
+     * @param deptRoleId 部门角色id
+     * @return 权限id
+     */
+    Set<Long> getDeptRolePerm(Long deptRoleId);
+
+
+    /**
+     * 设置部门角色权限.
+     *
+     * @param deptRoleId 部门角色权限
+     * @param newIds     新的权限id
+     * @return 是否成功
+     */
+    Boolean setDeptRolePerm(
+            Long deptRoleId,
+            Set<Long> newIds
+    );
 }

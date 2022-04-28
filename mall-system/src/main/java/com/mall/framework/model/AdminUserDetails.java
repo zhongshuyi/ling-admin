@@ -1,5 +1,6 @@
 package com.mall.framework.model;
 
+import cn.hutool.core.collection.CollStreamUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -111,7 +112,7 @@ public class AdminUserDetails implements UserDetails, Serializable {
         this.umsAdmin = umsAdmin;
         this.permissionList = permissionList;
         this.roles = umsRoles;
-        this.roleNameSet = umsRoles.stream().map(UmsRole::getRoleName).collect(Collectors.toSet());
+        this.roleNameSet = CollStreamUtil.toSet(umsRoles, UmsRole::getRoleName);
         this.depts = depts;
         this.urlList = urlList;
         this.permissionCodeList =

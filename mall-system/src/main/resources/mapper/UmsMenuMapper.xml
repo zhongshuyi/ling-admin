@@ -15,6 +15,20 @@
         </foreach>
     </insert>
 
+    <insert id="addDeptRolePerm">
+        insert into ums_role_menu values
+        <foreach collection="permIds" item="id" separator=",">
+            (null,#{deptRoleId},#{id})
+        </foreach>
+    </insert>
+
+    <delete id="delDeptRolePerm">
+        delete from ums_dept_role_permission where dept_role_id = #{deptRoleId} and permission_id in
+        <foreach collection="permIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
     <delete id="delDeptPermByDeptId">
         delete from ums_dept_permission where dept_id = #{deptId} and permission_id in
         <foreach collection="permIds" item="id" open="(" separator="," close=")">
@@ -81,6 +95,13 @@
         from ums_menu m
                  inner join ums_role_menu rm on m.id = rm.menu_id
         where rm.role_id = #{id}
+    </select>
+
+    <select id="selectDeptRolePerm" resultType="java.lang.Long">
+        select m.id
+        from ums_menu m
+                 inner join ums_dept_role_permission udrp on m.id = udrp.permission_id
+        where udrp.dept_role_id = #{id}
     </select>
 
 

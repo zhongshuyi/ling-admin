@@ -53,6 +53,11 @@ public class MenuController extends BaseController {
     private final IUmsMenuService umsMenuService;
 
     /**
+     * 部门服务.
+     */
+    private final IUmsMenuService umsDeptService;
+
+    /**
      * 配置信息.
      */
     private final CustomConfig config;
@@ -189,5 +194,18 @@ public class MenuController extends BaseController {
     @GetMapping("getPerm")
     public CommonResult<List<Tree<Long>>> getPerm() {
         return CommonResult.success(MenuUtil.buildPermTree(umsMenuService.list()));
+    }
+
+    /**
+     * 获取部门的权限树.
+     *
+     * @param deptId 部门id
+     * @return 部门权限树
+     */
+    @GetMapping("deptPermTree/{deptId}")
+    @ApiOperation("获取部门拥有权限的权限树")
+    public CommonResult<List<Tree<Long>>> getDeptPermTree(@PathVariable final Long deptId) {
+        return CommonResult.success(
+                MenuUtil.buildPermTree(umsMenuService.listByIds(umsDeptService.getDeptPerm(deptId))));
     }
 }

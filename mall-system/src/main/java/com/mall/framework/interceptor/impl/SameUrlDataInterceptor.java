@@ -32,10 +32,16 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implements Serializable {
 
+
     /**
      * 配置信息.
      */
     private final CustomConfig config;
+
+    /**
+     * Jackson序列化.
+     */
+    private final ObjectMapper objectMapper;
 
     /**
      * 防重提交 redis key.
@@ -87,7 +93,7 @@ public class SameUrlDataInterceptor extends BaseRepeatSubmitInterceptor implemen
 
         // body参数为空，获取Parameter的数据
         if (Validator.isEmpty(nowParams)) {
-            nowParams = new ObjectMapper().writeValueAsString(request.getParameterMap());
+            nowParams = objectMapper.writeValueAsString(request.getParameterMap());
         }
         final Map<String, Object> nowDataMap = new HashMap<>(2);
         nowDataMap.put(REPEAT_PARAMS, nowParams);

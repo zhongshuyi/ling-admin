@@ -1,5 +1,6 @@
 package com.mall.common.util.ip;
 
+import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.CharsetUtil;
@@ -54,8 +55,7 @@ public final class AddressUtils {
                 log.error("获取地理位置异常 {}", ip);
                 return UNKNOWN;
             }
-            final ObjectMapper objectMapper = new ObjectMapper();
-            final JsonNode root = objectMapper.readTree(rspStr);
+            final JsonNode root = Singleton.get(ObjectMapper.class).readTree(rspStr);
             final String region = root.get("pro").asText();
             final String city = root.get("city").asText();
             return String.format("%s %s", region, city);

@@ -59,7 +59,7 @@ public class MybatisPlusConfig {
 
     /**
      * 分页插件，自动识别数据库类型.
-     * https://baomidou.com/guide/interceptor-pagination.html
+     * <a href="https://baomidou.com/guide/interceptor-pagination.html">https://baomidou.com/guide/interceptor-pagination.html</a>
      *
      * @return 分页插件配置
      */
@@ -74,7 +74,7 @@ public class MybatisPlusConfig {
 
     /**
      * 乐观锁插件.
-     * https://baomidou.com/guide/interceptor-optimistic-locker.html
+     * <a href="https://baomidou.com/guide/interceptor-optimistic-locker.html">https://baomidou.com/guide/interceptor-optimistic-locker.html</a>
      *
      * @return 乐观锁插件配置
      */
@@ -84,7 +84,7 @@ public class MybatisPlusConfig {
 
     /**
      * 如果是对全表的删除或更新操作，就会终止该操作.
-     * https://baomidou.com/guide/interceptor-block-attack.html
+     * <a href="https://baomidou.com/guide/interceptor-block-attack.html">https://baomidou.com/guide/interceptor-block-attack.html</a>
      *
      * @return 全表操作拦截器
      */
@@ -95,7 +95,7 @@ public class MybatisPlusConfig {
 
     /**
      * 元对象字段填充控制器 用于填充创建时间/创建人/修改时间/修改人.
-     * https://baomidou.com/guide/auto-fill-metainfo.html
+     * <a href="https://baomidou.com/guide/auto-fill-metainfo.html">https://baomidou.com/guide/auto-fill-metainfo.html</a>
      *
      * @return 元对象字段填充控制器
      */
@@ -106,7 +106,7 @@ public class MybatisPlusConfig {
 
     /**
      * sql注入器配置.
-     * https://baomidou.com/guide/sql-injector.html
+     * <a href="https://baomidou.com/guide/sql-injector.html">https://baomidou.com/guide/sql-injector.html</a>
      *
      * @return sql注入器配置
      */

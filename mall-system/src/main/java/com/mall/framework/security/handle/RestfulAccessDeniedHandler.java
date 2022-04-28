@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -19,11 +20,17 @@ import org.springframework.stereotype.Component;
  *
  * @author 钟舒艺
  **/
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler, Serializable {
 
     private static final long serialVersionUID = -8970718410437077606L;
+
+    /**
+     * Jackson序列化.
+     */
+    private final ObjectMapper objectMapper;
 
     @Override
     public final void handle(
@@ -35,7 +42,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler, Serializ
         final String msg = CharSequenceUtil.format("请求访问：{},认证失败,你没有权限", request.getRequestURI());
         ServletUtils.renderString(
                 response,
-                new ObjectMapper().writeValueAsString(CommonResult.forbidden(msg))
+                objectMapper.writeValueAsString(CommonResult.forbidden(msg))
         );
         log.warn("没有权限 : "
                 + "ip: " + IpUtils.getIpAdder(request)

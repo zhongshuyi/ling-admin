@@ -1,6 +1,7 @@
 package com.mall.framework.interceptor;
 
 
+import cn.hutool.core.lang.Singleton;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mall.common.annotation.RepeatSubmit;
@@ -33,8 +34,7 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
             final RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
             if (annotation != null && this.isRepeatSubmit(request)) {
                 final CommonResult<Void> ajaxResult = CommonResult.failed("不允许重复提交，请稍后再试");
-                ServletUtils.renderString(
-                        response, new ObjectMapper().writeValueAsString(ajaxResult));
+                ServletUtils.renderString(response, Singleton.get(ObjectMapper.class).writeValueAsString(ajaxResult));
                 return false;
             }
             return true;
@@ -50,6 +50,5 @@ public abstract class BaseRepeatSubmitInterceptor implements HandlerInterceptor 
      * @return 是否重复
      * @throws JsonProcessingException 转换异常
      */
-    public abstract boolean isRepeatSubmit(HttpServletRequest request)
-            throws JsonProcessingException;
+    public abstract boolean isRepeatSubmit(HttpServletRequest request) throws JsonProcessingException;
 }

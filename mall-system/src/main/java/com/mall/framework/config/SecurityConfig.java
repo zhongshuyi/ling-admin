@@ -20,8 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * SpringSecurity的配置类
- * 文档记录: https://www.yuque.com/rookieteam/bvc9h3/gbvtga#g5MxD
+ * SpringSecurity的配置类.
+ * 文档记录:
+ * <a href="https://www.yuque.com/rookieteam/bvc9h3/gbvtga#g5MxD">https://www.yuque.com/rookieteam/bvc9h3/gbvtga#g5MxD</a>
  * Spring Security默认是禁用注解的,要想开启注解需要在继承WebSecurityConfigurerAdapter的类上加@EnableGlobalMethodSecurity注解
  * 判断用户对某个控制层的方法是否具有访问权限
  *
@@ -37,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 配置信息.
      */
     private final CustomConfig customConfig;
-    
+
     /**
      * 登录用户服务类.
      */
@@ -122,7 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public final void configure(final WebSecurity web) throws Exception {
+    public final void configure(final WebSecurity web) {
         final WebSecurity and = web.ignoring().and();
 
         // 忽略 GET

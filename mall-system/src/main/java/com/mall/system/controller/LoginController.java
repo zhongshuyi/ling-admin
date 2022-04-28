@@ -1,6 +1,7 @@
 package com.mall.system.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollStreamUtil;
 import com.mall.common.annotation.LoginAuth;
 import com.mall.common.core.domain.CommonResult;
 import com.mall.common.enums.BusinessExceptionMsgEnum;
@@ -18,7 +19,6 @@ import io.swagger.annotations.ApiOperation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -122,10 +122,7 @@ public class LoginController {
             return CommonResult.success(
                     MenuUtil.getRouter(
                             umsMenuService.selectMenuByIds(
-                                    adminUserDetails.getPermissionList()
-                                            .stream()
-                                            .map(UmsMenu::getId)
-                                            .collect(Collectors.toList()))));
+                                    CollStreamUtil.toList(adminUserDetails.getPermissionList(), UmsMenu::getId))));
         }
     }
 }

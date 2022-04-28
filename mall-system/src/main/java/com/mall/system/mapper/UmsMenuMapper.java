@@ -91,7 +91,7 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
     /**
      * 删除部门权限.
      *
-     * @param roleId  部门id
+     * @param roleId  角色id
      * @param permIds 权限id
      * @return 是否成功
      */
@@ -126,4 +126,35 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
     Set<Long> selectRolePerm(Long id);
 
 
+    /**
+     * 获取部门角色权限.
+     *
+     * @return 权限id
+     */
+    Set<Long> selectDeptRolePerm();
+
+
+    /**
+     * 添加部门角色权限.
+     *
+     * @param deptRoleId 部门角色id.
+     * @param permIds    权限id
+     * @return 受影响行数
+     */
+    Integer addDeptRolePerm(
+            @Param("deptRoleId") Long deptRoleId,
+            @Param("permIds") Set<Long> permIds
+    );
+
+    /**
+     * 删除部门角色权限.
+     *
+     * @param deptRoleId 部门id
+     * @param permIds    权限id
+     * @return 是否成功
+     */
+    Integer delDeptRolePerm(
+            @Param("roleId") Long deptRoleId,
+            @Param("permIds") Set<Long> permIds
+    );
 }

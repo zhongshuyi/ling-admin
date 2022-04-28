@@ -16,4 +16,5 @@ import org.springframework.stereotype.Service;
 public class TestDomeServiceImpl extends ServicePlusImpl<TestDomeMapper, TestDome, TestDomeVo>
         implements TestDomeService {
 
+    private static final long serialVersionUID = 1069024247199834280L;
 }

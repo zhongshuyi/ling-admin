@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -19,11 +20,18 @@ import org.springframework.stereotype.Component;
  *
  * @author 钟舒艺
  **/
-@Component
+
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = -8970718410437077606L;
+
+    /**
+     * Jackson序列化.
+     */
+    private final ObjectMapper objectMapper;
 
     @Override
     public final void commence(
@@ -35,7 +43,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint, S
         final String msg = CharSequenceUtil.format("请求访问：{},未登录或token已过期", request.getRequestURI());
         ServletUtils.renderString(
                 response,
-                new ObjectMapper().writeValueAsString(CommonResult.unauthorized(msg))
+                objectMapper.writeValueAsString(CommonResult.unauthorized(msg))
         );
         log.warn("未登录或已过期 : " + "ip: "
                 + IpUtils.getIpAdder(request)

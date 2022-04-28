@@ -69,7 +69,9 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminByUserName(userName);
         if (umsAdmin != null && umsAdmin.getAvatar() != null) {
             umsAdmin.setAvatar(
-                    getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + umsAdmin.getAvatar());
+                    getConfig().getMinio().getUrl()
+                            + "/" + getConfig().getMinio().getBucketName()
+                            + "/" + umsAdmin.getAvatar());
         }
         return umsAdmin;
     }
@@ -79,7 +81,9 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         final UmsAdmin umsAdmin = getBaseMapper().getUmsAdminById(id);
         if (CharSequenceUtil.isNotEmpty(umsAdmin.getAvatar())) {
             umsAdmin.setAvatar(
-                    getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + umsAdmin.getAvatar());
+                    getConfig().getMinio().getUrl()
+                            + "/" + getConfig().getMinio().getBucketName()
+                            + "/" + umsAdmin.getAvatar());
         }
         return umsAdmin;
     }
@@ -90,7 +94,9 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         list.forEach(u -> {
             if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
                 u.setAvatar(
-                        getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + u.getAvatar());
+                        getConfig().getMinio().getUrl()
+                                + "/" + getConfig().getMinio().getBucketName()
+                                + "/" + u.getAvatar());
             }
         });
         return list;
@@ -107,7 +113,9 @@ public class UmsAdminServiceImpl extends ServicePlusImpl<UmsAdminMapper, UmsAdmi
         pageInfo.getList().forEach(u -> {
             if (CharSequenceUtil.isNotEmpty(u.getAvatar())) {
                 u.setAvatar(
-                        getConfig().getMinio().getUrl() + "/" + getConfig().getMinio().getBucketName() + "/" + u.getAvatar());
+                        getConfig().getMinio().getUrl()
+                                + "/" + getConfig().getMinio().getBucketName()
+                                + "/" + u.getAvatar());
             }
         });
         pagePlus.setRecords(pageInfo.getList());

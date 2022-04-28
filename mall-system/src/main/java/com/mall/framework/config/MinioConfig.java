@@ -2,7 +2,6 @@ package com.mall.framework.config;
 
 import io.minio.MinioClient;
 import java.io.Serializable;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author 钟舒艺
  **/
-@Data
 @Configuration
 @RequiredArgsConstructor
 public class MinioConfig implements Serializable {

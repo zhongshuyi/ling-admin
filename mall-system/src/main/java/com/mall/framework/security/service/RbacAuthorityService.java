@@ -2,6 +2,7 @@ package com.mall.framework.security.service;
 
 import cn.hutool.core.collection.CollUtil;
 import com.mall.framework.model.AdminUserDetails;
+import com.mall.framework.util.RequestUtil;
 import com.mall.framework.util.SecurityUtils;
 import com.mall.system.entity.UmsPermissionUrl;
 import com.mall.system.entity.UmsRole;
@@ -23,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class RbacAuthorityService {
 
     /**
+     * 请求校验.
+     */
+    private final RequestUtil requestUtil;
+
+    /**
      * 根据访问url判断是否有权限.
      *
      * @param request        请求
@@ -33,6 +39,9 @@ public class RbacAuthorityService {
             final HttpServletRequest request,
             final Authentication authentication
     ) {
+        if (requestUtil.checkIgnores(request)) {
+            return true;
+        }
         final AdminUserDetails user = SecurityUtils.getLoginUser();
         for (final UmsRole role : user.getRoles()) {
             if ("admin".equals(role.getRoleKey())) {

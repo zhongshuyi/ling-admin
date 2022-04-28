@@ -160,4 +160,26 @@ public class UmsMenuServiceImpl
         result.removeAll(oldIds);
         return isSuccess && (result.isEmpty() || getBaseMapper().addRolePermByRoleId(roleId, result) == result.size());
     }
+
+    @Override
+    public final Set<Long> getDeptRolePerm(final Long deptRoleId) {
+        return getBaseMapper().selectDeptRolePerm();
+    }
+
+    @Override
+    public final Boolean setDeptRolePerm(
+            final Long deptRoleId,
+            final Set<Long> newIds
+    ) {
+        final Set<Long> oldIds = getDeptRolePerm(deptRoleId);
+        final Set<Long> result = new HashSet<>(oldIds);
+        result.removeAll(newIds);
+        final boolean isSuccess =
+                result.isEmpty() || getBaseMapper().delDeptRolePerm(deptRoleId, result) == result.size();
+        result.clear();
+        result.addAll(newIds);
+        result.removeAll(oldIds);
+        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePermByRoleId(
+                deptRoleId, result) == result.size());
+    }
 }

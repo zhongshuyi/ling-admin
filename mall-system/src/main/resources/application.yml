@@ -5,7 +5,7 @@ custom:
     avatar-postfix: ".png,.jpg"
     avatar-path: "img/avatar"
   minio:
-    url: http://127.0.0.1:9000
+    url: http://121.196.144.187:9000
     accessKey: minioadmin
     secretKey: minioadmin
     bucketName: mall
@@ -29,6 +29,7 @@ custom:
     # 需要忽略的 post 请求
     post:
       - "/login"
+      - "/error"
     # 需要忽略的请求，不限方法
     pattern:
       - "/test/*"
