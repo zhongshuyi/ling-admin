@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ling.system.mapper.SysAdminMapper">
+
+    <select id="getUserListByRoleId" resultType="com.ling.system.entity.SysAdmin">
+        select u.id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
+               status,
+               del_flag,
+               depart_ids,
+               user_identity,
+               u.remark
+        from sys_admin u
+                 join sys_user_role uur on u.id = uur.user_id
+                 left join sys_file uf on u.avatar_file_id = uf.id
+        where uur.role_id = #{roleId}
+    </select>
+
+    <select id="queryUserList" resultType="com.ling.system.entity.SysAdmin">
+        SELECT u.id,
+        username,
+        real_name,
+        u.email,
+        tel,
+        sex,
+        concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+        avatar_file_id,
+        status,
+        del_flag,
+        depart_ids,
+        user_identity,
+        u.remark
+        FROM sys_admin u
+        join sys_user_dept uud on u.id = uud.user_id
+        <if test="deptId!=null or deptIds!=null">
+            join sys_dept ud on uud.dept_id = ud.id
+        </if>
+        left join sys_file uf on u.avatar_file_id = uf.id
+        <where>
+            u.del_flag = 0
+            <if test="deptId!=null and deptId!=-1">
+                and ud.parent_list like CONCAT((select parent_list from sys_dept where id = #{deptId}),'%')
+            </if>
+            <if test="deptIds!=null and deptIds.size()!=0">
+                and
+                <foreach collection="deptIds" item="id" index="index" open="(" close=")" separator="or">
+                    ud.parent_list like CONCAT((select parent_list from sys_dept where id = #{id}),'%')
+                </foreach>
+            </if>
+            <if test="username!=null and username != ''">
+                and username like CONCAT(#{username},'%')
+            </if>
+            <if test="realName!=null and realName != ''">
+                and real_name like CONCAT(#{realName},'%')
+            </if>
+        </where>
+        order by u.id
+    </select>
+    <select id="getSysAdminByUserName" resultType="com.ling.system.entity.SysAdmin">
+        select u.id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
+               password,
+               status,
+               del_flag,
+               depart_ids,
+               user_identity,
+               u.remark
+        from sys_admin u
+                 left join sys_file uf on u.avatar_file_id = uf.id
+        where u.username = #{username};
+    </select>
+    <select id="getSysAdminById" resultType="com.ling.system.entity.SysAdmin">
+        select u.id,
+               username,
+               real_name,
+               email,
+               tel,
+               sex,
+               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+               avatar_file_id,
+               password,
+               status,
+               del_flag,
+               depart_ids,
+               user_identity,
+               u.remark
+        from sys_admin u
+                 left join sys_file uf on u.avatar_file_id = uf.id
+        where u.id = #{userId}
+    </select>
+
+    <select id="getUserAvatar" resultType="java.lang.String">
+        select concat(uf.path, '/', uf.name, uf.postfix) as avatar
+        from sys_admin u
+                 left join sys_file uf on u.avatar_file_id = uf.id
+        where u.id = #{userId}
+    </select>
+
+
+</mapper>

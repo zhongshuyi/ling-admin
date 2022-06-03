@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ling.system.mapper.SysDeptMapper">
+    <insert id="addUserDept">
+        insert into sys_user_dept values
+        <foreach collection="deptIds" item="id" separator=",">
+            (null,#{userId},#{id})
+        </foreach>
+    </insert>
+    <delete id="delUserDept">
+        delete from sys_user_dept where user_id = #{userId} and dept_id in
+        <foreach collection="deptIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectDeptListByUserId" resultType="com.ling.system.entity.SysDept">
+        select sys_dept.id,
+               parent_id,
+               dept_name,
+               order_no,
+               leader,
+               phone,
+               parent_list,
+               email,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_dept
+                 inner join sys_user_dept uud on sys_dept.id = uud.dept_id
+        where uud.user_id = #{userId}
+    </select>
+    <select id="selectDeptIdsByUserId" resultType="java.lang.Long">
+        select sys_dept.id
+        from sys_dept
+                 inner join sys_user_dept uud on sys_dept.id = uud.dept_id
+        where uud.user_id = #{userId}
+    </select>
+    <select id="selectDeptChildren" resultType="com.ling.system.entity.SysDept">
+        select id,
+               parent_id,
+               dept_name,
+               order_no,
+               leader,
+               phone,
+               parent_list,
+               email,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from sys_dept
+        where parent_list like concat((select parent_list from sys_dept where id = #{parentId}), '%')
+          and id != #{parentId}
+    </select>
+
+
+</mapper>

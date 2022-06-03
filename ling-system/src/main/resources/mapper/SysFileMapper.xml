@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ling.system.mapper.SysFileMapper">
+
+    <select id="getUserAvatar" resultType="com.ling.system.entity.SysFile">
+        select uf.id,
+               name,
+               original_name,
+               postfix,
+               path,
+               size,
+               business_type,
+               upload_by_id
+        from sys_file uf
+                 left join sys_admin u on uf.id = u.avatar_file_id
+        where u.id = #{userId}
+    </select>
+</mapper>

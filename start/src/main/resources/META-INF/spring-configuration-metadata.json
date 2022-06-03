@@ -1,0 +1,132 @@
+{
+  "properties": [
+    {
+      "name": "custom.app.default-role-id",
+      "type": "java.lang.Long",
+      "description": "默认的角色id"
+    },
+    {
+      "name": "custom.app.default-dept-id",
+      "type": "java.lang.Long",
+      "description": "默认的部门id"
+    },
+    {
+      "name": "custom.app.super-admin-role-id",
+      "type": "java.lang.Long",
+      "description": "超级管理员id"
+    },
+    {
+      "name": "custom.app.avatar-postfix",
+      "type": "java.lang.String",
+      "description": "头像允许的文件后缀."
+    },
+    {
+      "name": "custom.app.avatar-path",
+      "type": "java.lang.String",
+      "description": "头像储存路径."
+    },
+    {
+      "name": "custom.token.tokenHeader",
+      "type": "java.lang.String",
+      "description": "token存储的请求头",
+      "defaultValue": "Authorization"
+    },
+    {
+      "name": "custom.token.secret",
+      "type": "java.lang.String",
+      "description": "token加解密使用的密钥",
+      "defaultValue": "ling-admin-secret"
+    },
+    {
+      "name": "custom.token.expiration",
+      "type": "java.lang.Integer",
+      "description": "token的超期限时间(60*60*24*7)"
+    },
+    {
+      "name": "custom.token.tokenPrefix",
+      "type": "java.lang.String",
+      "description": "token负载中拿到开头",
+      "defaultValue": "Bearer "
+    },
+    {
+      "name": "custom.token.userKey",
+      "type": "java.lang.String",
+      "description": "储存的键名"
+    },
+    {
+      "name": "mybatis-plus.mapperPackage",
+      "type": "java.lang.String",
+      "description": "扫描包路径"
+    },
+    {
+      "name": "minio.url",
+      "type": "java.lang.String",
+      "description": "minio服务器地址"
+    },
+    {
+      "name": "minio.accessKey",
+      "type": "java.lang.String",
+      "description": "minio账号"
+    },
+    {
+      "name": "minio.secretKey",
+      "type": "java.lang.String",
+      "description": "minio密码"
+    },
+    {
+      "name": "minio.bucketName",
+      "type": "java.lang.String",
+      "description": "桶名称"
+    },
+    {
+      "name": "custom.ignores.get",
+      "type": "java.lang.String",
+      "description": "不需要拦截的get请求."
+    },
+    {
+      "name": "custom.ignores.post",
+      "type": "java.lang.String",
+      "description": "不需要拦截的post请求."
+    },
+    {
+      "name": "custom.ignores.pattern",
+      "type": "java.lang.String",
+      "description": "不需要拦截的路径,不限制方法."
+    },
+    {
+      "name": "custom.minio.url",
+      "type": "java.lang.String",
+      "description": "minioUrl."
+    },
+    {
+      "name": "custom.minio.accessKey",
+      "type": "java.lang.String",
+      "description": "minio用户名."
+    },
+    {
+      "name": "custom.minio.secretKey",
+      "type": "java.lang.String",
+      "description": "minio密码."
+    },
+    {
+      "name": "custom.minio.bucketName",
+      "type": "java.lang.String",
+      "description": "桶名称."
+    },
+    {
+      "name": "custom.wx.app-id",
+      "type": "java.lang.String",
+      "description": "小程序的appId."
+    },
+    {
+      "name": "custom.wx.app-secret",
+      "type": "java.lang.String",
+      "description": "微信开放平台申请的appSecret."
+    },
+    {
+      "name": "mybatis-plus.mapperPackage",
+      "type": "java.lang.String",
+      "description": "包扫描."
+    }
+  ]
+}

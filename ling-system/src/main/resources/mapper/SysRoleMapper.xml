@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ling.system.mapper.SysRoleMapper">
+    <insert id="addDataScope">
+        insert into sys_role_dept values
+        <foreach collection="deptIds" item="id" separator=",">
+            (null,#{roleId},#{id})
+        </foreach>
+    </insert>
+
+    <delete id="delDataScope">
+        delete from sys_role_dept where role_id = #{roleId} and dept_id in
+        <foreach collection="deptIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="addUserRole">
+        insert into sys_user_role values
+        <foreach collection="roleIds" item="id" separator=",">
+            (null,#{userId},#{id})
+        </foreach>
+    </insert>
+
+    <delete id="delUserRole">
+        delete from sys_user_role where user_id = #{userId} and role_id in
+        <foreach collection="roleIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectRoleListByUserId" resultType="com.ling.system.entity.SysRole"
+            parameterType="long">
+        select distinct r.id,
+                        r.role_name,
+                        r.role_key,
+                        r.order_no,
+                        r.data_scope,
+                        r.status,
+                        r.create_time,
+                        r.remark
+        from sys_role r
+                 inner join sys_user_role ur on r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+    <select id="selectDataScope" resultType="java.lang.Long">
+        select distinct dept_id
+        from sys_role_dept
+        where role_id = #{roleId}
+    </select>
+    <select id="selectRoleIdsByUserId" resultType="java.lang.Long" parameterType="long">
+        select distinct r.id
+        from sys_role r
+                 inner join sys_user_role ur on r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+</mapper>

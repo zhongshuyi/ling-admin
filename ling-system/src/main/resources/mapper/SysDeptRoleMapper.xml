@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定一个对应的Dao/Mapper接口-->
+<mapper namespace="com.ling.system.mapper.SysDeptRoleMapper">
+    <insert id="addDeptRoleToUser">
+        insert into sys_dept_role_user values
+        <foreach collection="deptRoleIds" item="deptRoleId" separator=",">
+            (null,#{userId},#{deptRoleId})
+        </foreach>
+    </insert>
+
+    <delete id="delDeptRoleToUser">
+        delete from sys_dept_role_user where user_id = #{userId} and dept_role_id in
+        <foreach collection="deptRoleIds" item="deptRoleId" open="(" separator="," close=")">
+            #{deptRoleId}
+        </foreach>
+    </delete>
+
+    <select id="getDeptRoleIdsByUserId" resultType="java.lang.Long">
+        select dept_role_id
+        from sys_dept_role_user
+                 join sys_dept_role udr on udr.id = sys_dept_role_user.dept_role_id
+        where user_id = #{userId}
+          and dept_id = #{deptId}
+    </select>
+</mapper>
