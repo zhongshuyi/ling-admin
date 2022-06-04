@@ -87,6 +87,13 @@ public class DeptManagementController extends BaseController {
     @ApiOperation("获取管理的下级部门树结构")
     public CommonResult<List<Tree<Long>>> getDepts() {
         final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
+        if (Boolean.TRUE.equals(adminUserDetails.getSysAdmin().getIsAdmin())) {
+            return CommonResult.success(
+                    DeptController.buildDeptTree(
+                            sysDeptService.list(Wrappers.<SysDept>lambdaQuery().orderByAsc(SysDept::getOrderNo)),
+                            0L
+                    ));
+        }
         if (!adminUserDetails.getSysAdmin().getUserIdentity().equals(1)) {
             throw new BusinessErrorException(HttpStatus.HTTP_FORBIDDEN, "用户不是上级");
         }

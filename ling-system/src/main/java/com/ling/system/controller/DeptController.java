@@ -156,7 +156,7 @@ public class DeptController extends BaseController {
      * @param parentId   父id
      * @return 部门树结构
      */
-    private List<Tree<Long>> buildDeptTree(
+    public static List<Tree<Long>> buildDeptTree(
             final List<SysDept> deptVoList,
             final Long parentId) {
         final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();

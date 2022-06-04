@@ -56,14 +56,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public final List<SysMenu> selectRouterListAll() {
         return list(Wrappers.<SysMenu>lambdaQuery()
                 .eq(SysMenu::getStatus, AppConstants.ENABLE)
-                .in(SysMenu::getMenuType, 0, 1)
+                .in(SysMenu::getMenuType, MenuType.DIRECTORY.getCode(), MenuType.MENU.getCode())
                 .orderByAsc(Arrays.asList(SysMenu::getOrderNo, SysMenu::getParentId)));
     }
 
     @Override
     public final List<SysMenu> selectMenuByIds(final List<Long> permIds) {
-        return list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getId, permIds).in(SysMenu::getMenuType, 0L, 1L).eq(
-                SysMenu::getStatus, 0L));
+        return list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getId, permIds)
+                .in(SysMenu::getMenuType, MenuType.DIRECTORY.getCode(), MenuType.MENU.getCode())
+                .eq(SysMenu::getStatus, AppConstants.ENABLE));
     }
 
     @Override

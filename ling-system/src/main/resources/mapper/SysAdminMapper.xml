@@ -4,19 +4,19 @@
 <mapper namespace="com.ling.system.mapper.SysAdminMapper">
 
     <select id="getUserListByRoleId" resultType="com.ling.system.entity.SysAdmin">
-        select u.id,
-               username,
-               real_name,
-               email,
-               tel,
-               sex,
-               concat(uf.path, '/', uf.name, uf.postfix) as avatar,
-               avatar_file_id,
-               status,
-               del_flag,
-               depart_ids,
-               user_identity,
-               u.remark
+        select distinct u.id,
+                        username,
+                        real_name,
+                        email,
+                        tel,
+                        sex,
+                        concat(uf.path, '/', uf.name, uf.postfix) as avatar,
+                        avatar_file_id,
+                        status,
+                        del_flag,
+                        depart_ids,
+                        user_identity,
+                        u.remark
         from sys_admin u
                  join sys_user_role uur on u.id = uur.user_id
                  left join sys_file uf on u.avatar_file_id = uf.id
@@ -24,7 +24,7 @@
     </select>
 
     <select id="queryUserList" resultType="com.ling.system.entity.SysAdmin">
-        SELECT u.id,
+        SELECT distinct u.id,
         username,
         real_name,
         u.email,
@@ -38,9 +38,9 @@
         user_identity,
         u.remark
         FROM sys_admin u
-        join sys_user_dept uud on u.id = uud.user_id
+        left join sys_user_dept uud on u.id = uud.user_id
         <if test="deptId!=null or deptIds!=null">
-            join sys_dept ud on uud.dept_id = ud.id
+            left join sys_dept ud on uud.dept_id = ud.id
         </if>
         left join sys_file uf on u.avatar_file_id = uf.id
         <where>

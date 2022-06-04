@@ -8,9 +8,9 @@
 
 这是我的个人学习项目,将自己所学整合,尽量规范代码
 
-后台前端: [https://gitee.com/zhong_shu_yi/ling-admin-ui](https://gitee.com/zhong_shu_yi/ling-admin-ui)
+后台前端: [https://github.com/zhongshuyi/ling-admin-ui](https://github.com/zhongshuyi/ling-admin-ui)
 
-github: [https://github.com/zhongshuyi/mall](https://github.com/zhongshuyi/mall)
+github: [https://github.com/zhongshuyi/ling-admin](https://github.com/zhongshuyi/ling-admin)
 
 业务参考: [jeecg-boot](http://jeecg.com)
 代码参考: [RuoYi-Vue-Plus](https://gitee.com/JavaLionLi/RuoYi-Vue-Plus)
