@@ -61,6 +61,7 @@ public class DataPermissionInterceptor extends JsqlParserSupport implements Inne
         DataPermissionInterceptor.log.info("执行方法: " + ms.getId());
         // 解析 sql 分配对应方法
         final PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
+        log.info("修改后sql:" + mpBs.sql());
         mpBs.sql(parserSingle(mpBs.sql(), ms.getId()));
     }
 

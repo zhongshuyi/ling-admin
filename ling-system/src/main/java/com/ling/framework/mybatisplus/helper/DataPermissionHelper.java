@@ -119,6 +119,7 @@ public class DataPermissionHelper {
         final DataPermission dataPermission = findAnnotation(mappedStatementId);
         // 无注解则返回原始where
         if (ObjectUtil.isEmpty(dataPermission)) {
+            log.info("本次查询无注解");
             return where;
         }
         final AdminUserDetails adminUserDetails = SecurityUtils.getLoginUser();
@@ -211,13 +212,12 @@ public class DataPermissionHelper {
                 DataPermissionHelper.log.info("找到方法:" + m.getName());
                 //获取注解来判断是不是要处理sql
                 dataPermission = m.getAnnotation(DataPermission.class);
-                if (ObjectUtil.isEmpty(dataPermission)) {
-                    noAnnotationCache.add(mappedStatementId);
-                    break;
-                } else {
+                if (ObjectUtil.isNotEmpty(dataPermission)) {
                     dataPermissionCacheMap.put(mappedStatementId, dataPermission);
                     // 方法上的注解优先级高,有注解则直接返回
                     return dataPermission;
+                } else {
+                    break;
                 }
             }
         }
@@ -229,6 +229,8 @@ public class DataPermissionHelper {
         // 获取类注解
         dataPermission = clazz.getAnnotation(DataPermission.class);
         if (ObjectUtil.isEmpty(dataPermission)) {
+            // 如果类和方法都没有就标记类与方法没有注解
+            noAnnotationCache.add(mappedStatementId);
             noAnnotationCache.add(className);
         } else {
             dataPermissionCacheMap.put(className, dataPermission);
