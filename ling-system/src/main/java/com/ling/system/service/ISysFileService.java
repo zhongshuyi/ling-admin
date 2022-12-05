@@ -17,5 +17,5 @@ public interface ISysFileService extends IService<SysFile>, Serializable {
      * @param userId 用户id
      * @return 头像文件信息
      */
-    SysFile selectUserAvatar(Long userId);
+    SysFile getUserAvatar(Long userId);
 }

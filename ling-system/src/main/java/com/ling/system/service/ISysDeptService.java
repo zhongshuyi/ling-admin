@@ -1,9 +1,9 @@
 package com.ling.system.service;
 
 import com.ling.common.core.mybatisplus.core.IServicePlus;
-import com.ling.system.dto.DeptDTO;
+import com.ling.system.dto.SysDeptDTO;
 import com.ling.system.entity.SysDept;
-import com.ling.system.vo.DeptVo;
+import com.ling.system.vo.SysDeptVO;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -14,23 +14,23 @@ import java.util.Set;
  * @author 钟舒艺
  * @since 2021-10-08
  */
-public interface ISysDeptService extends IServicePlus<SysDept, DeptVo>, Serializable {
+public interface ISysDeptService extends IServicePlus<SysDept, SysDeptVO, SysDeptDTO>, Serializable {
 
     /**
      * 添加部门.
      *
-     * @param addBo 添加对象
+     * @param deptDTO 添加对象
      * @return 是否成功
      */
-    Boolean addDept(DeptDTO addBo);
+    Boolean addDept(SysDeptDTO deptDTO);
 
     /**
      * 检查同一级部门下是否有相同名称部门.
      *
-     * @param addBo 新增部门对象
+     * @param deptDTO 新增部门对象
      * @return 是否存在
      */
-    Boolean checkDeptUnique(DeptDTO addBo);
+    Boolean checkDeptUnique(SysDeptDTO deptDTO);
 
     /**
      * 获取子部门列表.

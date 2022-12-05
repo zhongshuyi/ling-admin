@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
  * 部门角色.
  *
  * @author 钟舒艺
- * @date 2022-04-24
+ * @since 2022-04-24
  */
 @Data
 @TableName(value = "sys_dept_role")

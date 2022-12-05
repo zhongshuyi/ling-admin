@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ling.system.mapper.SysAdminMapper">
 
-    <select id="getUserListByRoleId" resultType="com.ling.system.entity.SysAdmin">
+    <select id="listAdminListByRoleId" resultType="com.ling.system.entity.SysAdmin">
         select distinct u.id,
                         username,
                         real_name,
@@ -13,7 +13,7 @@
                         concat(uf.path, '/', uf.name, uf.postfix) as avatar,
                         avatar_file_id,
                         status,
-                        del_flag,
+                        is_deleted,
                         depart_ids,
                         user_identity,
                         u.remark
@@ -23,7 +23,7 @@
         where uur.role_id = #{roleId}
     </select>
 
-    <select id="queryUserList" resultType="com.ling.system.entity.SysAdmin">
+    <select id="listSysAdmin" resultType="com.ling.system.entity.SysAdmin">
         SELECT distinct u.id,
         username,
         real_name,
@@ -33,7 +33,7 @@
         concat(uf.path, '/', uf.name, uf.postfix) as avatar,
         avatar_file_id,
         status,
-        del_flag,
+        is_deleted,
         depart_ids,
         user_identity,
         u.remark
@@ -44,7 +44,7 @@
         </if>
         left join sys_file uf on u.avatar_file_id = uf.id
         <where>
-            u.del_flag = 0
+            u.is_deleted = 0
             <if test="deptId!=null and deptId!=-1">
                 and ud.parent_list like CONCAT((select parent_list from sys_dept where id = #{deptId}),'%')
             </if>
@@ -74,7 +74,7 @@
                avatar_file_id,
                password,
                status,
-               del_flag,
+               is_deleted,
                depart_ids,
                user_identity,
                u.remark
@@ -93,7 +93,7 @@
                avatar_file_id,
                password,
                status,
-               del_flag,
+               is_deleted,
                depart_ids,
                user_identity,
                u.remark

@@ -1,22 +1,19 @@
 package com.ling.system.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ling.common.constant.AppConstants;
 import com.ling.common.enums.MenuType;
-import com.ling.system.dto.MenuDTO;
+import com.ling.system.convert.SysMenuConvert;
+import com.ling.system.dto.SysMenuDTO;
 import com.ling.system.entity.SysMenu;
-import com.ling.system.entity.SysPermissionUrl;
 import com.ling.system.mapper.SysMenuMapper;
-import com.ling.system.mapper.SysPermissionUrlMapper;
 import com.ling.system.service.ISysMenuService;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,12 +31,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     private static final long serialVersionUID = -5579437013223054201L;
 
-    /**
-     * 权限与url.
-     */
-    @Getter
-    private final transient SysPermissionUrlMapper sysPermissionUrlMapper;
-
 
     /**
      * 获取所有菜单列表.
@@ -47,13 +38,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return 菜单列表
      */
     @Override
-    public List<SysMenu> selectMenuListAll() {
+    public List<SysMenu> listMenuAll() {
         return list(
                 Wrappers.<SysMenu>lambdaQuery().orderByAsc(Arrays.asList(SysMenu::getOrderNo, SysMenu::getParentId)));
     }
 
     @Override
-    public final List<SysMenu> selectRouterListAll() {
+    public final List<SysMenu> listRouterAll() {
         return list(Wrappers.<SysMenu>lambdaQuery()
                 .eq(SysMenu::getStatus, AppConstants.ENABLE)
                 .in(SysMenu::getMenuType, MenuType.DIRECTORY.getCode(), MenuType.MENU.getCode())
@@ -61,52 +52,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public final List<SysMenu> selectMenuByIds(final List<Long> permIds) {
+    public final List<SysMenu> listMenuByIds(final List<Long> permIds) {
         return list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getId, permIds)
                 .in(SysMenu::getMenuType, MenuType.DIRECTORY.getCode(), MenuType.MENU.getCode())
                 .eq(SysMenu::getStatus, AppConstants.ENABLE));
     }
 
     @Override
-    public final Set<Long> selectRolePermsId(final Long userId) {
-        return baseMapper.selectUserPermsIdsById(userId);
+    public final Set<Long> listRolePermsId(final Long userId) {
+        return baseMapper.listUserPermsIdsById(userId);
     }
 
     @Override
-    public final Set<Long> selectDeptPermsId(final Long userId) {
-        return baseMapper.selectDeptRolePermsIdsByUserId(userId);
+    public final Set<Long> listDeptPermsId(final Long userId) {
+        return baseMapper.listDeptRolePermsIdsByUserId(userId);
     }
 
     @Override
-    public final Boolean addByDTO(final MenuDTO menuDTO) {
-        final SysMenu menu = BeanUtil.toBean(menuDTO, SysMenu.class);
-        save(menu);
-        if (
-                menuDTO.getMenuType().equals(MenuType.BUTTON.getCode())
-                        &&
-                        CollUtil.isNotEmpty(menuDTO.getPermissionUrl())
-        ) {
-            for (final SysPermissionUrl url : menuDTO.getPermissionUrl()) {
-                url.setMenuId(menu.getId());
-            }
-            getSysPermissionUrlMapper().insertAll(menuDTO.getPermissionUrl());
-        }
-        return true;
+    public final Boolean saveMenuByDTO(final SysMenuDTO menuDTO) {
+        final SysMenu menu = SysMenuConvert.INSTANCT.dtoToEntity(menuDTO);
+        return save(menu);
     }
 
     @Override
-    public final Boolean deleteById(final Long id) {
-        final List<SysMenu> list = selectMenuChildren(id);
+    public final Boolean removeMenuById(final Long id) {
+        final List<SysMenu> list = listMenuChildren(id);
         if (CollUtil.isNotEmpty(list)) {
             for (final SysMenu menu : list) {
-                deleteById(menu.getId());
+                removeMenuById(menu.getId());
             }
         }
-        getBaseMapper().delDeptPermByPermId(id);
-        getBaseMapper().delRolePermByPermId(id);
-        getBaseMapper().delDeptRolePermByPermId(id);
-        getSysPermissionUrlMapper().delete(
-                Wrappers.<SysPermissionUrl>lambdaQuery().eq(SysPermissionUrl::getMenuId, id));
+        getBaseMapper().deleteDeptPermByPermId(id);
+        getBaseMapper().deleteRolePermByPermId(id);
+        getBaseMapper().deleteDeptRolePermByPermId(id);
         return removeById(id);
     }
 
@@ -118,76 +96,76 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public final List<SysMenu> selectMenuChildren(final Long id) {
+    public final List<SysMenu> listMenuChildren(final Long id) {
         return this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
     }
 
     @Override
-    public final List<SysMenu> selectDeptPermMenu(final Long deptId) {
-        return getBaseMapper().selectDeptPermMenu(deptId);
+    public final List<SysMenu> listDeptPermMenu(final Long deptId) {
+        return getBaseMapper().listDeptPermMenu(deptId);
     }
 
     @Override
-    public final Set<Long> selectDeptPerm(final Long id) {
-        return getBaseMapper().selectDeptPerm(id);
+    public final Set<Long> listDeptPerm(final Long id) {
+        return getBaseMapper().listDeptPerm(id);
     }
 
     @Override
-    public final Boolean setDeptPerm(
+    public final Boolean updateDeptPerm(
             final Long deptId,
             final Set<Long> newIds
     ) {
-        final Set<Long> oldIds = getBaseMapper().selectDeptPerm(deptId);
+        final Set<Long> oldIds = getBaseMapper().listDeptPerm(deptId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptPermByDeptId(
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().deleteDeptPermByDeptId(
                 deptId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addDeptPermByDeptId(deptId, result) == result.size());
+        return isSuccess && (result.isEmpty() || getBaseMapper().insertDeptPermByDeptId(deptId, result) == result.size());
     }
 
     @Override
-    public final Set<Long> getRolePerm(final Long id) {
-        return getBaseMapper().selectRolePerm(id);
+    public final Set<Long> listRolePerm(final Long id) {
+        return getBaseMapper().listRolePermIds(id);
     }
 
     @Override
-    public final Boolean setRolePerm(
+    public final Boolean updateRolePerm(
             final Long roleId,
             final Set<Long> newIds
     ) {
-        final Set<Long> oldIds = getBaseMapper().selectRolePerm(roleId);
+        final Set<Long> oldIds = getBaseMapper().listRolePermIds(roleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delRolePermByRoleId(
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().deleteRolePermByRoleId(
                 roleId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePermByRoleId(roleId, result) == result.size());
+        return isSuccess && (result.isEmpty() || getBaseMapper().insertRolePermByRoleId(roleId, result) == result.size());
     }
 
     @Override
-    public final Set<Long> selectDeptRolePermIds(final Long deptRoleId) {
-        return getBaseMapper().selectDeptRolePerm(deptRoleId);
+    public final Set<Long> listDeptRolePermIds(final Long deptRoleId) {
+        return getBaseMapper().listDeptRolePermIds(deptRoleId);
     }
 
     @Override
-    public final Boolean setDeptRolePerm(
+    public final Boolean updateDeptRolePerm(
             final Long deptRoleId,
             final Set<Long> newIds
     ) {
-        final Set<Long> oldIds = selectDeptRolePermIds(deptRoleId);
+        final Set<Long> oldIds = listDeptRolePermIds(deptRoleId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delDeptRolePerm(
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().deleteDeptRolePerm(
                 deptRoleId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addRolePermByRoleId(
+        return isSuccess && (result.isEmpty() || getBaseMapper().insertRolePermByRoleId(
                 deptRoleId, result) == result.size());
     }
 }

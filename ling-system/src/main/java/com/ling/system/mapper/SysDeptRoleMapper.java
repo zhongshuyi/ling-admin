@@ -36,7 +36,7 @@ public interface SysDeptRoleMapper extends BaseMapperPlus<SysDeptRole> {
      * @param deptRoleIds 部门角色id集合
      * @return 受影响行数
      */
-    Integer addDeptRoleToUser(
+    Integer insertDeptRoleToUser(
             @Param("deptId") Long deptId,
             @Param("userId") Long userId,
             @Param("deptRoleIds") Set<Long> deptRoleIds);
@@ -49,7 +49,7 @@ public interface SysDeptRoleMapper extends BaseMapperPlus<SysDeptRole> {
      * @param deptRoleIds 部门角色id集合
      * @return 受影响行数
      */
-    Integer delDeptRoleToUser(
+    Integer deleteDeptRoleToUser(
             @Param("deptId") Long deptId,
             @Param("userId") Long userId,
             @Param("deptRoleIds") Set<Long> deptRoleIds);

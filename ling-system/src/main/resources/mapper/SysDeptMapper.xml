@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ling.system.mapper.SysDeptMapper">
-    <insert id="addUserDept">
+    <insert id="insertUserDept">
         insert into sys_user_dept values
         <foreach collection="deptIds" item="id" separator=",">
             (null,#{userId},#{id})
         </foreach>
     </insert>
-    <delete id="delUserDept">
+    <delete id="deleteUserDept">
         delete from sys_user_dept where user_id = #{userId} and dept_id in
         <foreach collection="deptIds" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
-    <select id="selectDeptListByUserId" resultType="com.ling.system.entity.SysDept">
+    <select id="listDeptListByUserId" resultType="com.ling.system.entity.SysDept">
         select sys_dept.id,
                parent_id,
                dept_name,
@@ -33,13 +33,13 @@
                  inner join sys_user_dept uud on sys_dept.id = uud.dept_id
         where uud.user_id = #{userId}
     </select>
-    <select id="selectDeptIdsByUserId" resultType="java.lang.Long">
+    <select id="getDeptIdsByUserId" resultType="java.lang.Long">
         select sys_dept.id
         from sys_dept
                  inner join sys_user_dept uud on sys_dept.id = uud.dept_id
         where uud.user_id = #{userId}
     </select>
-    <select id="selectDeptChildren" resultType="com.ling.system.entity.SysDept">
+    <select id="listDeptChildren" resultType="com.ling.system.entity.SysDept">
         select id,
                parent_id,
                dept_name,

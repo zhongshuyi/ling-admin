@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiOperation;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +32,7 @@ public class SysPermissionUrl implements Serializable {
      */
     private Long menuId;
     /**
-     * 接口描述, {@link ApiOperation}的值.
+     * 接口描述的值.
      */
     private String description;
     /**

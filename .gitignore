@@ -1,44 +1,38 @@
-######################################################################
-# Build Tools
-
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
-
 target/
 !.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-######################################################################
-# IDE
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
 
-### STS ###
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
 .project
 .settings
 .springBeans
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+.sts4-cache
 
 ### NetBeans ###
-nbproject/private/
-build/*
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-######################################################################
-# Others
-*.log
-*.xml.versionsBackup
-*.swp
+### VS Code ###
+.vscode/
 
-!*/build/*.java
-!*/build/*.html
-!*/build/*.xml
+### Mac OS ###
+.DS_Store

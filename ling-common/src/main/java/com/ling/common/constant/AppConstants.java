@@ -1,5 +1,7 @@
 package com.ling.common.constant;
 
+import cn.hutool.core.text.CharSequenceUtil;
+
 /**
  * 应用全局常量.
  *
@@ -46,6 +48,25 @@ public final class AppConstants {
      * 未删除标识.
      */
     public static final Byte NOT_DELETE = 0;
+
+    /**
+     * 用户信息 Redis Key 标识模板.
+     */
+    private static final String USERINFO_KEY_TEMPLATE = "{}:userinfo:{}";
+
+
+    /**
+     * 获取用于存储用户信息的 Redis Key.
+     *
+     * @param tokenName token名
+     * @param tokenKey  token值
+     * @return 键名
+     */
+    public static String getUserInfoKey(
+            String tokenName,
+            String tokenKey) {
+        return CharSequenceUtil.format(USERINFO_KEY_TEMPLATE, tokenName, tokenKey);
+    }
 
     private AppConstants() {
     }

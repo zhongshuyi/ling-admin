@@ -19,13 +19,13 @@ import lombok.Getter;
  * IServicePlus 实现类.
  *
  * @param <M> Mapper类
- * @param <T> 数据实体类
+ * @param <E> 数据实体类
  * @param <V> vo类
  * @author 钟舒艺
  */
-public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
-        extends ServiceImpl<M, T>
-        implements IServicePlus<T, V> {
+public class ServicePlusImpl<M extends BaseMapperPlus<E>, E, V, D>
+        extends ServiceImpl<M, E>
+        implements IServicePlus<E, V, D> {
 
     private static final long serialVersionUID = -2447762079455049677L;
 
@@ -36,7 +36,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     private final Class<V> voClass = currentVoClass();
 
     @Override
-    protected final Class<T> currentModelClass() {
+    protected final Class<E> currentModelClass() {
         return Convert.convert(new TypeReference<>() {
         }, ReflectionKit
                 .getSuperClassGenericType(
@@ -87,7 +87,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
 
     @Override
     public final List<V> listVo(
-            final Wrapper<T> queryWrapper,
+            final Wrapper<E> queryWrapper,
             final CopyOptions copyOptions
     ) {
         return BeanUtil.copyToList(
@@ -101,12 +101,11 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
      * 通过DTO查询vo集合.
      *
      * @param dto 数据传输对象
-     * @param <D> DTO class
      * @return voList
      */
     @Override
-    public <D> List<V> listVoByDTO(final D dto) {
-        final T e = BeanUtil.toBean(dto, getEntityClass());
+    public List<V> listVoByDTO(final D dto) {
+        final E e = BeanUtil.toBean(dto, getEntityClass());
         return BeanUtil.copyToList(
                 getBaseMapper().selectList(new QueryWrapper<>(e)),
                 getVoClass(),
@@ -115,8 +114,8 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     }
 
     @Override
-    public final <D> PagePlus<T, V> pageVo(
-            final PagePlus<T, V> page,
+    public final PagePlus<E, V> pageVo(
+            final PagePlus<E, V> page,
             final D dto
     ) {
         return pageVo(
@@ -126,12 +125,12 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     }
 
     @Override
-    public final PagePlus<T, V> pageVo(
-            final PagePlus<T, V> page,
-            final Wrapper<T> queryWrapper,
+    public final PagePlus<E, V> pageVo(
+            final PagePlus<E, V> page,
+            final Wrapper<E> queryWrapper,
             final CopyOptions copyOptions
     ) {
-        final PagePlus<T, V> result = getBaseMapper().selectPage(page, queryWrapper);
+        final PagePlus<E, V> result = getBaseMapper().selectPage(page, queryWrapper);
         result.setRecordsVo(
                 BeanUtil.copyToList(
                         result.getRecords(),
@@ -155,7 +154,7 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
 
 
     @Override
-    public final boolean saveAll(final Collection<T> entityList) {
+    public final boolean saveAll(final Collection<E> entityList) {
         if (CollUtil.isEmpty(entityList)) {
             return false;
         }
@@ -165,15 +164,15 @@ public class ServicePlusImpl<M extends BaseMapperPlus<T>, T, V>
     /**
      * 保存前的数据校验.
      *
-     * @param t 实体类
+     * @param e 实体类
      */
     @Override
-    public void validEntityBeforeSave(final T t) {
-        // 如果插入前需要验证,则重写此方法
+    public void validEntityBeforeSave(final E e) {
+        // 如果新增与更新前需要验证,则重写此方法
     }
 
     @Override
     public void validEntityBeforeDel(final Long id) {
-        // 如果保存前需要验证或者做其他操作,则重新此方法
+        // 如果保存前需要验证或者做其他操作,则重写此方法
     }
 }

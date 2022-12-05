@@ -25,7 +25,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param userId 用户id
      * @return 权限列表set
      */
-    Set<Long> selectUserPermsIdsById(Long userId);
+    Set<Long> listUserPermsIdsById(Long userId);
 
 
     /**
@@ -34,7 +34,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param userId 用户id.
      * @return 权限列表set
      */
-    Set<SysMenu> selectUserPermsById(Long userId);
+    Set<SysMenu> listUserPermsById(Long userId);
 
 
     /**
@@ -43,7 +43,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param userId 用户id
      * @return 权限列表
      */
-    Set<Long> selectDeptRolePermsIdsByUserId(Long userId);
+    Set<Long> listDeptRolePermsIdsByUserId(Long userId);
 
 
     /**
@@ -52,7 +52,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param userId 用户id
      * @return 权限列表
      */
-    Set<SysMenu> selectDeptRolePermsByUserId(Long userId);
+    Set<SysMenu> listDeptRolePermsByUserId(Long userId);
 
 
     /**
@@ -61,7 +61,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param id 部门id
      * @return 权限
      */
-    Set<Long> selectDeptPerm(Long id);
+    Set<Long> listDeptPerm(Long id);
 
     /**
      * 增加部门权限.
@@ -70,7 +70,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds 权限id
      * @return 改变行数
      */
-    Integer addDeptPermByDeptId(
+    Integer insertDeptPermByDeptId(
             @Param("deptId") Long deptId,
             @Param("permIds") Set<Long> permIds
     );
@@ -82,7 +82,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds 权限id
      * @return 是否成功
      */
-    Integer delDeptPermByDeptId(
+    Integer deleteDeptPermByDeptId(
             @Param("deptId") Long deptId,
             @Param("permIds") Set<Long> permIds
     );
@@ -93,7 +93,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permId 菜单权限id
      * @return 成功条数
      */
-    Integer delDeptPermByPermId(Long permId);
+    Integer deleteDeptPermByPermId(Long permId);
 
 
     /**
@@ -103,7 +103,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds 权限id
      * @return 改变行数
      */
-    Integer addRolePermByRoleId(
+    Integer insertRolePermByRoleId(
             @Param("roleId") Long roleId,
             @Param("permIds") Set<Long> permIds
     );
@@ -115,7 +115,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds 权限id
      * @return 是否成功
      */
-    Integer delRolePermByRoleId(
+    Integer deleteRolePermByRoleId(
             @Param("roleId") Long roleId,
             @Param("permIds") Set<Long> permIds
     );
@@ -127,7 +127,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permId 菜单权限id
      * @return 删除条数
      */
-    Integer delRolePermByPermId(Long permId);
+    Integer deleteRolePermByPermId(Long permId);
 
     /**
      * 根据权限角色id删除部门角色的权限或菜单.
@@ -135,7 +135,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permId 菜单权限id
      * @return 删除条数
      */
-    Integer delDeptRolePermByPermId(Long permId);
+    Integer deleteDeptRolePermByPermId(Long permId);
 
     /**
      * 获取角色权限.
@@ -143,7 +143,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param id 角色id
      * @return 权限
      */
-    Set<Long> selectRolePerm(Long id);
+    Set<Long> listRolePermIds(Long id);
 
 
     /**
@@ -152,7 +152,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param deptRoleId 部门角色id
      * @return 权限id
      */
-    Set<Long> selectDeptRolePerm(Long deptRoleId);
+    Set<Long> listDeptRolePermIds(Long deptRoleId);
 
 
     /**
@@ -162,7 +162,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds    权限id
      * @return 受影响行数
      */
-    Integer addDeptRolePerm(
+    Integer insertDeptRolePerm(
             @Param("deptRoleId") Long deptRoleId,
             @Param("permIds") Set<Long> permIds
     );
@@ -174,7 +174,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param permIds    权限id
      * @return 是否成功
      */
-    Integer delDeptRolePerm(
+    Integer deleteDeptRolePerm(
             @Param("roleId") Long deptRoleId,
             @Param("permIds") Set<Long> permIds
     );
@@ -185,5 +185,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param deptId 部门id
      * @return 该部门所拥有权限的菜单
      */
-    List<SysMenu> selectDeptPermMenu(Long deptId);
+    List<SysMenu> listDeptPermMenu(Long deptId);
 }

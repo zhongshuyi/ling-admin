@@ -23,7 +23,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param userId 用户id
      * @return 角色列表
      */
-    List<SysRole> selectRoleListByUserId(Long userId);
+    List<SysRole> listRoleByUserId(Long userId);
 
 
     /**
@@ -32,7 +32,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param userId 用户id
      * @return 角色id
      */
-    Set<Long> selectRoleIdsByUserId(Long userId);
+    Set<Long> getRoleIdsByUserId(Long userId);
 
 
     /**
@@ -42,7 +42,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param roleIds 角色id集合
      * @return 受影响行数
      */
-    Integer addUserRole(
+    Integer insertUserRole(
             @Param("userId") Long userId,
             @Param("roleIds") Set<Long> roleIds
     );
@@ -54,7 +54,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param roleId 角色id
      * @return 部门id集合
      */
-    Set<Long> selectDataScope(Long roleId);
+    Set<Long> getRoleDataScope(Long roleId);
 
     /**
      * 增加角色自定义数据范围.
@@ -63,7 +63,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param deptIds 部门id
      * @return 受影响行数
      */
-    Integer addDataScope(
+    Integer insertDataScope(
             @Param("roleId") Long roleId,
             @Param("deptIds") Set<Long> deptIds
     );
@@ -75,7 +75,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param deptIds 部门id
      * @return 受影响行数
      */
-    Integer delDataScope(
+    Integer deleteDataScope(
             @Param("roleId") Long roleId,
             @Param("deptIds") Set<Long> deptIds
     );
@@ -87,7 +87,7 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole> {
      * @param roleIds 角色id集合
      * @return 受影响行数
      */
-    Integer delUserRole(
+    Integer deleteUserRole(
             @Param("userId") Long userId,
             @Param("roleIds") Set<Long> roleIds
     );

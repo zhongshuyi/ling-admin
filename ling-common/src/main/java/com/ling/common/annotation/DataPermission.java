@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * 数据权限注解.
  *
  * @author 钟舒艺
- * @date 2022-05-21-20:33
+ * @since 2022-05-21-20:33
  **/
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

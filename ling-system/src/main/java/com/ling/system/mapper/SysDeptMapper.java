@@ -23,7 +23,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept>, BaseMapperPlus<SysDe
      * @param userId 用户id
      * @return 部门列表
      */
-    List<SysDept> selectDeptListByUserId(Long userId);
+    List<SysDept> listDeptListByUserId(Long userId);
 
     /**
      * 根据用户id查询部门id.
@@ -31,7 +31,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept>, BaseMapperPlus<SysDe
      * @param userId 用户id
      * @return 部门id
      */
-    Set<Long> selectDeptIdsByUserId(Long userId);
+    Set<Long> getDeptIdsByUserId(Long userId);
 
     /**
      * 增加用户的部门.
@@ -40,7 +40,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept>, BaseMapperPlus<SysDe
      * @param deptIds 部门id集合
      * @return 受影响行数
      */
-    Integer addUserDept(
+    Integer insertUserDept(
             Long userId,
             Set<Long> deptIds
     );
@@ -52,7 +52,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept>, BaseMapperPlus<SysDe
      * @param deptIds 要删除的部门id
      * @return 受影响行数
      */
-    Integer delUserDept(
+    Integer deleteUserDept(
             Long userId,
             Set<Long> deptIds
     );
@@ -63,5 +63,5 @@ public interface SysDeptMapper extends BaseMapper<SysDept>, BaseMapperPlus<SysDe
      * @param parentId 父id
      * @return 子部门列表
      */
-    List<SysDept> selectDeptChildren(Long parentId);
+    List<SysDept> listDeptChildren(Long parentId);
 }

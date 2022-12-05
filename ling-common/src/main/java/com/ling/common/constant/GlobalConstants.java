@@ -4,7 +4,7 @@ package com.ling.common.constant;
  * 全局常量.
  *
  * @author 钟舒艺
- * @date 2022-05-31-19:30
+ * @since 2022-05-31-19:30
  **/
 public final class GlobalConstants {
 

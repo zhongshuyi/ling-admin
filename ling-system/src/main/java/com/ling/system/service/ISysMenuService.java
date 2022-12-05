@@ -1,7 +1,7 @@
 package com.ling.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ling.system.dto.MenuDTO;
+import com.ling.system.dto.SysMenuDTO;
 import com.ling.system.entity.SysMenu;
 import java.io.Serializable;
 import java.util.List;
@@ -20,14 +20,14 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      *
      * @return 菜单列表
      */
-    List<SysMenu> selectMenuListAll();
+    List<SysMenu> listMenuAll();
 
     /**
      * 获取有效路由.
      *
      * @return 菜单列表.
      */
-    List<SysMenu> selectRouterListAll();
+    List<SysMenu> listRouterAll();
 
 
     /**
@@ -36,7 +36,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param permIds 权限id列表
      * @return 菜单
      */
-    List<SysMenu> selectMenuByIds(List<Long> permIds);
+    List<SysMenu> listMenuByIds(List<Long> permIds);
 
     /**
      * 根据用户ID查询角色权限.
@@ -44,7 +44,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param userId 用户ID
      * @return 菜单列表
      */
-    Set<Long> selectRolePermsId(Long userId);
+    Set<Long> listRolePermsId(Long userId);
 
 
     /**
@@ -53,7 +53,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param userId 用户id
      * @return 权限的id
      */
-    Set<Long> selectDeptPermsId(Long userId);
+    Set<Long> listDeptPermsId(Long userId);
 
 
     /**
@@ -62,7 +62,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param menuDTO 菜单增加对象
      * @return 是否成功
      */
-    Boolean addByDTO(MenuDTO menuDTO);
+    Boolean saveMenuByDTO(SysMenuDTO menuDTO);
 
     /**
      * 删除菜单.
@@ -70,7 +70,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param id 菜单id
      * @return 是否成功
      */
-    Boolean deleteById(Long id);
+    Boolean removeMenuById(Long id);
 
     /**
      * 检查菜单是否唯一.
@@ -86,7 +86,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param id 菜单id
      * @return 子级菜单
      */
-    List<SysMenu> selectMenuChildren(Long id);
+    List<SysMenu> listMenuChildren(Long id);
 
 
     /**
@@ -95,7 +95,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param deptId 部门id
      * @return 该部门所拥有权限的菜单
      */
-    List<SysMenu> selectDeptPermMenu(Long deptId);
+    List<SysMenu> listDeptPermMenu(Long deptId);
 
     /**
      * 获取部门权限.
@@ -103,7 +103,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param id 部门id
      * @return 权限
      */
-    Set<Long> selectDeptPerm(Long id);
+    Set<Long> listDeptPerm(Long id);
 
     /**
      * 修改部门权限.
@@ -112,7 +112,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param newIds 新的权限id列表
      * @return 是否修改成功
      */
-    Boolean setDeptPerm(
+    Boolean updateDeptPerm(
             Long deptId,
             Set<Long> newIds
     );
@@ -123,7 +123,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param id 角色id
      * @return 权限
      */
-    Set<Long> getRolePerm(Long id);
+    Set<Long> listRolePerm(Long id);
 
 
     /**
@@ -133,7 +133,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param newIds 新的权限id集合
      * @return 是否成功
      */
-    Boolean setRolePerm(
+    Boolean updateRolePerm(
             Long roleId,
             Set<Long> newIds
     );
@@ -144,7 +144,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param deptRoleId 部门角色id
      * @return 权限id
      */
-    Set<Long> selectDeptRolePermIds(Long deptRoleId);
+    Set<Long> listDeptRolePermIds(Long deptRoleId);
 
 
     /**
@@ -154,7 +154,7 @@ public interface ISysMenuService extends IService<SysMenu>, Serializable {
      * @param newIds     新的权限id
      * @return 是否成功
      */
-    Boolean setDeptRolePerm(
+    Boolean updateDeptRolePerm(
             Long deptRoleId,
             Set<Long> newIds
     );

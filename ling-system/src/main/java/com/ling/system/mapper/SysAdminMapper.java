@@ -2,7 +2,7 @@ package com.ling.system.mapper;
 
 import com.ling.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.ling.common.core.mybatisplus.core.BaseMapperPlus;
-import com.ling.system.dto.UserDTO;
+import com.ling.system.dto.SysAdminDTO;
 import com.ling.system.entity.SysAdmin;
 import java.util.List;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -25,16 +25,16 @@ public interface SysAdminMapper extends BaseMapperPlus<SysAdmin> {
      * @param roleId 角色id
      * @return 用户列表
      */
-    List<SysAdmin> getUserListByRoleId(Long roleId);
+    List<SysAdmin> listAdminListByRoleId(Long roleId);
 
 
     /**
      * 自定义分页查询.
      *
-     * @param bo 查询条件
+     * @param dto 查询条件
      * @return 分页后结果及总行数
      */
-    List<SysAdmin> queryUserList(UserDTO bo);
+    List<SysAdmin> listSysAdmin(SysAdminDTO dto);
 
     /**
      * 根据用户名获取用户信息.

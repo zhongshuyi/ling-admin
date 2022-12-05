@@ -1,6 +1,5 @@
 package com.ling.common.core.domain;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,12 +21,10 @@ public class PageInfo<T> implements Serializable {
     /**
      * 总记录数.
      */
-    @ApiModelProperty("总记录数")
     private long total;
 
     /**
      * 列表数据.
      */
-    @ApiModelProperty("列表数据")
     private transient List<T> items;
 }

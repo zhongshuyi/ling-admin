@@ -3,8 +3,7 @@ package com.ling.system.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.ling.common.core.domain.BaseEntity;
-import java.io.Serializable;
+import com.ling.framework.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,10 +15,10 @@ import lombok.experimental.Accessors;
  * @author 钟舒艺
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Accessors(chain = true)
-public class SysAdmin extends BaseEntity implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class SysAdmin extends User {
 
     private static final long serialVersionUID = 1L;
 
@@ -77,11 +76,6 @@ public class SysAdmin extends BaseEntity implements Serializable {
     private Byte status;
 
     /**
-     * 删除标志（0 代表存在 1 代表删除）.
-     */
-    private Byte delFlag;
-
-    /**
      * 用户身份(0: 普通员工 ; 1: 上级).
      */
     private Integer userIdentity;
@@ -90,10 +84,4 @@ public class SysAdmin extends BaseEntity implements Serializable {
      * 负责的部门.
      */
     private String departIds;
-
-    /**
-     * 是否是超级管理员.
-     */
-    @TableField(exist = false)
-    private Boolean isAdmin;
 }

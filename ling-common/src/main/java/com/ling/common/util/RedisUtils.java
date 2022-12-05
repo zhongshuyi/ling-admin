@@ -21,6 +21,7 @@ import org.redisson.api.RedissonClient;
  *
  * @author 钟舒艺
  **/
+@SuppressWarnings("unused")
 public final class RedisUtils {
 
     /**
@@ -136,7 +137,7 @@ public final class RedisUtils {
      * @param duration 超时时间
      * @return true=设置成功；false=设置失败
      */
-    private static boolean expire(
+    public static boolean expire(
             final String key,
             final Duration duration
     ) {

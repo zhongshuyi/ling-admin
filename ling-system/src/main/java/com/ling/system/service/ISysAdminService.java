@@ -1,37 +1,36 @@
 package com.ling.system.service;
 
-import com.ling.common.core.mybatisplus.core.IServicePlus;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ling.common.core.mybatisplus.core.PagePlus;
-import com.ling.system.dto.UserDTO;
+import com.ling.system.dto.SysAdminDTO;
 import com.ling.system.entity.SysAdmin;
-import com.ling.system.vo.UserVo;
+import com.ling.system.vo.SysAdminVO;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 用户信息表 服务类.
+ * new class.
  *
  * @author 钟舒艺
- * @since 2021-07-06
- */
-public interface ISysAdminService extends IServicePlus<SysAdmin, UserVo> {
-
+ * @since 2022-10-24 14:36
+ **/
+public interface ISysAdminService extends IService<SysAdmin> {
 
     /**
-     * 根据用户名查询用户.
+     * 根据用户名查询系统用户信息.
      *
      * @param userName 用户名.
-     * @return 用户信息(含密码)
+     * @return 用户消息
      */
-    SysAdmin selectSysAdminByUserName(String userName);
+    SysAdmin getSysAdminByUsername(String userName);
 
     /**
      * 根据id获取用户信息.
      *
-     * @param id 用户id
+     * @param userId 用户id
      * @return 用户信息
      */
-    SysAdmin selectSysAdminById(Long id);
+    SysAdmin getSysAdminById(Long userId);
 
     /**
      * 根据角色id获取用户列表.
@@ -39,19 +38,19 @@ public interface ISysAdminService extends IServicePlus<SysAdmin, UserVo> {
      * @param roleId 角色id
      * @return 用户列表
      */
-    List<SysAdmin> selectUserListByRoleId(Long roleId);
+    List<SysAdmin> listSysAdminListByRoleId(Long roleId);
 
 
     /**
      * 条件分页查询用户列表.
      *
      * @param pagePlus 分页信息
-     * @param bo       条件
+     * @param dto      前端传来的条件
      * @return 分页后信息
      */
-    PagePlus<SysAdmin, UserVo> selectUserListPage(
-            PagePlus<SysAdmin, UserVo> pagePlus,
-            UserDTO bo
+    PagePlus<SysAdmin, SysAdminVO> listSysAdminPage(
+            PagePlus<SysAdmin, SysAdminVO> pagePlus,
+            SysAdminDTO dto
     );
 
     /**
@@ -62,7 +61,7 @@ public interface ISysAdminService extends IServicePlus<SysAdmin, UserVo> {
      * @param uploadById 上传人id
      * @return 是否成功
      */
-    Boolean uploadAvatar(
+    Boolean setSysAdminAvatar(
             Long id,
             MultipartFile file,
             final Long uploadById
@@ -71,16 +70,41 @@ public interface ISysAdminService extends IServicePlus<SysAdmin, UserVo> {
     /**
      * 获取用户头像地址.
      *
-     * @param id 用户id
+     * @param userId 用户id
      * @return 头像地址
      */
-    String getUserAvatar(Long id);
+    String getSysAdminAvatarUrl(Long userId);
 
     /**
      * 检查用户名是否重复.
      *
-     * @param sysAdmin 用户信息
+     * @param sysAdminDTO 用户信息
      * @return 是否重复
      */
-    Boolean checkUsernameUnique(SysAdmin sysAdmin);
+    Boolean checkUsernameUnique(SysAdminDTO sysAdminDTO);
+
+
+    /**
+     * 新增系统用户.
+     *
+     * @param sysAdminDTO 用户信息.
+     * @return 是否成功
+     */
+    Boolean saveSysAdmin(SysAdminDTO sysAdminDTO);
+
+    /**
+     * 根据id删除系统用户.
+     *
+     * @param sysAdminId 系统用户id
+     * @return 是否成功
+     */
+    Boolean removeSysAdminById(Long sysAdminId);
+
+    /**
+     * 根据id修改系统用户.
+     *
+     * @param sysAdminDTO 数据传输对象
+     * @return 是否更新成功
+     */
+    Boolean updateSysAdminById(SysAdminDTO sysAdminDTO);
 }

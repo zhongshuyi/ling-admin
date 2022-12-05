@@ -25,4 +25,19 @@ public class ValidationGroups {
     public interface Query {
     }
 
+    /**
+     * 添加时校验标识.
+     */
+    public static final Class<ValidationGroups.Add> ADD = ValidationGroups.Add.class;
+
+    /**
+     * 修改时校验标识.
+     */
+    public static final Class<ValidationGroups.Edit> EDIT = ValidationGroups.Edit.class;
+
+    /**
+     * 查询时校验标识.
+     */
+    public static final Class<ValidationGroups.Query> QUERY = ValidationGroups.Query.class;
+
 }

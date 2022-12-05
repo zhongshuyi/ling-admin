@@ -1,6 +1,5 @@
 package com.ling.common.core.domain;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -16,25 +15,21 @@ public class BasePageQuery implements Serializable {
     /**
      * 分页大小.
      */
-    @ApiModelProperty(value = "分页大小", example = "10")
     private Integer pageSize;
 
     /**
      * 当前页数.
      */
-    @ApiModelProperty(value = "当前页数", example = "1")
     private Integer pageNum;
 
     /**
      * 排序列.
      */
-    @ApiModelProperty(value = "排序列")
     private String orderByColumn;
 
     /**
      * 排序的方向desc或者asc.
      */
-    @ApiModelProperty(value = "排序的方向")
     private String isAsc;
 
 }

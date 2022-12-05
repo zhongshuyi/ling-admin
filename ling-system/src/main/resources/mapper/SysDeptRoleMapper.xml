@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace绑定一个对应的Dao/Mapper接口-->
 <mapper namespace="com.ling.system.mapper.SysDeptRoleMapper">
-    <insert id="addDeptRoleToUser">
+    <insert id="insertDeptRoleToUser">
         insert into sys_dept_role_user values
         <foreach collection="deptRoleIds" item="deptRoleId" separator=",">
             (null,#{userId},#{deptRoleId})
         </foreach>
     </insert>
 
-    <delete id="delDeptRoleToUser">
+    <delete id="deleteDeptRoleToUser">
         delete from sys_dept_role_user where user_id = #{userId} and dept_role_id in
         <foreach collection="deptRoleIds" item="deptRoleId" open="(" separator="," close=")">
             #{deptRoleId}

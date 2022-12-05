@@ -16,8 +16,10 @@ public class SysFileServiceImpl
         extends ServiceImpl<SysFileMapper, SysFile>
         implements ISysFileService {
 
+    private static final long serialVersionUID = -4690970412370935527L;
+
     @Override
-    public final SysFile selectUserAvatar(final Long userId) {
+    public final SysFile getUserAvatar(final Long userId) {
         return getBaseMapper().getUserAvatar(userId);
     }
 }

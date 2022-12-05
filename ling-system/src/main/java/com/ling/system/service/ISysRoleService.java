@@ -1,8 +1,9 @@
 package com.ling.system.service;
 
 import com.ling.common.core.mybatisplus.core.IServicePlus;
+import com.ling.system.dto.SysRoleDTO;
 import com.ling.system.entity.SysRole;
-import com.ling.system.vo.RoleVo;
+import com.ling.system.vo.SysRoleVO;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
  * @author 钟舒艺
  * @since 2021-07-07
  */
-public interface ISysRoleService extends IServicePlus<SysRole, RoleVo>, Serializable {
+public interface ISysRoleService extends IServicePlus<SysRole, SysRoleVO, SysRoleDTO>, Serializable {
 
 
     /**
@@ -60,7 +61,7 @@ public interface ISysRoleService extends IServicePlus<SysRole, RoleVo>, Serializ
      * @param newIds 新的部门id集合
      * @return 是否修改成功
      */
-    Boolean setDataScope(
+    Boolean updateDataScope(
             Long roleId,
             Set<Long> newIds
     );
@@ -72,7 +73,7 @@ public interface ISysRoleService extends IServicePlus<SysRole, RoleVo>, Serializ
      * @param roleIds 角色id列表
      * @return 是否成功
      */
-    Boolean setUserRole(
+    Boolean updateUserRole(
             Long userId,
             Set<Long> roleIds
     );
@@ -83,5 +84,5 @@ public interface ISysRoleService extends IServicePlus<SysRole, RoleVo>, Serializ
      * @param userId 用户id
      * @return 角色id
      */
-    Set<Long> selectRoleIdsByUserId(Long userId);
+    Set<Long> listRoleIdsByUserId(Long userId);
 }

@@ -1,9 +1,10 @@
 package com.ling.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
+import com.ling.common.core.domain.BaseVO;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -13,9 +14,9 @@ import lombok.experimental.Accessors;
  **/
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-@ApiModel("路由")
-public class RouterVo {
+public class RouterVO extends BaseVO {
 
     /**
      * 路径.
@@ -46,5 +47,5 @@ public class RouterVo {
     /**
      * 子路由.
      */
-    private List<RouterVo> children;
+    private List<RouterVO> children;
 }

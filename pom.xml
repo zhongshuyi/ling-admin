@@ -9,33 +9,24 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>ling-system</module>
+        <module>ling-start</module>
         <module>ling-common</module>
-        <module>ling-dome</module>
-        <module>ling-socket</module>
-        <module>start</module>
+        <module>ling-system</module>
+        <module>ling-framework</module>
+        <module>ling-generator</module>
     </modules>
 
     <properties>
-        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.4.5</spring-boot.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.1</mybatis-plus-generator.version>
-        <druid.version>1.2.8</druid.version>
-        <mysql-connector.version>8.0.25</mysql-connector.version>
-        <lombok.version>1.18.22</lombok.version>
-        <hutool.version>5.7.20</hutool.version>
-        <velocity.version>2.3</velocity.version>
-        <springfox.version>3.0.0</springfox.version>
     </properties>
 
     <!--父项目 提供相关的 Maven 默认依赖。-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.0</version>
+        <version>2.7.4</version>
         <relativePath/>
     </parent>
 
@@ -44,28 +35,22 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>2.7.4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
-            <!--swagger3-->
+            <!-- Sa-Token 权限认证，在线文档：http://sa-token.dev33.cn/ -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>3.0.0</version>
-                <!-- 排除自带的,否则会报For input string: ""-->
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-models</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>1.31.0</version>
             </dependency>
+            <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
             <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-models</artifactId>
-                <version>1.6.6</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-dao-redis-jackson</artifactId>
+                <version>1.31.0</version>
             </dependency>
 
             <!--http框架-->
@@ -96,11 +81,17 @@
                 <version>5.8.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>1.5.3.Final</version>
+            </dependency>
+
             <!--mybatis-plus-->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>3.5.2</version>
             </dependency>
 
             <!--集成druid连接池-->
@@ -145,6 +136,30 @@
                 <version>1.7.19</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-webmvc-core</artifactId>
+                <version>1.6.11</version>
+
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-javadoc</artifactId>
+                <version>1.6.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>3.5.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.7</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -159,6 +174,30 @@
                     <source>11</source>
                     <target>11</target>
                     <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.24</version>
+                        </path>
+                        <!-- mapstruct注解处理器 -->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.5.3.Final</version>
+                        </path>
+                        <!-- lombok 与 mapstruct 组合插件-->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                        <path>
+                            <groupId>com.github.therapi</groupId>
+                            <artifactId>therapi-runtime-javadoc-scribe</artifactId>
+                            <version>0.14.0</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

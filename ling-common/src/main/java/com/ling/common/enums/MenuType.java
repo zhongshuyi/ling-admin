@@ -6,7 +6,7 @@ import lombok.Getter;
  * 菜单类型.
  *
  * @author 钟舒艺
- * @date 2022-05-11-18:05
+ * @since 2022-05-11-18:05
  **/
 @Getter
 public enum MenuType {

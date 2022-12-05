@@ -1,8 +1,9 @@
 package com.ling.system.service;
 
 import com.ling.common.core.mybatisplus.core.IServicePlus;
+import com.ling.system.dto.SysDeptRoleDTO;
 import com.ling.system.entity.SysDeptRole;
-import com.ling.system.vo.DeptRoleVo;
+import com.ling.system.vo.SysDeptRoleVO;
 import java.util.Set;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Set;
  *
  * @author 钟舒艺
  **/
-public interface ISysDeptRoleService extends IServicePlus<SysDeptRole, DeptRoleVo> {
+public interface ISysDeptRoleService extends IServicePlus<SysDeptRole, SysDeptRoleVO, SysDeptRoleDTO> {
 
     /**
      * 根据用户id获取该用户拥有的部门角色id.

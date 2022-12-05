@@ -4,11 +4,11 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ling.common.core.mybatisplus.core.ServicePlusImpl;
-import com.ling.system.dto.DeptDTO;
+import com.ling.system.dto.SysDeptDTO;
 import com.ling.system.entity.SysDept;
 import com.ling.system.mapper.SysDeptMapper;
 import com.ling.system.service.ISysDeptService;
-import com.ling.system.vo.DeptVo;
+import com.ling.system.vo.SysDeptVO;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,20 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2021-10-08
  */
 @Service
-public class SysDeptServiceImpl extends ServicePlusImpl<SysDeptMapper, SysDept, DeptVo> implements ISysDeptService {
+public class SysDeptServiceImpl extends ServicePlusImpl<SysDeptMapper, SysDept, SysDeptVO, SysDeptDTO> implements ISysDeptService {
 
     private static final long serialVersionUID = 8302483662294489594L;
 
     /**
      * 添加部门并设置父级列表.
      *
-     * @param addBo 添加对象
+     * @param deptDTO 添加对象
      * @return 是否成功
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addDept(final DeptDTO addBo) {
-        final SysDept dept = BeanUtil.toBean(addBo, SysDept.class);
+    public Boolean addDept(final SysDeptDTO deptDTO) {
+        final SysDept dept = BeanUtil.toBean(deptDTO, SysDept.class);
         // 获取父部门信息
         final SysDept parent = getBaseMapper().selectOne(
                 Wrappers.<SysDept>lambdaQuery()
@@ -50,18 +50,18 @@ public class SysDeptServiceImpl extends ServicePlusImpl<SysDeptMapper, SysDept, 
 
 
     @Override
-    public final Boolean checkDeptUnique(final DeptDTO addBo) {
+    public final Boolean checkDeptUnique(final SysDeptDTO deptDTO) {
         return getOne(
                 Wrappers.<SysDept>lambdaQuery()
-                        .eq(SysDept::getParentId, addBo.getParentId())
-                        .eq(SysDept::getDeptName, addBo.getDeptName())
+                        .eq(SysDept::getParentId, deptDTO.getParentId())
+                        .eq(SysDept::getDeptName, deptDTO.getDeptName())
         )
                 != null;
     }
 
     @Override
     public final List<SysDept> selectDeptChildren(final Long parentId) {
-        return getBaseMapper().selectDeptChildren(parentId);
+        return getBaseMapper().listDeptChildren(parentId);
     }
 
 
@@ -88,12 +88,12 @@ public class SysDeptServiceImpl extends ServicePlusImpl<SysDeptMapper, SysDept, 
 
     @Override
     public final List<SysDept> selectDeptListByUserId(final Long userId) {
-        return getBaseMapper().selectDeptListByUserId(userId);
+        return getBaseMapper().listDeptListByUserId(userId);
     }
 
     @Override
     public final Set<Long> selectDeptIdsByUserId(final Long userId) {
-        return getBaseMapper().selectDeptIdsByUserId(userId);
+        return getBaseMapper().getDeptIdsByUserId(userId);
     }
 
     @Override
@@ -101,14 +101,14 @@ public class SysDeptServiceImpl extends ServicePlusImpl<SysDeptMapper, SysDept, 
             final Long userId,
             final Set<Long> newIds
     ) {
-        final Set<Long> oldIds = getBaseMapper().selectDeptIdsByUserId(userId);
+        final Set<Long> oldIds = getBaseMapper().getDeptIdsByUserId(userId);
         final Set<Long> result = new HashSet<>(oldIds);
         result.removeAll(newIds);
-        final boolean isSuccess = result.isEmpty() || getBaseMapper().delUserDept(userId, result) == result.size();
+        final boolean isSuccess = result.isEmpty() || getBaseMapper().deleteUserDept(userId, result) == result.size();
         result.clear();
         result.addAll(newIds);
         result.removeAll(oldIds);
-        return isSuccess && (result.isEmpty() || getBaseMapper().addUserDept(userId, result) == result.size());
+        return isSuccess && (result.isEmpty() || getBaseMapper().insertUserDept(userId, result) == result.size());
     }
 
 }
