@@ -1,0 +1,24 @@
+package ${package.Parent}.convert;
+
+import com.ling.common.core.interfaces.BaseConvert;
+
+import ${package.Parent}.dto.${entity}DTO;
+import ${package.Entity}.${entity};
+import ${package.Parent}.vo.${entity}VO;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+/**
+ * 系统用户转换类.
+ *
+ * @author 钟舒艺
+ * @since 2022-10-22 11:09
+ **/
+@Mapper
+public interface ${entity}Convert extends BaseConvert<SysAdminVO, SysAdminDTO, SysAdmin> {
+
+    /**
+     * 实例.
+     */
+        ${entity}Convert INSTANCT = Mappers.getMapper(${entity}Convert.class);
+}

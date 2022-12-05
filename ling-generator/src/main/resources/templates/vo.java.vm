@@ -1,0 +1,33 @@
+package ${package.Parent}.vo;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ling.common.core.domain.BaseVO;
+import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+/**
+ * <p>
+ * $!{table.comment} 视图类.
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public class ${entity}VO extends BaseVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    #foreach($field in ${table.fields})
+        /**
+         * ${field.comment}.
+         */
+        private ${field.propertyType} ${field.propertyName};
+
+    #end
+}

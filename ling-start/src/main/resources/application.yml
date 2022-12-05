@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: ling-admin
+  profiles:
+    # 区分配置,这里使用开发时配置(application-dev.yml)
+    active: dev
+    include: socket,mp
+  servlet:
+    multipart:
+      # 开启文件上传
+      enabled: true
+      # 单个上传文件最大值
+      max-file-size: 200MB
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+############## Sa-Token 配置 ##############
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: lingAdmin
+  # token 前缀
+  token-prefix: Bearer
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: true
+  # token风格
+  token-style: simple-uuid
+  # 是否输出操作日志
+  is-log: true
+
+springdoc:
+  # 排除的路径
+  paths-to-exclude: /error
+
+custom:
+  app:
+    super-admin-role-id: 1
+    default-role-id: 2
+    default-dept-id: 6
+    avatar-postfix: ".png,.jpg,.jpeg"
+    avatar-path: "img/avatar"
+  minio:
+    url: http://localhost:9000
+    accessKey: minioadmin
+    secretKey: minioadmin
+    bucketName: mall
+  # 需要忽略的请求
+  ignores:
+    get:
+      - "/favicon.ico"
+      - "/*/api-docs"
+      - "/error"
+    # 需要忽略的 post 请求
+    post:
+      - "/login"
+      - "/error"
+    # 需要忽略的请求，不限方法
+    pattern:
+      - "/ws/**"
+
+
+
+
+
+
+
