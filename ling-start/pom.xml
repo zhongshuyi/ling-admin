@@ -24,19 +24,6 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- springboot 单元测试-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!--  配置注解执行器 配置完成后，当执行类中已经定义了对象和该对象的字段后，在配置文件中对该类赋值时，便会非常方便地弹出提示信息。-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +48,18 @@
             <artifactId>ling-system</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.ling</groupId>
+            <artifactId>ling-blog</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ling</groupId>
+            <artifactId>ling-eims</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <!-- 全局配置-->
@@ -71,7 +70,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.4</version>
+                <version>${springboot.version}</version>
                 <configuration>
                     <mainClass>com.ling.LingAdminApplication</mainClass>
                 </configuration>
@@ -84,6 +83,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <!--远程Docker的地址-->
+                    <dockerHost>https://121.196.144.187:2375</dockerHost>
+                    <!-- ca证书的本地地址 -->
+                    <dockerCertPath>C:\ca</dockerCertPath>
+                    <!-- 打包后的镜像名称 -->
+                    <imageName>ling-admin</imageName>
+                    <!-- DockerFile所在文件夹 -->
+                    <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

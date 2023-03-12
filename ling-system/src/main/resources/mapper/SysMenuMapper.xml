@@ -104,7 +104,7 @@
         where udrp.dept_role_id = #{deptRoleId}
     </select>
 
-    <select id="listDeptPermMenu" resultType="com.ling.system.entity.SysMenu">
+    <select id="listDeptPermMenu" resultType="com.ling.common.core.domain.model.SysMenu">
         select sys_menu.id,
                parent_id,
                perms,
@@ -134,7 +134,7 @@
                  right join sys_dept_permission udp on sys_menu.id = udp.permission_id
         where udp.dept_id = #{deptId}
     </select>
-    <select id="listUserPermsById" resultType="com.ling.system.entity.SysMenu">
+    <select id="listUserPermsById" resultType="com.ling.common.core.domain.model.SysMenu">
         select m.id,
                parent_id,
                perms,
@@ -168,7 +168,7 @@
           and r.status = 1
           and ur.user_id = #{userId}
     </select>
-    <select id="listDeptRolePermsByUserId" resultType="com.ling.system.entity.SysMenu">
+    <select id="listDeptRolePermsByUserId" resultType="com.ling.common.core.domain.model.SysMenu">
         select m.id,
                parent_id,
                perms,

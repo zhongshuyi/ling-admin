@@ -1,7 +1,7 @@
 package com.ling.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ling.common.core.domain.BaseVO;
+import com.ling.common.core.domain.base.BaseVO;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

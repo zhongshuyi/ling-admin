@@ -16,6 +16,10 @@ spring:
       validation-query: SELECT 1
 
 
-
-
+custom:
+  minio:
+    url: https://localhost:9000
+    accessKey: minioadmin
+    secretKey: minioadmin
+    bucketName: image
 

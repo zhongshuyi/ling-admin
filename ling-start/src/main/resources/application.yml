@@ -11,6 +11,10 @@ spring:
       enabled: true
       # 单个上传文件最大值
       max-file-size: 200MB
+  mvc:
+    view:
+      prefix: /static/
+      suffix: .html
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -46,15 +50,9 @@ custom:
     default-dept-id: 6
     avatar-postfix: ".png,.jpg,.jpeg"
     avatar-path: "img/avatar"
-  minio:
-    url: http://localhost:9000
-    accessKey: minioadmin
-    secretKey: minioadmin
-    bucketName: mall
   # 需要忽略的请求
   ignores:
     get:
-      - "/favicon.ico"
       - "/*/api-docs"
       - "/error"
     # 需要忽略的 post 请求
@@ -64,6 +62,7 @@ custom:
     # 需要忽略的请求，不限方法
     pattern:
       - "/ws/**"
+      - "/blog/**"
 
 
 

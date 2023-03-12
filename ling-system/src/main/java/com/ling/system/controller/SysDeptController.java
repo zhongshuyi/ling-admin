@@ -1,16 +1,19 @@
 package com.ling.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ling.common.constant.PermissionCodeConstant;
 import com.ling.common.core.controller.BaseController;
 import com.ling.common.core.domain.CommonResult;
+import com.ling.common.core.domain.model.SysDept;
 import com.ling.common.core.validate.ValidationGroups;
 import com.ling.system.dto.SysDeptDTO;
-import com.ling.system.entity.SysDept;
 import com.ling.system.service.ISysDeptService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Slf4j
 @RestController
+@Tag(name = "部门管理")
 @RequiredArgsConstructor
 @RequestMapping("/system/dept")
 public class SysDeptController extends BaseController {
@@ -73,6 +77,7 @@ public class SysDeptController extends BaseController {
      * @return 部门树结构
      */
     @GetMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_DEPT_LIST)
     public CommonResult<List<Tree<Long>>> getDeptVoList() {
         return CommonResult.success(
                 buildDeptTree(sysDeptService.list(Wrappers.<SysDept>lambdaQuery().orderByAsc(SysDept::getOrderNo)),
@@ -87,6 +92,7 @@ public class SysDeptController extends BaseController {
      * @return 部门详细信息
      */
     @GetMapping("/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_DEPT_QUERY)
     public CommonResult<SysDept> getDept(@PathVariable final Long id) {
         return CommonResult.success(sysDeptService.getById(id));
     }
@@ -98,8 +104,9 @@ public class SysDeptController extends BaseController {
      * @return 是否成功
      */
     @PostMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_DEPT_ADD)
     public CommonResult<Void> addDept(
-            @Validated(ValidationGroups.ADD)
+            @Validated(ValidationGroups.Add.class)
             @RequestBody final SysDeptDTO addBo
     ) {
         if (Boolean.TRUE.equals(sysDeptService.checkDeptUnique(addBo))) {
@@ -116,6 +123,7 @@ public class SysDeptController extends BaseController {
      * @return 是否成功
      */
     @DeleteMapping("/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_DEPT_DELETE)
     public CommonResult<Void> deleteById(@PathVariable final Long id) {
         return toAjax(sysDeptService.deleteById(id));
     }
@@ -127,6 +135,7 @@ public class SysDeptController extends BaseController {
      * @return 是否成功
      */
     @PutMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_DEPT_EDIT)
     public CommonResult<Void> editDept(@RequestBody final SysDeptDTO dept) {
         if (Boolean.TRUE.equals(sysDeptService.checkDeptUnique(dept))) {
             return CommonResult.failed("部门'" + dept.getDeptName() + "' 已存在");

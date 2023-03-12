@@ -21,7 +21,7 @@ public class StpInterfaceImpl implements StpInterface {
     /**
      * 权限服务.
      */
-    private PermissionService permissionService;
+    private final PermissionService permissionService;
 
 
     /**

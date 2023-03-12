@@ -1,4 +1,4 @@
-package com.ling.common.core.domain;
+package com.ling.common.core.domain.base;
 
 import java.io.Serializable;
 import lombok.Data;

@@ -1,6 +1,8 @@
 package com.ling.framework.controller;
 
 import com.ling.common.core.domain.CommonResult;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,28 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Slf4j
 @RestController
-@RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomErrorController implements ErrorController {
 
-    @RequestMapping
-    public CommonResult<Void> doHandleError() {
-        return CommonResult.failed(HttpStatus.NOT_FOUND.value(), "路径不存在");
+    /**
+     * 自定义 error 处理.
+     *
+     * @param request 请求信息
+     * @return 通用返回
+     */
+    @RequestMapping("/error")
+    public CommonResult<Void> doHandleError(HttpServletRequest request) {
+        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        if (status != null) {
+            Integer statusCode = Integer.valueOf(status.toString());
+            log.error(String.valueOf(statusCode));
+            if (statusCode == HttpStatus.NOT_FOUND.value()) {
+                return CommonResult.failed(statusCode, "路径不存在");
+            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+                return CommonResult.failed(statusCode, "服务器错误");
+            } else {
+                return CommonResult.failed(statusCode, HttpStatus.valueOf(statusCode).getReasonPhrase());
+            }
+        }
+        return CommonResult.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器错误");
     }
 }

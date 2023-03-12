@@ -30,7 +30,7 @@
         </foreach>
     </delete>
 
-    <select id="listRoleByUserId" resultType="com.ling.system.entity.SysRole"
+    <select id="listRoleByUserId" resultType="com.ling.common.core.domain.model.SysRole"
             parameterType="long">
         select distinct r.id,
                         r.role_name,

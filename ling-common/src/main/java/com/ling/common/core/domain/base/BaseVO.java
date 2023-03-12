@@ -1,4 +1,4 @@
-package com.ling.common.core.domain;
+package com.ling.common.core.domain.base;
 
 import lombok.Data;
 
@@ -10,4 +10,9 @@ import lombok.Data;
  **/
 @Data
 public class BaseVO {
+
+    /**
+     * 主键id.
+     */
+    private Long id;
 }

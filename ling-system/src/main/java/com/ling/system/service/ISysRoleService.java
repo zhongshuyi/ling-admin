@@ -1,8 +1,8 @@
 package com.ling.system.service;
 
+import com.ling.common.core.domain.model.SysRole;
 import com.ling.common.core.mybatisplus.core.IServicePlus;
 import com.ling.system.dto.SysRoleDTO;
-import com.ling.system.entity.SysRole;
 import com.ling.system.vo.SysRoleVO;
 import java.io.Serializable;
 import java.util.List;
@@ -20,9 +20,9 @@ public interface ISysRoleService extends IServicePlus<SysRole, SysRoleVO, SysRol
     /**
      * 检查角色的标识是否唯一.
      *
-     * @param roleBo 角色Bo
+     * @param sysRoleBo 角色Bo
      */
-    void checkRoleKeyUnique(SysRole roleBo);
+    void checkRoleKeyUnique(SysRole sysRoleBo);
 
     /**
      * 更改角色状态.

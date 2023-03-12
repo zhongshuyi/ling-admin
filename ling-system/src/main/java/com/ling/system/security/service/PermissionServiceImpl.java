@@ -1,10 +1,11 @@
 package com.ling.system.security.service;
 
 import com.ling.framework.service.PermissionService;
-import com.ling.system.utils.SecurityUtils;
+import com.ling.framework.utils.SecurityUtils;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @author 钟舒艺
  * @since 2022-10-27 15:45
  **/
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
@@ -26,7 +28,8 @@ public class PermissionServiceImpl implements PermissionService {
      */
     @Override
     public Set<String> getPermissionList(Serializable userId) {
-        return SecurityUtils.getLoginUserInfo().getPermissionList();
+        log.info("获取权限{}", SecurityUtils.getLoginUser().toString());
+        return SecurityUtils.getLoginUser().getPermissionList();
     }
 
     /**
@@ -37,6 +40,6 @@ public class PermissionServiceImpl implements PermissionService {
      */
     @Override
     public Set<String> getRoleList(Serializable userId) {
-        return SecurityUtils.getLoginUserInfo().getRoleNameSet();
+        return SecurityUtils.getLoginUser().getRoleNameSet();
     }
 }

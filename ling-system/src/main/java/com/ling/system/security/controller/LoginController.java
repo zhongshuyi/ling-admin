@@ -4,16 +4,18 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
 import com.ling.common.core.domain.CommonResult;
+import com.ling.common.core.domain.model.LoginBody;
+import com.ling.common.core.domain.model.LoginUser;
+import com.ling.common.core.domain.model.SysMenu;
 import com.ling.framework.controller.LoginControllerInterface;
-import com.ling.framework.model.LoginBody;
 import com.ling.framework.service.LoginService;
-import com.ling.system.security.model.LoginUserInfo;
+import com.ling.framework.utils.SecurityUtils;
 import com.ling.system.service.ISysMenuService;
 import com.ling.system.utils.MenuUtil;
-import com.ling.system.utils.SecurityUtils;
 import com.ling.system.vo.RouterVO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,11 +86,11 @@ public class LoginController implements LoginControllerInterface {
     @Override
     public CommonResult<Map<String, Object>> getUserInfo() {
 
-        LoginUserInfo userInfo = SecurityUtils.getLoginUserInfo();
-        final Map<String, Object> map = BeanUtil.beanToMap(userInfo.getUser());
+        LoginUser userInfo = SecurityUtils.getLoginUser();
+        final Map<String, Object> map = BeanUtil.beanToMap(userInfo.getUser(), new LinkedHashMap<>(30), true, null);
         map.put("password", "");
-        map.put("roles", userInfo.getRoles());
-        map.put("depts", userInfo.getDepts());
+        map.put("roles", userInfo.getSysRoles());
+        map.put("depts", userInfo.getSysDepts());
 
         return CommonResult.success(map);
     }
@@ -100,7 +102,7 @@ public class LoginController implements LoginControllerInterface {
      */
     @Override
     public CommonResult<Set<String>> getPermCode() {
-        return CommonResult.success(SecurityUtils.getLoginUserInfo().getPermissionList());
+        return CommonResult.success(SecurityUtils.getLoginUser().getPermissionList());
     }
 
     /**
@@ -110,10 +112,10 @@ public class LoginController implements LoginControllerInterface {
      */
     @GetMapping("/getRouterList")
     public CommonResult<List<RouterVO>> getMenuList() {
-        if (Boolean.TRUE.equals(SecurityUtils.getLoginUserInfo().getIsAdmin())) {
-            return CommonResult.success(MenuUtil.getRouter(sysMenuService.listMenuAll()));
+        if (Boolean.TRUE.equals(SecurityUtils.getLoginUser().getIsAdmin())) {
+            return CommonResult.success(MenuUtil.getRouter(BeanUtil.copyToList(sysMenuService.listRouterAll(), SysMenu.class)));
         } else {
-            return CommonResult.success(MenuUtil.getRouter(SecurityUtils.getLoginUserInfo().getMenuAndPermissionList()));
+            return CommonResult.success(MenuUtil.getRouter(SecurityUtils.getLoginUser().getSysMenuAndPermissionList()));
         }
     }
 }

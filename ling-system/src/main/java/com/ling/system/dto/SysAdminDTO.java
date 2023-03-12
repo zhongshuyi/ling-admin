@@ -2,11 +2,10 @@ package com.ling.system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ling.common.constant.Regular;
-import com.ling.common.core.domain.BaseDTO;
+import com.ling.common.core.domain.base.BaseDTO;
 import com.ling.common.core.validate.ValidationGroups;
 import java.util.Set;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
@@ -24,13 +23,6 @@ import lombok.experimental.Accessors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SysAdminDTO extends BaseDTO {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 用户ID.
-     */
-    @NotNull(message = "主键不能为空", groups = {ValidationGroups.EDIT})
-    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.EDIT})
-    private Long id;
 
 
     /**
@@ -51,19 +43,19 @@ public class SysAdminDTO extends BaseDTO {
     /**
      * 用户账号.
      */
-    @NotNull(message = "用户账号不能为空", groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+    @NotNull(message = "用户账号不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String username;
 
     /**
      * 用户昵称.
      */
-    @NotNull(message = "用户昵称不能为空", groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+    @NotNull(message = "用户昵称不能为空", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String realName;
 
     /**
      * 用户邮箱.
      */
-    @Email(message = "用户邮箱必须是邮箱格式", groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+    @Email(message = "用户邮箱必须是邮箱格式", groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String email;
 
     /**
@@ -72,7 +64,7 @@ public class SysAdminDTO extends BaseDTO {
     @Pattern(
             message = "必须是中国大陆电话号码",
             regexp = Regular.CHINA_TEL_NO,
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT}
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class}
     )
     private String tel;
 

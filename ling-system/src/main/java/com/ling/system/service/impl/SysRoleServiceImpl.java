@@ -3,10 +3,10 @@ package com.ling.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ling.common.core.domain.model.SysRole;
 import com.ling.common.core.mybatisplus.core.ServicePlusImpl;
 import com.ling.common.exception.BusinessErrorException;
 import com.ling.system.dto.SysRoleDTO;
-import com.ling.system.entity.SysRole;
 import com.ling.system.mapper.SysAdminMapper;
 import com.ling.system.mapper.SysRoleMapper;
 import com.ling.system.service.ISysMenuService;
@@ -18,6 +18,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 角色信息表 服务实现类.
@@ -80,6 +81,7 @@ public class SysRoleServiceImpl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateDataScope(
             final Long roleId,
             final Set<Long> newIds
@@ -95,6 +97,7 @@ public class SysRoleServiceImpl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateUserRole(
             final Long userId,
             final Set<Long> newIds

@@ -1,8 +1,8 @@
 package com.ling.system.convert;
 
+import com.ling.common.core.domain.model.SysDept;
 import com.ling.common.core.interfaces.BaseConvert;
 import com.ling.system.dto.SysDeptDTO;
-import com.ling.system.entity.SysDept;
 import com.ling.system.vo.SysDeptVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

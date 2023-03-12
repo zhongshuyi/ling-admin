@@ -67,6 +67,7 @@ public final class PageUtils {
         if (pageNum <= 0) {
             pageNum = DEFAULT_PAGE_NUM;
         }
+
         final PagePlus<T, K> page = new PagePlus<>(pageNum, pageSize);
         final OrderItem orderItem = buildOrderItem(orderByColumn, isAsc);
         if (orderItem != null) {

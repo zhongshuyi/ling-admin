@@ -1,8 +1,8 @@
-package com.ling.system.entity;
+package com.ling.common.core.domain.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.ling.common.core.domain.BaseEntity;
+import com.ling.common.core.domain.base.BaseEntity;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class SysMenu extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -122,6 +122,4 @@ public class SysMenu extends BaseEntity implements Serializable {
      * 是否是外链 1是,0不是.
      */
     private Byte isFrame;
-
-
 }

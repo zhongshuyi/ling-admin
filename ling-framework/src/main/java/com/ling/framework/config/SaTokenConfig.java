@@ -1,11 +1,16 @@
 package com.ling.framework.config;
 
+import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.json.JSONUtil;
+import com.ling.common.core.domain.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -26,25 +31,37 @@ public class SaTokenConfig implements WebMvcConfigurer {
      */
     private final CustomConfig customConfig;
 
-    /**
-     * 注册拦截器.
-     *
-     * @param registry 注册信息.
-     */
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 注册 Sa-Token 拦截器，打开注解式鉴权功能
+        registry.addInterceptor(new SaInterceptor()).addPathPatterns("/**");
+    }
 
-        // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-        registry.addInterceptor(new SaInterceptor(handle -> {
-            // 放行配置文件中忽略的路径
-            releaseIgnores();
-            // 其余全部拦截并检查
-            SaRouter.match("/**").check(r -> {
-                StpUtil.checkLogin();
-            });
-        }));
+    /**
+     * 注册 [Sa-Token全局过滤器].
+     *
+     * @return 过滤器
+     */
+    @Bean
+    public SaServletFilter getSaServletFilter() {
+        log.info("注册过滤器");
+        return new SaServletFilter()
+                // 指定 拦截路由 与 放行路由 排除掉 /favicon.ico
+                .addInclude("/**").addExclude("/favicon.ico")
+                .setAuth(o -> {
+                    // 放行配置文件中忽略的路径
+                    releaseIgnores();
+                    // 其余全部拦截并检查
+                    SaRouter.match("/**").check(r -> StpUtil.checkLogin());
+                })
 
-
+                .setError(e -> {
+                    // 设置响应头
+                    SaHolder.getResponse().setHeader("Content-Type", "application/json;charset=UTF-8");
+                    // 使用封装的 JSON 工具类转换数据格式
+                    return JSONUtil.toJsonStr(CommonResult.unauthorized(e.getMessage()));
+                });
     }
 
 

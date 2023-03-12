@@ -24,8 +24,8 @@ public class SysDeptRoleDTO {
      */
     @NotNull(
             message = "主键不能为空",
-            groups = {ValidationGroups.EDIT})
-    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.EDIT})
+            groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
     private Long id;
 
     /**
@@ -38,7 +38,7 @@ public class SysDeptRoleDTO {
      */
     @NotNull(
             message = "角色名不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String roleName;
 
     /**
@@ -46,7 +46,7 @@ public class SysDeptRoleDTO {
      */
     @NotNull(
             message = "角色权限字符串不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String roleKey;
 
     /**

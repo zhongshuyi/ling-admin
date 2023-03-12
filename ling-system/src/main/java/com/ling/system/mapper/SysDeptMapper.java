@@ -1,9 +1,9 @@
 package com.ling.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ling.common.core.domain.model.SysDept;
 import com.ling.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.ling.common.core.mybatisplus.core.BaseMapperPlus;
-import com.ling.system.entity.SysDept;
 import java.util.List;
 import java.util.Set;
 import org.apache.ibatis.annotations.CacheNamespace;

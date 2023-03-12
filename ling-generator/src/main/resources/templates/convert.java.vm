@@ -15,7 +15,7 @@ import org.mapstruct.factory.Mappers;
  * @since 2022-10-22 11:09
  **/
 @Mapper
-public interface ${entity}Convert extends BaseConvert<SysAdminVO, SysAdminDTO, SysAdmin> {
+public interface ${entity}Convert extends BaseConvert<${entity}VO, ${entity}DTO, ${entity}> {
 
     /**
      * 实例.

@@ -28,8 +28,8 @@ public class SysRoleDTO {
      */
     @NotNull(
             message = "主键不能为空",
-            groups = {ValidationGroups.EDIT})
-    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.EDIT})
+            groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
     private Long id;
 
     /**
@@ -37,7 +37,7 @@ public class SysRoleDTO {
      */
     @NotNull(
             message = "角色名不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String roleName;
 
     /**
@@ -45,7 +45,7 @@ public class SysRoleDTO {
      */
     @NotNull(
             message = "角色权限字符串不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String roleKey;
 
     /**
@@ -53,17 +53,17 @@ public class SysRoleDTO {
      */
     @NotNull(
             message = "显示顺序不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @Min(
             value = 0,
             message = "显示顺序最低为0",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private Integer orderNo;
 
     /**
      * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5:仅本人数据权限）.
      */
-    @Range(min = 1, max = 5, message = "数据范围,只能为1,2,3,4,5", groups = {ValidationGroups.EDIT})
+    @Range(min = 1, max = 5, message = "数据范围,只能为1,2,3,4,5", groups = {ValidationGroups.Edit.class})
     private Integer dataScope;
 
 
@@ -72,15 +72,15 @@ public class SysRoleDTO {
      */
     @NotNull(
             message = "角色状态不能为空",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @Max(
             value = 1,
             message = "角色状态,只能为0,1",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     @Min(
             value = 0,
             message = "角色状态,只能为0,1",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private Integer status;
 
     /**

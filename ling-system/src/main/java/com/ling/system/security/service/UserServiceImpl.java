@@ -1,18 +1,21 @@
 package com.ling.system.security.service;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ling.common.constant.AppConstants;
+import com.ling.common.core.domain.model.LoginUser;
+import com.ling.common.core.domain.model.SysMenu;
+import com.ling.common.core.domain.model.User;
 import com.ling.common.enums.BusinessExceptionMsgEnum;
+import com.ling.common.enums.DataScopeTypeEnum;
 import com.ling.common.exception.BusinessErrorException;
 import com.ling.framework.config.CustomConfig;
-import com.ling.framework.model.User;
+import com.ling.framework.mybatisplus.helper.DataPermissionHelper;
 import com.ling.framework.service.UserService;
-import com.ling.system.entity.SysMenu;
+import com.ling.framework.utils.SecurityUtils;
 import com.ling.system.mapper.SysMenuMapper;
-import com.ling.system.security.model.LoginUserInfo;
 import com.ling.system.service.ISysAdminService;
 import com.ling.system.service.ISysDeptService;
 import com.ling.system.service.ISysRoleService;
-import com.ling.system.utils.SecurityUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,29 +80,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public void afterLogin(User user) {
         // 组合在线用户信息
-        LoginUserInfo userInfo = new LoginUserInfo();
+        LoginUser userInfo = new LoginUser();
 
         // 设置用户基本信息
         userInfo.setUser(user);
 
         // 添加用户角色菜单
-        HashSet<SysMenu> menus = new HashSet<>(sysMenuMapper.listUserPermsById(Long.valueOf(user.getId().toString())));
+        HashSet<SysMenu> menus = new HashSet<>(sysMenuMapper.listUserPermsById(user.getId()));
         // 添加用户部门角色菜单
         menus.addAll(sysMenuMapper.listDeptRolePermsByUserId(Long.valueOf(user.getId().toString())));
-        userInfo.setMenuAndPermissionList(new ArrayList<>(menus));
+        userInfo.setSysMenuAndPermissionList(new ArrayList<>(menus));
 
         // 设置角色
-        userInfo.setRoles(sysRoleService.selectRoleListByUserId(Long.valueOf(user.getId().toString())));
+        userInfo.setSysRoles(sysRoleService.selectRoleListByUserId(Long.valueOf(user.getId().toString())));
 
         // 设置部门
-        userInfo.setDepts(sysDeptService.selectDeptListByUserId(Long.valueOf(user.getId().toString())));
+        userInfo.setSysDepts(sysDeptService.selectDeptListByUserId(Long.valueOf(user.getId().toString())));
+
+        // 获取该用户的数据权限集
+        userInfo.setDataScopeTypeEnumCodeList(
+                DataPermissionHelper.getDataPermissionTypeEnum(userInfo)
+                        .stream().map(DataScopeTypeEnum::getCode).collect(Collectors.toList())
+        );
 
         // 判断是否是超级管理员以及角色是否被禁用
-        userInfo.getRoles().forEach(r -> {
+        userInfo.getSysRoles().forEach(r -> {
             if (r.getStatus().equals(AppConstants.DISABLE)) {
                 log.info("登录用户：{} 角色{}已被停用.", user.getUsername(), r.getRoleName());
                 throw new BusinessErrorException(BusinessExceptionMsgEnum.ROLE_DISABLE);
             }
+            // 判断配置文件中的角色id
             if (r.getId().equals(config.getApp().getSuperAdminRoleId())) {
                 userInfo.setIsAdmin(true);
             }
@@ -108,9 +118,15 @@ public class UserServiceImpl implements UserService {
             userInfo.setIsAdmin(false);
         }
 
-        // 管理员拥有所有权限
+        // 管理员拥有所有权限与菜单
         if (Boolean.TRUE.equals(userInfo.getIsAdmin())) {
             userInfo.setPermissionList(Set.of("*"));
+            userInfo.setSysMenuAndPermissionList(
+                    sysMenuMapper.selectList(
+                            Wrappers.<SysMenu>lambdaQuery()
+                                    .eq(SysMenu::getIsDeleted, 0)
+                                    .select(SysMenu.class, info -> !"update_time".equals(info.getColumn()) || !"create_time".equals(info.getColumn()))
+                    ));
         } else {
             // 提取出权限
             userInfo.setPermissionList(menus.stream().filter(p -> p.getMenuType() == 2).map(SysMenu::getPerms).collect(Collectors.toSet()));

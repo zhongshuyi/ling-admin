@@ -27,8 +27,8 @@ public class SysDeptDTO implements Serializable {
     /**
      * 部门id.
      */
-    @NotNull(message = "主键不能为空", groups = {ValidationGroups.EDIT})
-    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.EDIT})
+    @NotNull(message = "主键不能为空", groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
     private Long id;
 
     /**
@@ -36,27 +36,27 @@ public class SysDeptDTO implements Serializable {
      */
     @NotNull(
             message = "父部门id不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     @Min(value = 0,
             message = "父部门id最低为0",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private Long parentId;
 
     /**
      * 部门名称.
      */
     @NotNull(message = "部门id不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String deptName;
 
     /**
      * 显示顺序.
      */
     @NotNull(message = "显示顺序不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     @Min(value = 0,
             message = "显示顺序最低为0",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private Integer orderNo;
 
     /**
@@ -64,7 +64,7 @@ public class SysDeptDTO implements Serializable {
      */
     @Size(max = 30,
             message = "名字长度必须在30个字符以内",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String leader;
 
     /**
@@ -73,13 +73,13 @@ public class SysDeptDTO implements Serializable {
     @Pattern(
             message = "必须是中国大陆电话号码",
             regexp = Regular.CHINA_TEL_NO,
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String phone;
 
     /**
      * 邮箱.
      */
     @Email(message = "必须是邮箱",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private String email;
 }

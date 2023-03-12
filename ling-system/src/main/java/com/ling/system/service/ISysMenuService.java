@@ -1,8 +1,8 @@
 package com.ling.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ling.common.core.domain.model.SysMenu;
 import com.ling.system.dto.SysMenuDTO;
-import com.ling.system.entity.SysMenu;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;

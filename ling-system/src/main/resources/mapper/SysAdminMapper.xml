@@ -13,7 +13,7 @@
                         concat(uf.path, '/', uf.name, uf.postfix) as avatar,
                         avatar_file_id,
                         status,
-                        is_deleted,
+                        u.is_deleted,
                         depart_ids,
                         user_identity,
                         u.remark
@@ -33,7 +33,7 @@
         concat(uf.path, '/', uf.name, uf.postfix) as avatar,
         avatar_file_id,
         status,
-        is_deleted,
+        u.is_deleted,
         depart_ids,
         user_identity,
         u.remark
@@ -74,7 +74,7 @@
                avatar_file_id,
                password,
                status,
-               is_deleted,
+               u.is_deleted,
                depart_ids,
                user_identity,
                u.remark
@@ -93,7 +93,7 @@
                avatar_file_id,
                password,
                status,
-               is_deleted,
+               u.is_deleted,
                depart_ids,
                user_identity,
                u.remark

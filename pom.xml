@@ -14,12 +14,36 @@
         <module>ling-system</module>
         <module>ling-framework</module>
         <module>ling-generator</module>
+        <module>ling-blog</module>
+        <module>ling-eims</module>
+        <module>ling-dome</module>
     </modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <springboot.version>2.7.4</springboot.version>
+        <satoken.version>1.31.0</satoken.version>
+        <redisson.version>3.17.0</redisson.version>
+        <okhttp.version>4.9.3</okhttp.version>
+        <okhttp.version>4.9.3</okhttp.version>
+        <lombok.version>1.18.24</lombok.version>
+        <hutool.version>5.8.0</hutool.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <druid.version>1.2.9</druid.version>
+        <mysql-connector.version>8.0.29</mysql-connector.version>
+        <p6spy.version>3.9.1</p6spy.version>
+        <pagehelper.version>1.4.2</pagehelper.version>
+        <minio.version>8.4.1</minio.version>
+        <minio.version>8.4.1</minio.version>
+        <springdoc.version>1.6.11</springdoc.version>
+        <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
+        <velocity.version>1.7</velocity.version>
+
+        <mockito.version>5.1.1</mockito.version>
     </properties>
 
     <!--父项目 提供相关的 Maven 默认依赖。-->
@@ -30,12 +54,34 @@
         <relativePath/>
     </parent>
 
+    <dependencies>
+        <!-- springboot 单元测试-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+            <version>${mockito.version}</version>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.7.4</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -44,75 +90,75 @@
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-spring-boot-starter</artifactId>
-                <version>1.31.0</version>
+                <version>${satoken.version}</version>
             </dependency>
             <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-dao-redis-jackson</artifactId>
-                <version>1.31.0</version>
+                <version>${satoken.version}</version>
             </dependency>
 
             <!--http框架-->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
-                <version>4.9.3</version>
+                <version>${okhttp.version}</version>
             </dependency>
 
             <!--redisson-->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>3.17.0</version>
+                <version>${redisson.version}</version>
             </dependency>
 
             <!--lombok插件-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.24</version>
+                <version>${lombok.version}</version>
             </dependency>
 
             <!-- 一个Java基础工具类，对文件、流、加密解密、转码、正则、线程、XML等JDK方法进行封装，组成各种Util工具类-->
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.8.0</version>
+                <version>${hutool.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
-                <version>1.5.3.Final</version>
+                <version>${mapstruct.version}</version>
             </dependency>
 
             <!--mybatis-plus-->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.5.2</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
 
             <!--集成druid连接池-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
-                <version>1.2.9</version>
+                <version>${druid.version}</version>
             </dependency>
 
             <!--Mysql数据库驱动-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.29</version>
+                <version>${mysql-connector.version}</version>
             </dependency>
 
             <!--SQL 分析打印-->
             <dependency>
                 <groupId>p6spy</groupId>
                 <artifactId>p6spy</artifactId>
-                <version>3.9.1</version>
+                <version>${p6spy.version}</version>
             </dependency>
 
             <!--mybatis 分页插件,主要用于多表分页-->
@@ -129,24 +175,16 @@
                 <version>8.4.1</version>
             </dependency>
 
-            <!-- socketIo-->
-            <dependency>
-                <groupId>com.corundumstudio.socketio</groupId>
-                <artifactId>netty-socketio</artifactId>
-                <version>1.7.19</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-webmvc-core</artifactId>
-                <version>1.6.11</version>
-
+                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-javadoc</artifactId>
-                <version>1.6.11</version>
+                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>
@@ -158,7 +196,7 @@
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
-                <version>1.7</version>
+                <version>${velocity.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -169,33 +207,32 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
                     <encoding>UTF-8</encoding>
                     <annotationProcessorPaths>
                         <path>
+                            <groupId>com.github.therapi</groupId>
+                            <artifactId>therapi-runtime-javadoc-scribe</artifactId>
+                            <version>0.15.0</version>
+                        </path>
+                        <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.24</version>
+                            <version>${lombok.version}</version>
                         </path>
                         <!-- mapstruct注解处理器 -->
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>1.5.3.Final</version>
+                            <version>${mapstruct.version}</version>
                         </path>
                         <!-- lombok 与 mapstruct 组合插件-->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
                             <version>0.2.0</version>
-                        </path>
-                        <path>
-                            <groupId>com.github.therapi</groupId>
-                            <artifactId>therapi-runtime-javadoc-scribe</artifactId>
-                            <version>0.14.0</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

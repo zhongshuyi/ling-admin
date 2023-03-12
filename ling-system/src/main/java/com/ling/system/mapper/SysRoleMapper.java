@@ -1,9 +1,9 @@
 package com.ling.system.mapper;
 
 
+import com.ling.common.core.domain.model.SysRole;
 import com.ling.common.core.mybatisplus.cache.MybatisPlusRedisCache;
 import com.ling.common.core.mybatisplus.core.BaseMapperPlus;
-import com.ling.system.entity.SysRole;
 import java.util.List;
 import java.util.Set;
 import org.apache.ibatis.annotations.CacheNamespace;

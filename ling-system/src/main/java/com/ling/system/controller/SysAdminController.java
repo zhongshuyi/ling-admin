@@ -1,23 +1,25 @@
 package com.ling.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.http.HttpStatus;
+import com.ling.common.constant.PermissionCodeConstant;
 import com.ling.common.core.controller.BaseController;
 import com.ling.common.core.domain.CommonResult;
 import com.ling.common.core.domain.PageInfo;
+import com.ling.common.core.domain.model.LoginUser;
 import com.ling.common.core.mybatisplus.util.PageUtils;
 import com.ling.common.core.validate.ValidationGroups;
 import com.ling.common.exception.BusinessErrorException;
-import com.ling.framework.config.CustomConfig;
 import com.ling.framework.service.UserService;
+import com.ling.framework.utils.SecurityUtils;
 import com.ling.system.convert.SysAdminConvert;
 import com.ling.system.dto.SysAdminDTO;
 import com.ling.system.entity.SysAdmin;
-import com.ling.system.security.model.LoginUserInfo;
 import com.ling.system.service.ISysAdminService;
 import com.ling.system.service.ISysDeptService;
 import com.ling.system.service.ISysRoleService;
-import com.ling.system.utils.SecurityUtils;
 import com.ling.system.vo.SysAdminVO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @Slf4j
 @RestController
+@Tag(name = "用户管理")
 @RequestMapping("/system/user")
 @RequiredArgsConstructor
 public class SysAdminController extends BaseController {
@@ -53,12 +56,6 @@ public class SysAdminController extends BaseController {
      * 系统用户服务类.
      */
     private final ISysAdminService sysAdminService;
-
-
-    /**
-     * 配置信息.
-     */
-    private final CustomConfig config;
 
     /**
      * 部门服务.
@@ -78,9 +75,9 @@ public class SysAdminController extends BaseController {
      * @return 分页后信息
      */
     @GetMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_LIST)
     public CommonResult<PageInfo<SysAdminVO>> getUserList(
-            @Validated(ValidationGroups.QUERY) final SysAdminDTO userDTO) {
-
+            @Validated(ValidationGroups.Query.class) final SysAdminDTO userDTO) {
         return CommonResult.success(
                 PageUtils.buildPageInfo(
                         sysAdminService.listSysAdminPage(
@@ -96,6 +93,7 @@ public class SysAdminController extends BaseController {
      * @return 用户vo
      */
     @GetMapping("/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_QUERY)
     public CommonResult<SysAdminVO> getUserById(@PathVariable final Long id) {
         final SysAdminVO sysAdminVO = SysAdminConvert.INSTANCT.convertToVO(sysAdminService.getSysAdminById(id));
         sysAdminVO.setRoleIds(sysRoleService.listRoleIdsByUserId(id));
@@ -122,7 +120,8 @@ public class SysAdminController extends BaseController {
      * @return 是否成功
      */
     @PostMapping
-    public CommonResult<Void> addUser(@Validated({ValidationGroups.ADD}) @RequestBody final SysAdminDTO sysAdminDTO) {
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_ADD)
+    public CommonResult<Void> addUser(@Validated({ValidationGroups.Add.class}) @RequestBody final SysAdminDTO sysAdminDTO) {
         if (!sysAdminDTO.getPassword().equals(sysAdminDTO.getPasswordRepeat())) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "两次密码不一样");
         }
@@ -137,13 +136,14 @@ public class SysAdminController extends BaseController {
      * @return 是否成功
      */
     @PutMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_EDIT)
     public CommonResult<Void> edit(
-            @Validated({ValidationGroups.EDIT}) @RequestBody final SysAdminDTO user
+            @Validated({ValidationGroups.Edit.class}) @RequestBody final SysAdminDTO user
     ) {
 
         Boolean flag = sysAdminService.updateSysAdminById(user);
 
-        final LoginUserInfo userInfo = SecurityUtils.getLoginUserInfo();
+        final LoginUser userInfo = SecurityUtils.getLoginUser();
         // 如果修改的是本用户则更新信息
         if (Boolean.TRUE.equals(flag) && userInfo.getUser().getId().equals(user.getId())) {
             // 重新获取一遍所有信息
@@ -159,6 +159,7 @@ public class SysAdminController extends BaseController {
      * @return 是否删除成功
      */
     @DeleteMapping("/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_DELETE)
     public CommonResult<Void> del(@PathVariable final Long id) {
         return toAjax(sysAdminService.removeSysAdminById(id));
     }
@@ -172,12 +173,13 @@ public class SysAdminController extends BaseController {
      * @return 是否成功.
      */
     @PostMapping("/avatar/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_USER_EDIT)
     public CommonResult<Void> uploadAvatar(
             @PathVariable final Long id,
             @RequestParam("file") final MultipartFile file
     ) {
-        final LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
-        final Long currentUserId = (Long) loginUserInfo.getUser().getId();
+        final LoginUser loginUserInfo = SecurityUtils.getLoginUser();
+        final Long currentUserId = loginUserInfo.getUser().getId();
         final Boolean isSuccess = sysAdminService.setSysAdminAvatar(id, file, currentUserId);
         // 如果是更新本人头像,则修改登录者信息
         if (id.equals(currentUserId) && Boolean.TRUE.equals(isSuccess)) {

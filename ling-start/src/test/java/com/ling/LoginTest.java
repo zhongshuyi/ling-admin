@@ -1,6 +1,8 @@
 package com.ling;
 
+import cn.dev33.satoken.secure.BCrypt;
 import com.ling.system.service.ISysAdminService;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +30,13 @@ public class LoginTest {
 
 
     }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(BCrypt.hashpw("admin123", BCrypt.gensalt()));
+    }
+
+//    public static int calculateTime(){
+//
+//    }
+
 }

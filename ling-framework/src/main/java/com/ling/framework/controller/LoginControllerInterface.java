@@ -1,7 +1,7 @@
 package com.ling.framework.controller;
 
 import com.ling.common.core.domain.CommonResult;
-import com.ling.framework.model.LoginBody;
+import com.ling.common.core.domain.model.LoginBody;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.validation.annotation.Validated;

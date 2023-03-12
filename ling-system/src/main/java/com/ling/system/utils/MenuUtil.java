@@ -8,9 +8,8 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.ling.common.constant.AppConstants;
 import com.ling.common.constant.Regular;
+import com.ling.common.core.domain.model.SysMenu;
 import com.ling.common.enums.MenuType;
-import com.ling.system.convert.SysMenuConvert;
-import com.ling.system.entity.SysMenu;
 import com.ling.system.vo.RouterMeta;
 import com.ling.system.vo.RouterVO;
 import java.util.Collections;
@@ -48,24 +47,25 @@ public final class MenuUtil {
     /**
      * 获取处理好后的路由.
      *
-     * @param menus 从数据库中直接查出来的菜单信息
+     * @param sysMenus 从数据库中直接查出来的菜单信息
      * @return 处理好的
      */
-    public static List<RouterVO> getRouter(final List<SysMenu> menus) {
-        return setRedirect(buildRouters(menus, MENU_ROOT_ID));
+    public static List<RouterVO> getRouter(final List<SysMenu> sysMenus) {
+        return setRedirect(buildRouters(sysMenus, MENU_ROOT_ID));
     }
+
 
     /**
      * 构建菜单树.
      *
-     * @param menus 菜单列表
+     * @param sysMenus 菜单列表
      * @return 处理后菜单树
      */
-    public static List<Tree<Long>> getMenuList(final List<SysMenu> menus) {
+    public static List<Tree<Long>> getMenuList(final List<SysMenu> sysMenus) {
         final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
-        treeNodeConfig.setNameKey("title");
-        return TreeUtil.build(menus, MENU_ROOT_ID, treeNodeConfig, (treeNode, tree) ->
+        treeNodeConfig.setNameKey("label");
+        return TreeUtil.build(sysMenus, MENU_ROOT_ID, treeNodeConfig, (treeNode, tree) ->
                 tree.setId(treeNode.getId())
                         .setParentId(treeNode.getParentId())
                         .setWeight(treeNode.getOrderNo())
@@ -76,13 +76,13 @@ public final class MenuUtil {
     /**
      * 构建权限树结构.
      *
-     * @param menus 菜单
+     * @param sysMenus 菜单
      * @return 树结构
      */
-    public static List<Tree<Long>> buildPermTree(final List<SysMenu> menus) {
+    public static List<Tree<Long>> buildPermTree(final List<SysMenu> sysMenus) {
         final TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("order");
-        return TreeUtil.build(menus, MENU_ROOT_ID, treeNodeConfig, (treeNode, tree) ->
+        return TreeUtil.build(sysMenus, MENU_ROOT_ID, treeNodeConfig, (treeNode, tree) ->
                 tree.setId(treeNode.getId())
                         .setParentId(treeNode.getParentId())
                         .setWeight(treeNode.getOrderNo())
@@ -93,26 +93,30 @@ public final class MenuUtil {
     /**
      * 构建路由树.
      *
-     * @param menus    菜单
+     * @param sysMenus 菜单
      * @param parentId 父id
      * @return 菜单树
      */
     private static List<RouterVO> buildRouters(
-            final List<SysMenu> menus,
+            final List<SysMenu> sysMenus,
             final Long parentId
     ) {
 
         final LinkedList<RouterVO> routers = new LinkedList<>();
 
-        if (CollUtil.isEmpty(menus)) {
+        if (CollUtil.isEmpty(sysMenus)) {
             return Collections.emptyList();
         }
 
-        for (final SysMenu menu : menus) {
-            if (!menu.getParentId().equals(parentId)) {
+        for (final SysMenu sysMenu : sysMenus) {
+            if (!sysMenu.getParentId().equals(parentId)) {
                 continue;
             }
-            final RouterVO router = SysMenuConvert.INSTANCT.convertToVO(menu);
+            final RouterVO router = BeanUtil.toBean(sysMenu, RouterVO.class);
+
+            if (router.getPath() == null) {
+                log.info(sysMenu.toString());
+            }
 
             // 设置路由名字
             router.setName(router.getPath().replace(PATH_DELIMITER, ""));
@@ -123,16 +127,16 @@ public final class MenuUtil {
                             +
                             router.getName().substring(1));
 
-            String component = menu.getComponent();
+            String component = sysMenu.getComponent();
 
             // 如果是上级菜单是根路由或链接设置LayOut组件
-            if (menu.getParentId().equals(MENU_ROOT_ID) || menu.getIsLink().equals(AppConstants.TRUE)) {
+            if (sysMenu.getParentId().equals(MENU_ROOT_ID) || sysMenu.getIsLink().equals(AppConstants.TRUE)) {
                 router.setComponent(LAYOUT_COMPONENT);
             }
 
 
             // 设置一级路由路径(不能是链接)
-            if (menu.getParentId().equals(MENU_ROOT_ID) && menu.getIsLink().equals(AppConstants.FALSE)) {
+            if (sysMenu.getParentId().equals(MENU_ROOT_ID) && sysMenu.getIsLink().equals(AppConstants.FALSE)) {
                 String path = PATH_DELIMITER + router.getPath();
                 String regx = PATH_DELIMITER + "+";
                 path = path.replaceAll(regx, PATH_DELIMITER);
@@ -143,19 +147,19 @@ public final class MenuUtil {
                 }
             }
 
-            final RouterMeta meta = BeanUtil.toBean(menu, RouterMeta.class);
+            final RouterMeta meta = BeanUtil.toBean(sysMenu, RouterMeta.class);
 
             // 设置路由属性
-            meta.setIgnoreKeepAlive(conversion(menu.getIgnoreKeepAlive()))
-                    .setIsLink(conversion(menu.getIsLink()))
-                    .setAffix(conversion(menu.getAffix()))
-                    .setHideBreadcrumb(conversion(menu.getHideBreadcrumb()))
-                    .setHideChildrenInMenu(conversion(menu.getHideChildrenInMenu()))
-                    .setHideTab(conversion(menu.getHideTab()))
-                    .setHideMenu(conversion(menu.getHideMenu()));
+            meta.setIgnoreKeepAlive(conversion(sysMenu.getIgnoreKeepAlive()))
+                    .setIsLink(conversion(sysMenu.getIsLink()))
+                    .setAffix(conversion(sysMenu.getAffix()))
+                    .setHideBreadcrumb(conversion(sysMenu.getHideBreadcrumb()))
+                    .setHideChildrenInMenu(conversion(sysMenu.getHideChildrenInMenu()))
+                    .setHideTab(conversion(sysMenu.getHideTab()))
+                    .setHideMenu(conversion(sysMenu.getHideMenu()));
 
             // 上级是根目录且自身是菜单
-            if (menu.getMenuType().equals(MenuType.MENU.getCode()) && menu.getParentId().equals(MENU_ROOT_ID)) {
+            if (sysMenu.getMenuType().equals(MenuType.MENU.getCode()) && sysMenu.getParentId().equals(MENU_ROOT_ID)) {
                 router.setChildren(List.of(
                                         new RouterVO()
                                                 .setName(router.getName())
@@ -172,7 +176,7 @@ public final class MenuUtil {
 
             router.setMeta(meta);
 
-            router.setChildren(buildRouters(menus, menu.getId()));
+            router.setChildren(buildRouters(sysMenus, sysMenu.getId()));
 
             if (CollUtil.isEmpty(router.getChildren())) {
                 router.setChildren(null);
@@ -226,4 +230,6 @@ public final class MenuUtil {
     private static Boolean conversion(final Byte is) {
         return is.equals(AppConstants.TRUE);
     }
+
+
 }

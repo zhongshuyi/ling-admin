@@ -1,11 +1,26 @@
 package ${package.Controller};
 
+import com.ling.common.core.domain.CommonResult;
+import com.ling.common.core.domain.PageInfo;
+import com.ling.common.core.mybatisplus.util.PageUtils;
+import com.ling.common.core.validate.ValidationGroups;
+
+import ${package.Parent}.convert.${entity}Convert;
+import ${package.Parent}.dto.${entity}DTO;
+import ${package.Service}.${table.serviceName};
+import ${package.Parent}.vo.${entity}VO;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-#if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
-#else
-import org.springframework.stereotype.Controller;
-#end
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
@@ -18,21 +33,84 @@ import ${superControllerClassPackage};
  * @author ${author}
  * @since ${date}
  */
-#if(${restControllerStyle})
+@Slf4j
 @RestController
-#else
-@Controller
-#end
+@Tag(name = "$!{table.comment}")
+@RequiredArgsConstructor
 @RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
-#if(${kotlin})
-class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
-
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
 #else
-    #if(${superControllerClass})
-    public class ${table.controllerName} extends ${superControllerClass} {
-    #else
-    public class ${table.controllerName} {
-    #end
+public class ${table.controllerName} {
+#end
+
+private final ${table.serviceName} ${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service;
+
+/**
+ * 分页获取$!{table.comment}信息列表.
+ *
+ * @param ${entity.substring(0,1).toLowerCase()}${entity.substring(1)}DTO 查询条件
+ * @return 分页后数据
+ */
+@GetMapping
+public CommonResult<PageInfo<${entity}VO>>getUserList(
+@Validated(ValidationGroups.Query.class) final ${entity}DTO ${entity.substring(0,1).toLowerCase()}${entity.substring(1)}DTO){
+
+        return CommonResult.success(
+        PageUtils.buildPageInfo(
+    ${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service.pageVo(
+        PageUtils.buildPagePlus(),
+    ${entity.substring(0,1).toLowerCase()}${entity.substring(1)}DTO
+        )));
+        }
+
+
+/**
+ * 获取单个$!{table.comment}详细信息.
+ *
+ * @param id 商品id
+ * @return $!{table.comment}信息
+ */
+@GetMapping("/{id}")
+public CommonResult<${entity}VO> getById(@PathVariable final Long id){
+        return CommonResult.success(${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service.getVoById(id));
+        }
+
+
+/**
+ * 添加$!{table.comment}.
+ *
+ * @param dto $!{table.comment}信息
+ * @return {@link CommonResult}<{@link Void}> 是否成功
+ */
+@PostMapping
+public CommonResult<Void> add(@Validated(ValidationGroups.Add.class) @RequestBody final ${entity}DTO dto){
+        return toAjax(${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service.saveByDTO(dto,${entity}Convert.class));
+        }
+
+/**
+ * 编辑$!{table.comment}信息.
+ *
+ * @param dto $!{table.comment}dto
+ * @return {@link CommonResult}<{@link Void}>
+ */
+@PutMapping
+public CommonResult<Void> edit(@Validated(ValidationGroups.Edit.class) @RequestBody final ${entity}DTO dto){
+        return toAjax(${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service.updateByDTO(dto));
+        }
+
+
+/**
+ * 删除$!{table.comment}信息.
+ *
+ * @param id id
+ * @return {@link CommonResult}<{@link Void}> 是否成功
+ */
+@DeleteMapping("/{id}")
+public CommonResult<Void> del(@PathVariable final Long id){
+        return toAjax(${entity.substring(0,1).toLowerCase()}${entity.substring(1)}Service.deleteWithValidById(id));
+        }
+
 
         }
-#end
+

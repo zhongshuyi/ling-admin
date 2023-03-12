@@ -1,20 +1,22 @@
 package com.ling.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ling.common.constant.PermissionCodeConstant;
 import com.ling.common.core.controller.BaseController;
 import com.ling.common.core.domain.CommonResult;
 import com.ling.common.core.domain.PageInfo;
+import com.ling.common.core.domain.model.SysRole;
 import com.ling.common.core.mybatisplus.util.PageUtils;
 import com.ling.common.core.validate.ValidationGroups;
 import com.ling.common.exception.BusinessErrorException;
 import com.ling.framework.config.CustomConfig;
 import com.ling.system.convert.SysRoleConvert;
 import com.ling.system.dto.SysRoleDTO;
-import com.ling.system.entity.SysRole;
-import com.ling.system.service.ISysMenuService;
 import com.ling.system.service.ISysRoleService;
 import com.ling.system.vo.SysRoleVO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController
+@Tag(name = "角色管理")
 @RequiredArgsConstructor
 @RequestMapping("/system/role")
 public class SysRoleController extends BaseController {
@@ -46,11 +49,6 @@ public class SysRoleController extends BaseController {
      * 角色服务.
      */
     private final ISysRoleService sysRoleService;
-
-    /**
-     * 权限菜单服务.
-     */
-    private final ISysMenuService sysMenuService;
 
     /**
      * app配置信息.
@@ -64,6 +62,7 @@ public class SysRoleController extends BaseController {
      * @return 分页后的角色列表
      */
     @GetMapping
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_LIST)
     public CommonResult<PageInfo<SysRoleVO>> getPageList(final SysRoleDTO role) {
         return CommonResult.success(
                 PageUtils.buildPageInfo(
@@ -98,7 +97,8 @@ public class SysRoleController extends BaseController {
      * @return 是否添加成功
      */
     @PostMapping
-    public CommonResult<Void> add(@Validated(ValidationGroups.ADD) @RequestBody final SysRoleDTO role) {
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_ADD)
+    public CommonResult<Void> add(@Validated(ValidationGroups.Add.class) @RequestBody final SysRoleDTO role) {
         return toAjax(sysRoleService.saveByDTO(role, SysRoleConvert.class));
     }
 
@@ -109,7 +109,8 @@ public class SysRoleController extends BaseController {
      * @return 是否修改成功
      */
     @PutMapping
-    public CommonResult<Void> edit(@Validated(ValidationGroups.EDIT) @RequestBody final SysRoleDTO role) {
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_EDIT)
+    public CommonResult<Void> edit(@Validated(ValidationGroups.Edit.class) @RequestBody final SysRoleDTO role) {
         if (role.getId().equals(config.getApp().getSuperAdminRoleId())) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能修改超级管理员");
         }
@@ -124,6 +125,7 @@ public class SysRoleController extends BaseController {
      * @return 是否更改成功
      */
     @PutMapping("/{id}/{state}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_EDIT)
     public CommonResult<Void> stateChanges(
             @PathVariable final Long id,
             @PathVariable final Byte state
@@ -141,6 +143,7 @@ public class SysRoleController extends BaseController {
      * @return 是否删除成功
      */
     @DeleteMapping("/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_DELETE)
     public CommonResult<Void> del(@PathVariable final Long id) {
         if (id.equals(config.getApp().getSuperAdminRoleId())) {
             throw new BusinessErrorException(HttpStatus.HTTP_BAD_REQUEST, "不能删除超级管理员");
@@ -155,6 +158,7 @@ public class SysRoleController extends BaseController {
      * @return 部门id集合
      */
     @GetMapping("dataScope/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_QUERY)
     public CommonResult<Set<Long>> getCustomDataScope(@PathVariable final Long id) {
         return CommonResult.success(sysRoleService.selectDataScope(id));
     }
@@ -167,6 +171,7 @@ public class SysRoleController extends BaseController {
      * @return 是否成功
      */
     @PutMapping("dataScope/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_ROLE_EDIT)
     public CommonResult<Void> setCustomDataScope(
             @PathVariable final Long id,
             @RequestBody final Set<Long> newIds

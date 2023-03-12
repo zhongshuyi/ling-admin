@@ -1,5 +1,6 @@
 package com.ling.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -8,26 +9,28 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ling.common.constant.PermissionCodeConstant;
 import com.ling.common.core.controller.BaseController;
 import com.ling.common.core.domain.CommonResult;
 import com.ling.common.core.domain.PageInfo;
+import com.ling.common.core.domain.model.LoginUser;
+import com.ling.common.core.domain.model.SysDept;
 import com.ling.common.core.mybatisplus.core.PagePlus;
 import com.ling.common.core.mybatisplus.util.PageUtils;
 import com.ling.common.core.validate.ValidationGroups;
 import com.ling.common.exception.BusinessErrorException;
+import com.ling.framework.utils.SecurityUtils;
 import com.ling.system.dto.SysAdminDTO;
 import com.ling.system.dto.SysDeptRoleDTO;
 import com.ling.system.entity.SysAdmin;
-import com.ling.system.entity.SysDept;
 import com.ling.system.entity.SysDeptRole;
 import com.ling.system.mapper.SysDeptMapper;
-import com.ling.system.security.model.LoginUserInfo;
 import com.ling.system.service.ISysAdminService;
 import com.ling.system.service.ISysDeptRoleService;
 import com.ling.system.service.ISysDeptService;
-import com.ling.system.utils.SecurityUtils;
 import com.ling.system.vo.SysAdminVO;
 import com.ling.system.vo.SysDeptRoleVO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Slf4j
 @RestController
+@Tag(name = "上级部门管理")
 @RequiredArgsConstructor
 @RequestMapping("/system/deptManagement")
 public class SysDeptManagementController extends BaseController {
@@ -83,8 +87,9 @@ public class SysDeptManagementController extends BaseController {
      * @return 下级部门
      */
     @GetMapping("list")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_LIST)
     public CommonResult<List<Tree<Long>>> getDepts() {
-        LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
+        LoginUser loginUserInfo = SecurityUtils.getLoginUser();
         SysAdmin sysAdmin = (SysAdmin) loginUserInfo.getUser();
         if (Boolean.TRUE.equals(loginUserInfo.getIsAdmin())) {
             return CommonResult.success(
@@ -135,8 +140,9 @@ public class SysDeptManagementController extends BaseController {
      * @return 用户列表
      */
     @GetMapping("userList")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_LIST)
     public CommonResult<PageInfo<SysAdminVO>> getUserList(final SysAdminDTO adminDTO) {
-        LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
+        LoginUser loginUserInfo = SecurityUtils.getLoginUser();
         SysAdmin sysAdmin = (SysAdmin) loginUserInfo.getUser();
         if (!sysAdmin.getUserIdentity().equals(1)) {
             throw new BusinessErrorException(HttpStatus.HTTP_FORBIDDEN, "用户不是上级");
@@ -160,6 +166,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @PostMapping("addExistUser")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Void> addExistUser(
             final Long userId,
             final Long deptId) {
@@ -173,6 +180,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @GetMapping("deptRole")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_LIST)
     public CommonResult<PageInfo<SysDeptRoleVO>> getDeptRoleList(
             final SysDeptRoleDTO deptRoleDTO) {
         if (deptRoleDTO.getDeptId() == null || deptRoleDTO.getDeptId() == -1L) {
@@ -190,6 +198,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 部门 角色集合
      */
     @GetMapping("deptRole/{deptId}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_LIST)
     public CommonResult<List<SysDeptRoleVO>> getDeptRoleList(@PathVariable final Long deptId) {
         return CommonResult.success(
                 deptRoleService.listVo(Wrappers.<SysDeptRole>lambdaQuery().eq(SysDeptRole::getDeptId, deptId)));
@@ -202,8 +211,9 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @PostMapping("deptRole")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Void> addDeptRole(
-            @Validated(ValidationGroups.ADD) @RequestBody final SysDeptRoleDTO deptRoleDTO) {
+            @Validated(ValidationGroups.Add.class) @RequestBody final SysDeptRoleDTO deptRoleDTO) {
         return toAjax(deptRoleService.saveByDTO(deptRoleDTO));
     }
 
@@ -214,8 +224,9 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @PutMapping("deptRole")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Void> editDeptRole(
-            @Validated(ValidationGroups.EDIT) @RequestBody final SysDeptRoleDTO deptRoleDTO) {
+            @Validated(ValidationGroups.Edit.class) @RequestBody final SysDeptRoleDTO deptRoleDTO) {
         return toAjax(deptRoleService.updateByDTO(deptRoleDTO));
     }
 
@@ -226,6 +237,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @DeleteMapping("deptRole/{id}")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Void> delDeptRole(@PathVariable final Long id) {
         return toAjax(deptRoleService.deleteWithValidById(id));
     }
@@ -239,6 +251,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @GetMapping("userDeptRole")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Set<Long>> getDeptRoleToUser(
             final Long userId,
             final Long deptId) {
@@ -254,6 +267,7 @@ public class SysDeptManagementController extends BaseController {
      * @return 是否成功
      */
     @PutMapping("userDeptRole")
+    @SaCheckPermission(PermissionCodeConstant.SYS_SUBDEPT_EDIT)
     public CommonResult<Void> setDeptRoleToUser(
             final Long userId,
             final Long deptId,

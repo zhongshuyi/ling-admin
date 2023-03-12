@@ -1,8 +1,8 @@
 package com.ling.system.service;
 
+import com.ling.common.core.domain.model.SysDept;
 import com.ling.common.core.mybatisplus.core.IServicePlus;
 import com.ling.system.dto.SysDeptDTO;
-import com.ling.system.entity.SysDept;
 import com.ling.system.vo.SysDeptVO;
 import java.io.Serializable;
 import java.util.List;

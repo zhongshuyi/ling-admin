@@ -1,10 +1,10 @@
-package com.ling.system.utils;
+package com.ling.framework.utils;
 
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.ling.common.constant.AppConstants;
+import com.ling.common.core.domain.model.LoginUser;
 import com.ling.common.util.RedisUtils;
-import com.ling.system.security.model.LoginUserInfo;
 import java.time.Duration;
 
 /**
@@ -23,7 +23,7 @@ public class SecurityUtils {
      *
      * @return 当前登录用户信息
      */
-    public static LoginUserInfo getLoginUserInfo() {
+    public static LoginUser getLoginUser() {
         return RedisUtils.getCacheObject(getUserInfoKey());
     }
 
@@ -32,7 +32,7 @@ public class SecurityUtils {
      *
      * @param loginUserInfo 用户信息.
      */
-    public static void setLoginUserInfo(final LoginUserInfo loginUserInfo) {
+    public static void setLoginUserInfo(final LoginUser loginUserInfo) {
         RedisUtils.setCacheObject(getUserInfoKey(), loginUserInfo, Duration.ofSeconds(StpUtil.getTokenTimeout()));
     }
 

@@ -15,7 +15,7 @@
         </foreach>
     </delete>
 
-    <select id="listDeptListByUserId" resultType="com.ling.system.entity.SysDept">
+    <select id="listDeptListByUserId" resultType="com.ling.common.core.domain.model.SysDept">
         select sys_dept.id,
                parent_id,
                dept_name,
@@ -39,7 +39,7 @@
                  inner join sys_user_dept uud on sys_dept.id = uud.dept_id
         where uud.user_id = #{userId}
     </select>
-    <select id="listDeptChildren" resultType="com.ling.system.entity.SysDept">
+    <select id="listDeptChildren" resultType="com.ling.common.core.domain.model.SysDept">
         select id,
                parent_id,
                dept_name,

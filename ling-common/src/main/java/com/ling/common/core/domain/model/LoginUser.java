@@ -1,25 +1,19 @@
-package com.ling.system.security.model;
+package com.ling.common.core.domain.model;
 
-import com.ling.framework.model.User;
-import com.ling.system.entity.SysDept;
-import com.ling.system.entity.SysMenu;
-import com.ling.system.entity.SysRole;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
- * .
+ * new class.
  *
  * @author 钟舒艺
- * @since 2022-10-26 19:22
+ * @since 2023-01-08 22:52
  **/
 @Data
-public class LoginUserInfo implements Serializable {
-
-    private static final long serialVersionUID = 4778465245152238732L;
-
+@Accessors(chain = true)
+public class LoginUser {
 
     /**
      * 用户信息.
@@ -34,7 +28,7 @@ public class LoginUserInfo implements Serializable {
     /**
      * 菜单列表.
      */
-    private List<SysMenu> menuAndPermissionList;
+    private List<SysMenu> sysMenuAndPermissionList;
 
     /**
      * 权限列表.
@@ -49,16 +43,15 @@ public class LoginUserInfo implements Serializable {
     /**
      * 角色信息.
      */
-    private List<SysRole> roles;
+    private List<SysRole> sysRoles;
 
     /**
      * 部门信息.
      */
-    private List<SysDept> depts;
+    private List<SysDept> sysDepts;
 
     /**
      * 是否为管理员.
      */
     private Boolean isAdmin;
-
 }

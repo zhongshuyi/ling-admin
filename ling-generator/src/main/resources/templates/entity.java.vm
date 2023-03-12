@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
  */
 #if(${entityLombokModel})
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
     #if(${chainModel})
     @Accessors(chain = true)
     #end

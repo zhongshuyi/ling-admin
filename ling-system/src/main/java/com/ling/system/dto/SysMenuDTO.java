@@ -20,8 +20,8 @@ public class SysMenuDTO implements Serializable {
     /**
      * 主键id.
      */
-    @NotNull(message = "主键不能为空", groups = {ValidationGroups.EDIT})
-    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.EDIT})
+    @NotNull(message = "主键不能为空", groups = {ValidationGroups.Edit.class})
+    @Min(value = 0, message = "id最低为0", groups = {ValidationGroups.Edit.class})
     private Long id;
 
     /**
@@ -29,11 +29,11 @@ public class SysMenuDTO implements Serializable {
      */
     @NotNull(
             message = "父部门id不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     @Min(
             value = 0,
             message = "父部门id最低为0",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private Long parentId;
 
     /**
@@ -42,7 +42,7 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 200,
             message = "权限标识最大200个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String perms;
 
     /**
@@ -50,11 +50,11 @@ public class SysMenuDTO implements Serializable {
      */
     @NotNull(
             message = "显示顺序不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     @Min(
             value = 0,
             message = "显示顺序最低为0",
-            groups = {ValidationGroups.ADD, ValidationGroups.EDIT})
+            groups = {ValidationGroups.Add.class, ValidationGroups.Edit.class})
     private Integer orderNo;
 
     /**
@@ -63,7 +63,7 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 300,
             message = "路由地址最大300个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String path;
 
     /**
@@ -72,10 +72,10 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 200,
             message = "菜单名字最大200个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     @NotNull(
             message = "菜单名称不能为空",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String title;
 
     /**
@@ -84,7 +84,7 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 300,
             message = "菜单名字最大300个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String component;
 
     /**
@@ -103,7 +103,7 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 300,
             message = "图标最大100个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String icon;
 
     /**
@@ -112,7 +112,7 @@ public class SysMenuDTO implements Serializable {
     @Size(
             max = 300,
             message = "内嵌iframe的地址最大500个字符",
-            groups = {ValidationGroups.EDIT, ValidationGroups.ADD})
+            groups = {ValidationGroups.Edit.class, ValidationGroups.Add.class})
     private String frameSrc;
 
     /**

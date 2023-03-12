@@ -3,9 +3,10 @@ package com.ling.system.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ling.common.core.domain.BaseEntity;
+import com.ling.common.core.domain.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 文件.
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
  * @author 钟舒艺
  */
 @Data
+@Accessors(chain = true)
 @TableName(value = "sys_file")
 @EqualsAndHashCode(callSuper = true)
 public class SysFile extends BaseEntity {

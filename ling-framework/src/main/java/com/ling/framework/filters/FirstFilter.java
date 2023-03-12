@@ -1,7 +1,6 @@
 package com.ling.framework.filters;
 
 import cn.hutool.extra.servlet.ServletUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,15 +24,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Order(-1000)
 @RequiredArgsConstructor
 public class FirstFilter extends OncePerRequestFilter {
-
-    /**
-     * Jackson序列化.
-     */
-    private final ObjectMapper objectMapper;
-
-    @Value("${server.error.path:${error.path:/error}}")
-    private String errorPath;
-
 
     /**
      * 过滤器实现.

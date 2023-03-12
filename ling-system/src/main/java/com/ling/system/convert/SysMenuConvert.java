@@ -1,8 +1,8 @@
 package com.ling.system.convert;
 
+import com.ling.common.core.domain.model.SysMenu;
 import com.ling.common.core.interfaces.BaseConvert;
 import com.ling.system.dto.SysMenuDTO;
-import com.ling.system.entity.SysMenu;
 import com.ling.system.vo.RouterVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

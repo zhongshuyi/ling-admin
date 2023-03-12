@@ -1,4 +1,4 @@
-package com.ling.framework.model;
+package com.ling.common.core.domain.model;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Data;

@@ -1,31 +1,23 @@
-package com.ling.system.entity;
+package com.ling.common.core.domain.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.ling.common.core.domain.BaseEntity;
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ling.common.core.domain.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 部门表.
+ * 部门父类.
  *
  * @author 钟舒艺
- * @since 2021-10-08
- */
-@EqualsAndHashCode(callSuper = true)
+ * @since 2023-01-02 20:39
+ **/
 @Data
 @Accessors(chain = true)
-public class SysDept extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 部门id.
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SysDept extends BaseEntity {
+    private static final long serialVersionUID = 3055928702625291382L;
 
     /**
      * 父id.

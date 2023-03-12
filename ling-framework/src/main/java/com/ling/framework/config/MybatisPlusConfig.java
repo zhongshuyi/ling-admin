@@ -1,5 +1,6 @@
 package com.ling.framework.config;
 
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.ling.common.core.mybatisplus.methods.InsertAll;
+import com.ling.framework.mybatisplus.handler.CreateAndUpdateMetaObjectHandler;
+import com.ling.framework.mybatisplus.interceptor.DataPermissionInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +32,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @RequiredArgsConstructor
 public class MybatisPlusConfig {
 
-
     /**
      * 插件配置.
      *
@@ -39,6 +41,8 @@ public class MybatisPlusConfig {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusConfig.log.info("mybatisPlus 插件加载");
         final MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 数据权限拦截器
+        interceptor.addInnerInterceptor(new DataPermissionInterceptor());
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
         // 乐观锁插件
@@ -46,6 +50,17 @@ public class MybatisPlusConfig {
         // 阻断插件
         interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
+    }
+
+    /**
+     * 元对象字段填充控制器 用于填充创建时间/创建人/修改时间/修改人.
+     * <a href="https://baomidou.com/guide/auto-fill-metainfo.html">https://baomidou.com/guide/auto-fill-metainfo.html</a>
+     *
+     * @return 元对象字段填充控制器
+     */
+    @Bean
+    public MetaObjectHandler metaObjectHandler() {
+        return new CreateAndUpdateMetaObjectHandler();
     }
 
     /**

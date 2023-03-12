@@ -4,13 +4,14 @@ import cn.dev33.satoken.secure.BCrypt;
 import com.ling.common.annotation.LoginAuth;
 import com.ling.common.core.controller.BaseController;
 import com.ling.common.core.domain.CommonResult;
+import com.ling.common.core.domain.model.LoginUser;
 import com.ling.common.core.validate.ValidationGroups;
+import com.ling.framework.utils.SecurityUtils;
 import com.ling.system.dto.PasswordDTO;
 import com.ling.system.dto.SysAdminDTO;
 import com.ling.system.entity.SysAdmin;
-import com.ling.system.security.model.LoginUserInfo;
 import com.ling.system.service.ISysAdminService;
-import com.ling.system.utils.SecurityUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @LoginAuth
 @RestController
+@Tag(name = "个人中心")
 @RequiredArgsConstructor
 @RequestMapping("/personalCenter")
 public class SysPersonalCenterController extends BaseController {
@@ -49,9 +51,9 @@ public class SysPersonalCenterController extends BaseController {
      */
     @PutMapping
     public CommonResult<Void> setUserInfo(
-            @Validated({ValidationGroups.EDIT}) @RequestBody final SysAdminDTO user
+            @Validated({ValidationGroups.Edit.class}) @RequestBody final SysAdminDTO user
     ) {
-        final LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
+        final LoginUser loginUserInfo = SecurityUtils.getLoginUser();
         final SysAdmin sysAdmin = (SysAdmin) loginUserInfo.getUser();
         // 如果修改的是本用户则更新信息
         if (sysAdmin.getId().equals(user.getId())) {
@@ -72,7 +74,7 @@ public class SysPersonalCenterController extends BaseController {
      */
     @PutMapping("password")
     public CommonResult<Void> setPassword(@RequestBody final PasswordDTO password) {
-        final LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
+        final LoginUser loginUserInfo = SecurityUtils.getLoginUser();
         final SysAdmin sysAdmin = (SysAdmin) loginUserInfo.getUser();
         if (!BCrypt.checkpw(password.getPasswordOld(), sysAdmin.getPassword())) {
             return CommonResult.failed("旧密码错误");
@@ -92,7 +94,7 @@ public class SysPersonalCenterController extends BaseController {
     public CommonResult<Void> uploadAvatar(
             @RequestParam("file") final MultipartFile file
     ) {
-        final LoginUserInfo loginUserInfo = SecurityUtils.getLoginUserInfo();
+        final LoginUser loginUserInfo = SecurityUtils.getLoginUser();
         final SysAdmin sysAdmin = (SysAdmin) loginUserInfo.getUser();
         final Long currentUserId = sysAdmin.getId();
         final Boolean isSuccess = sysAdminService.setSysAdminAvatar(currentUserId, file, currentUserId);

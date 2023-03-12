@@ -1,6 +1,6 @@
 package com.ling.framework.service;
 
-import com.ling.framework.model.User;
+import com.ling.common.core.domain.model.User;
 
 /**
  * new class.

@@ -4,9 +4,9 @@ import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.http.HttpStatus;
 import com.ling.common.constant.AppConstants;
+import com.ling.common.core.domain.model.LoginBody;
+import com.ling.common.core.domain.model.User;
 import com.ling.common.exception.BusinessErrorException;
-import com.ling.framework.model.LoginBody;
-import com.ling.framework.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class LoginService {
 
         User user = userService.getUserByUsername(loginBody.getUsername());
         // 用户名与密码校验
-        if (user == null || BCrypt.checkpw(loginBody.getPassword(), user.getPassword())) {
+        if (user == null || !BCrypt.checkpw(loginBody.getPassword(), user.getPassword())) {
             throw new BusinessErrorException(HttpStatus.HTTP_UNAUTHORIZED, "用户名或密码错误");
         }
         if (user.getIsDeleted().equals(AppConstants.DELETE)) {

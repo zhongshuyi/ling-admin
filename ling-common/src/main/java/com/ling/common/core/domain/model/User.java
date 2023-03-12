@@ -1,6 +1,7 @@
-package com.ling.framework.model;
+package com.ling.common.core.domain.model;
 
-import com.ling.common.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ling.common.core.domain.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,7 +14,8 @@ import lombok.experimental.Accessors;
  **/
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = 844732306134765370L;
