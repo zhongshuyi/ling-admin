@@ -14,8 +14,6 @@
         <module>ling-system</module>
         <module>ling-framework</module>
         <module>ling-generator</module>
-        <module>ling-blog</module>
-        <module>ling-eims</module>
         <module>ling-dome</module>
     </modules>
 
